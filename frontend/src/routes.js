@@ -7,6 +7,7 @@ import CadastroUsuario from './pages/Cadastro/CadastroUsuario/CadastroUsuario'
 import CadastroBarbearia from './pages/Cadastro/CadastroBarbearia/CadastroBarbearia'
 import Confirmacao from './pages/Cadastro/Confirmacao/Confirmacao'
 import CadastroEndereco from './pages/Cadastro/CadastroEndereco/CadastroEndereco'
+import Funcionarios from "./pages/Funcionario/Funcionario"
 
 function Rotas() {
   return (
@@ -20,6 +21,7 @@ function Rotas() {
           <Route path="/cadastro-endereco" element={<CadastroEndereco />} />
           <Route path="/cadastro-barbearia" element={<CadastroBarbearia />} />
           <Route path="/confirmacao" element={<Confirmacao />} />
+          <Route path="/funcionario" element={<Funcionarios />} />
         </Routes>
       </BrowserRouter>
     </>
