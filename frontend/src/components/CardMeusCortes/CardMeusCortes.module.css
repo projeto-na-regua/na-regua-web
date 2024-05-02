@@ -1,0 +1,9 @@
+.card {
+    border-radius: 20px;
+    background-color: blue;
+    color: white;
+    padding: 20px;
+    margin: 10px;
+    width: calc(33.33% - 20px); /* 33.33% de largura menos a margem */
+    box-sizing: border-box; /* Garante que a largura inclua padding e borda */
+  }
