@@ -4,6 +4,7 @@ import iconEditar from '../../utils/assets/IconsHeaderUsuario/IconEditar.svg'
 import editFoto from '../../utils/assets/IconsHeaderUsuario/photo-edit_svgrepo.com.png'
 import { Formik, useFormik } from 'formik'
 import React, { useState } from 'react';
+import { TextField } from '@mui/material'
 
 function paginaLogin() {
     window.location = '/login'
@@ -112,24 +113,37 @@ function HeaderUsuario(props) {
                         width: '100%',
                         height: '45%',
                         display: 'flex',
-
                         alignItems: 'center',
+                        justifyContent: 'space-between'
 
                     }}>
 
                         <div className='inputsEsquerda' style={{
-                            width: '50%',
+                            width: '45%',
                             height: '100%',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: 32
                         }}>
 
-
+                            <TextField label='Nome' placeholder='Digite Aqui' />
+                            <TextField label='Email' placeholder='Digite Aqui' />
+                            <TextField label='Senha' placeholder='Digite Aqui' />
 
                         </div>
 
                         <div className='inputsDireita' style={{
-                            width: '50%',
+                            width: '45%',
                             height: '100%',
-                        }}></div>
+                            display: 'flex',
+                            flexDirection: 'column',
+                            justifyContent: 'space-evenly',
+                            alignItems: 'center',
+                        }}>
+                            <TextField label='Celular' placeholder='Digite Aqui' />
+                            <TextField label='Endereço' placeholder='Digite Aqui' />
+
+                        </div>
 
 
                     </div>
@@ -150,7 +164,8 @@ function HeaderUsuario(props) {
                             border: '2px solid #082031',
                             color: '#082031',
                             fontWeight: 'bold',
-                            borderRadius: '15px'
+                            borderRadius: '15px',
+                            cursor: 'pointer'
                         }}>Descartar Informações</button>
 
                         <button style={{
@@ -160,7 +175,8 @@ function HeaderUsuario(props) {
                             color: 'white',
                             border: 'none',
                             fontWeight: 'bold',
-                            borderRadius: '15px'
+                            borderRadius: '15px',
+                            cursor: 'pointer'
                         }}>Salvar Informações</button>
 
 
