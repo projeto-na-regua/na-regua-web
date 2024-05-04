@@ -29,7 +29,7 @@ function HeaderUsuario(props) {
         <div style={{
             display: "flex",
             width: '100%',
-            height: '35vh',
+            height: '40vh',
             backgroundColor: '#082031',
 
         }}>

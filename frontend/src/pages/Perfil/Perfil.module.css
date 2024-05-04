@@ -1,0 +1,16 @@
+.content-area {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.content {
+  width: calc(50% - 20px);
+  margin-bottom: 20px;
+}
+  
+
+.botao-nav {
+    font-family: "Plus Jakarta Sans";
+}

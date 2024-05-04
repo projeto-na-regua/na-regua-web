@@ -11,6 +11,7 @@ import Funcionarios from "./pages/Funcionario/Funcionario"
 import MeusCortes from './pages/MeusCortes/MeusCortes'
 import AgendamentosBarbearia from "./pages/Agendamento/Barbearia/AgendamentoBarbearia"
 import AgendamentosUsuario from "./pages/Agendamento/Usuario/AgendamentoUsuario"
+import Perfil from './pages/Perfil/Perfil'
 
 function Rotas() {
   return (
@@ -28,7 +29,7 @@ function Rotas() {
           <Route path="/meus-cortes" element={<MeusCortes />}/>
           <Route path="/minha-agenda" element={<AgendamentosBarbearia />}/>
           <Route path="/meus-agendamentos" element={<AgendamentosUsuario />}/>
-
+          <Route path="/perfil" element={<Perfil />} />
         </Routes>
       </BrowserRouter>
     </>
