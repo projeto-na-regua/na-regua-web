@@ -3,6 +3,7 @@ import { useState } from 'react';
 import React from 'react';
 import styles from './Funcionario.module.css' 
 import NavbarBarbeiro from '../../components/NavbarBarbeiro/NavbarBarbeiro';
+import HeaderUsuario from '../../components/HeaderUsuario/HeaderUsuario';
 
 function abrirEditarDeletar(){
 
@@ -12,6 +13,11 @@ export function Funcionarios() {
   const [open, setOpen] = useState(false);
 
   return (
+
+<div className="Header">
+
+<HeaderUsuario />
+
     <div className={styles.conteudo}>
       <div className={styles.container}>
         <div className={styles.conteudoFuncionarios}>
@@ -98,6 +104,7 @@ export function Funcionarios() {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 }
