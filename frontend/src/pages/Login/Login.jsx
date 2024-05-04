@@ -8,45 +8,74 @@ import { theme } from '../../theme.js'
 import { Button, Link } from '@mui/material'
 import image from '../../utils/assets/cuate.svg'
 import logo from '../../utils/assets/logo-scale1.svg'
+import { toast } from "react-toastify";
+import { validarEmail } from '../../utils/globals.js'
 
 function Login() {
   const navigate = useNavigate()
 
   const formik = useFormik({
     initialValues: { email: '', password: '' },
+
     onSubmit: async (values) => {
-      const response = await api.get('/usuarios', {
-        params: {
+      try {
+        const response = await api.post('/usuarios', {
           email: values.email,
-          password: values.password
+          senha: values.password
+        });
+
+        const data = response.data;
+
+        sessionStorage.setItem('user', JSON.stringify(data));
+        
+        toast.success("Login realizado com sucesso!", {
+          autoClose: 2000 // 2 segundos
+        });
+        
+        const user = JSON.parse(sessionStorage.getItem('user'));
+
+       setTimeout(() => {
+        if(user){
+          if(data.tipo === "Barbeiro" && data.idBarbearia !== null){
+            navigate("/minha-agenda")
+          }else{
+            navigate("/meus-agendamentos")
+          }
         }
-      })
+       }, 4000);
+        
 
-      const user = response.data[0]
+        console.log(data);
+      } catch (error) {
 
-      if (user) {
-        localStorage.setItem('user', JSON.stringify(user))
-      } else {
-        alert('Usuário ou senha inválidos')
+        if (error.response) {
+          toast.error("Email ou senha inválidos!")
+        }
       }
+
+
     },
+
     validationSchema: yup.object().shape({
       email: yup
         .string()
+        .email("Email Inválido!")
         .required('Insira seu e-mail'),
       password: yup
         .string()
         .required('Insira sua senha')
     })
+
+
   })
 
-  console.log(formik)
+  // console.log(formik)
 
   return (
     <ThemeProvider theme={theme}>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <Button onClick={() => navigate('/')} style={{ position: 'absolute', top: 16, left: 16 }}>Voltar</Button>
-        
+
         <div style={{
           width: '50vw',
           height: '100vh',
@@ -88,6 +117,7 @@ function Login() {
                   helperText={formik.touched.email ? formik.errors.email : ''}
                 />
 
+
                 <TextField
                   type="password"
                   name="password"
@@ -102,7 +132,7 @@ function Login() {
 
                 <Link to="/cadastro" alignSelf='flex-end' style={{ cursor: 'pointer' }}>Esqueceu sua senha?</Link>
 
-                <Button type='submit'>Entrar</Button>
+                <Button type='submit' onClick={formik.handleSubmit}>Entrar</Button>
 
                 <div style={{ display: 'flex', gap: 8, alignSelf: 'center' }}>
                   <span>Não tem uma conta?</span>

@@ -7,4 +7,14 @@ function transformarData(dataString) {
   const ano = data.getFullYear()
   return `${dia}/${mes}/${ano}`
 }
-export default transformarData
+
+
+function logout(){
+  sessionStorage.clear();
+}
+   
+
+export default {transformarData, logout}
+
+
+
