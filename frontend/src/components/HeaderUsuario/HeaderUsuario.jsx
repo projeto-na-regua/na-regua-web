@@ -2,9 +2,13 @@ import iconeSair from '../../utils/assets/IconsHeaderUsuario/Icone Sair.svg'
 import exemploImg from '../../utils/assets/IconsHeaderUsuario/exemplo.jpeg'
 import iconEditar from '../../utils/assets/IconsHeaderUsuario/IconEditar.svg'
 import editFoto from '../../utils/assets/IconsHeaderUsuario/photo-edit_svgrepo.com.png'
-import { Formik, useFormik } from 'formik'
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 import { TextField } from '@mui/material'
+
+
+function cadastroBarbearia(){
+    window.location = '/cadastro-barbearia'
+}
 
 function paginaLogin() {
     window.location = '/login'
@@ -128,7 +132,7 @@ function HeaderUsuario(props) {
 
                             <TextField label='Nome' placeholder='Digite Aqui' />
                             <TextField label='Email' placeholder='Digite Aqui' />
-                            <TextField label='Senha' placeholder='Digite Aqui' />
+                            <TextField label='Senha' placeholder='Digite Aqui' type='password' />
 
                         </div>
 
@@ -168,7 +172,7 @@ function HeaderUsuario(props) {
                             cursor: 'pointer'
                         }}>Descartar Informações</button>
 
-                        <button style={{
+                        <button  style={{
                             width: '47%',
                             height: '70%',
                             backgroundColor: '#082031',
@@ -177,7 +181,8 @@ function HeaderUsuario(props) {
                             fontWeight: 'bold',
                             borderRadius: '15px',
                             cursor: 'pointer'
-                        }}>Salvar Informações</button>
+                        }}>Salvar Informações
+                        </button>
 
 
                     </div>
@@ -243,8 +248,8 @@ function HeaderUsuario(props) {
             }}>
                 {/* IMAGEM */}
                 <div style={{
-                    width: '75%',
-                    height: '80%',
+                    width: '70%',
+                    height: '75%',
                     borderRadius: '100%',
                     border: 'solid 7px #E3A74F',
                     display: 'flex',
@@ -422,7 +427,7 @@ function HeaderUsuario(props) {
                     height: '23%',
 
                 }}>
-                    <button style={{
+                    <button onClick={cadastroBarbearia}    style={{
                         width: '100%',
                         height: '100%',
                         border: 'none',

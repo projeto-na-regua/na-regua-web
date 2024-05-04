@@ -7,6 +7,7 @@ import CadastroUsuario from './pages/Cadastro/CadastroUsuario/CadastroUsuario'
 import CadastroBarbearia from './pages/Cadastro/CadastroBarbearia/CadastroBarbearia'
 import Confirmacao from './pages/Cadastro/Confirmacao/Confirmacao'
 import CadastroEndereco from './pages/Cadastro/CadastroEndereco/CadastroEndereco'
+import Funcionarios from "./pages/Funcionario/Funcionario"
 import MeusCortes from './pages/MeusCortes/MeusCortes'
 import AgendamentosBarbearia from "./pages/Agendamento/Barbearia/AgendamentoBarbearia"
 import AgendamentosUsuario from "./pages/Agendamento/Usuario/AgendamentoUsuario"
@@ -23,9 +24,8 @@ function Rotas() {
           <Route path="/cadastro-endereco" element={<CadastroEndereco />} />
           <Route path="/cadastro-barbearia" element={<CadastroBarbearia /> } />
           <Route path="/confirmacao" element={<Confirmacao />} />
-          <Route path="/meus-cortes" element={<MeusCortes />} />
-          <Route path="/minha-agenda" element={<AgendamentosBarbearia />}/>
-          <Route path="/meus-agendamentos" element={<AgendamentosUsuario />}/>
+          <Route path="/funcionario" element={<Funcionarios />} />
+          <Route path="/meus-cortes" element={<MeusCortes />}/>
         </Routes>
       </BrowserRouter>
     </>
