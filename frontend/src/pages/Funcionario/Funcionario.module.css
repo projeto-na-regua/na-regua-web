@@ -19,52 +19,6 @@ body {
     margin-top: 2%;
 }
 
-.hoverTrocaTelas{
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    justify-content: center;
-}
-
-.utilHoverTrocaTelas{
-    width: 55%;
-    display: flex;
-    justify-content: space-between;
-    color: #082031;
-    font-weight: 500;
-    font-size: 24;
-}
-
-.opcoesTelas {
-    position: relative;
-    cursor: pointer;
-    transition: transform 0.3s;
-  }
-  
-  .opcoesTelas span {
-    position: relative;
-    z-index: 1; /* Coloca o texto acima da linha */
-  }
-  
-  .opcoesTelas::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: -2px;
-    width: 100%;
-    height: 1.5px;
-    background-color: transparent;
-    transition: background-color 0.3s;
-  }
-  
-  .opcoesTelas:hover::after {
-    background-color: #E3A74F; 
-}
-  
-  .opcoesTelas:hover span {
-    transform: translateY(-5px);
-  }
-
 .inputsPesquisaFiltro{
     display: flex;
     flex-direction: row;

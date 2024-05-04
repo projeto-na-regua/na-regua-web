@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import React from 'react';
 import styles from './Funcionario.module.css' 
+import NavbarBarbeiro from '../../components/NavbarBarbeiro/NavbarBarbeiro';
 
 function abrirEditarDeletar(){
 
@@ -14,17 +15,7 @@ export function Funcionarios() {
     <div className={styles.conteudo}>
       <div className={styles.container}>
         <div className={styles.conteudoFuncionarios}>
-          <div className={styles.hoverTrocaTelas}>
-            <div className={styles.utilHoverTrocaTelas}>
-              <div className={styles.opcoesTelas}><span>Agenda</span></div>
-              <div className={styles.opcoesTelas}><span>Dashboard</span></div>
-              <div className={styles.opcoesTelas}><span>Serviços</span></div>
-              <div className={styles.opcoesTelas}><span>Fluxo de Caixa</span></div>
-              <div className={styles.opcoesTelas}><span>Funcionarios</span></div>
-              <div className={styles.opcoesTelas}><span>Personalização</span></div>
-            </div>
-          </div>
-
+          <NavbarBarbeiro/>
           <div className={styles.inputsPesquisaFiltro}>
             <div className={styles.pesquisaFuncionario}>
               <input type="text" placeholder="Pesquise por funcionário" />
