@@ -26,6 +26,9 @@ function Rotas() {
           <Route path="/confirmacao" element={<Confirmacao />} />
           <Route path="/funcionario" element={<Funcionarios />} />
           <Route path="/meus-cortes" element={<MeusCortes />}/>
+          <Route path="/minha-agenda" element={<AgendamentosBarbearia />}/>
+          <Route path="/meus-agendamentos" element={<AgendamentosUsuario />}/>
+
         </Routes>
       </BrowserRouter>
     </>
