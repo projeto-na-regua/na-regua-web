@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 function NavbarBarbeiro(){
 
     const navigate = useNavigate();
-    
+
     function trocarTela(n){
         switch(n) {
             case 1:
@@ -21,7 +21,7 @@ function NavbarBarbeiro(){
               // Código para caso 4
               break;
             case 5:
-              // Código para caso 5
+              navigate("/funcionario")
               break;
             case 6:
               // Código para caso 6

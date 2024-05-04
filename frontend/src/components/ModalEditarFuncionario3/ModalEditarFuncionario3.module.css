@@ -1,0 +1,28 @@
+.input {
+    width: 100%;
+    border: 2px solid #082031;
+    transition: border-color 0.3s;
+}
+
+.span{
+    color: #082031;
+}
+
+.divInput input:hover {
+    border-color: #E3A74F;
+}
+
+.divInput input:hover + .span {
+    color: #E3A74F;
+}
+
+.input::placeholder {
+    color: #082031;
+    transition: color 0.3s;
+    padding-left: 2%;
+    font-size: 12px;
+}
+
+.input:hover::placeholder {
+    color: #E3A74F;
+}

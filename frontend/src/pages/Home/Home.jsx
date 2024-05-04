@@ -1,7 +1,7 @@
 import { ThemeProvider } from '@emotion/react'
 import { theme } from '../../theme.js'
 import Header from '../../components/Header/Header.jsx'
-import { Button } from '@mui/material'
+import { Button, collapseClasses } from '@mui/material'
 import logo from '../../utils/assets/logo-scale0.svg'
 import GrupoDeInputs from '../../components/GrupoDeInput/GrupoDeInputs.jsx'
 import image from '../../utils/assets/Group 221.svg'
@@ -9,9 +9,13 @@ import MultiActionAreaCard from '../../components/CardComImagem/CardComImagem.js
 import imageTeste from '../../utils/assets/Design sem nome.png'
 import { useNavigate } from 'react-router-dom'
 import { Teste } from '../../components/Teste.jsx'
+import { ModalPersonalizado } from '../../components/ModalEditarFuncionario2/ModalPersonalizado.jsx'
+import { useState } from 'react'
+import ModalEditarFuncionario3 from '../../components/ModalEditarFuncionario3/ModalEditarFuncionario3.jsx'
 
 function Home() {
   const navigate = useNavigate()
+  const [open, setOpen] = useState(false)
 
   return (
     <ThemeProvider theme={theme}>
@@ -91,6 +95,11 @@ function Home() {
 
       </div> */}
       <Teste />
+      <button onClick={() => setOpen(true)}>abrir</button>
+      <ModalPersonalizado open={open} setOpen={setOpen}>
+        <ModalEditarFuncionario3/>
+      </ModalPersonalizado>
+
     </ThemeProvider>
   );
 }

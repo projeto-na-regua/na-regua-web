@@ -5,7 +5,7 @@ export function ModalPersonalizado(props) {
     <>
       <Modal
         open={props.open}
-        onClose={() => props.setOpen(props.open)}
+        onClose={() => props.setOpen(false)}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
@@ -15,10 +15,16 @@ export function ModalPersonalizado(props) {
           left: '50%',
           transform: 'translate(-50%, -50%)',
           width: 400,
-          bgcolor: 'background.paper',
-          border: '2px solid #000',
+          bgcolor: '#F4F3EE',
+          borderRadius: 3,
           boxShadow: 24,
-          p: 4
+          p: 4,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexDirection: 'column',
+          paddingLeft: 0,
+          paddingRight: 0
         }}>
           {props.children}
         </Box>
