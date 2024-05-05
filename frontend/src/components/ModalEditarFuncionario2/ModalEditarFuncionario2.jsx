@@ -35,7 +35,7 @@ function ModalEditarFuncionario4(){
                     fontSize: 12,
                     fontWeight: 600,
                     letterSpacing: 1.5
-                }}>Cancelar</button>
+                }} /*</>onClick={()}*/>Cancelar</button>
                 <button style={{
                     color: '#082031',
                     backgroundColor: '#E3A74F',
@@ -46,7 +46,7 @@ function ModalEditarFuncionario4(){
                     fontSize: 12,
                     fontWeight: 600,
                     letterSpacing: 1.5
-                }}>Confirmar</button>
+                }} /*</>onClick={()}*/>Confirmar</button>
             </div>
     </>
     )

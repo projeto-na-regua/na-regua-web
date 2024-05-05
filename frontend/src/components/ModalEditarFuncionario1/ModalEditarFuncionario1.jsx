@@ -132,7 +132,7 @@ function ModalEditarFuncionario3() {
                     fontSize: 12,
                     fontWeight: 600,
                     letterSpacing: 1.5
-                }}>Descartar informações</button>
+                }} /*</>onClick={()}*/>Descartar informações</button>
                 <button style={{
                     color: '#F4F3EE',
                     backgroundColor: '#082031',
@@ -143,7 +143,7 @@ function ModalEditarFuncionario3() {
                     fontSize: 12,
                     fontWeight: 600,
                     letterSpacing: 1.5
-                }}>Editar informações</button>
+                }} /*</>onClick={()}*/>Editar informações</button>
             </div>
         </>
     )
