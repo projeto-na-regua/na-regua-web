@@ -9,9 +9,11 @@ import MultiActionAreaCard from '../../components/CardComImagem/CardComImagem.js
 import imageTeste from '../../utils/assets/Design sem nome.png'
 import { useNavigate } from 'react-router-dom'
 import { Teste } from '../../components/Teste.jsx'
-import { ModalPersonalizado } from '../../components/ModalEditarFuncionario2/ModalPersonalizado.jsx'
+import { ModalPersonalizado } from '../../components/ModalPaiEditarFuncionario/ModalPersonalizado.jsx'
 import { useState } from 'react'
-import ModalEditarFuncionario3 from '../../components/ModalEditarFuncionario3/ModalEditarFuncionario3.jsx'
+import ModalEditarFuncionario3 from '../../components/ModalEditarFuncionario1/ModalEditarFuncionario1.jsx'
+import ModalEditarFuncionario4 from '../../components/ModalEditarFuncionario2/ModalEditarFuncionario2.jsx'
+import ModalEditarFuncionario5 from '../../components/ModalEditarFuncionario3/ModalEditarFuncionario3.jsx'
 
 function Home() {
   const navigate = useNavigate()
@@ -97,7 +99,7 @@ function Home() {
       <Teste />
       <button onClick={() => setOpen(true)}>abrir</button>
       <ModalPersonalizado open={open} setOpen={setOpen}>
-        <ModalEditarFuncionario3/>
+        <ModalEditarFuncionario5/>
       </ModalPersonalizado>
 
     </ThemeProvider>
