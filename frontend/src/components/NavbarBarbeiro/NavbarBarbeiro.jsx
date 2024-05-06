@@ -1,4 +1,4 @@
-import styles from './NavbarBarbeiro.module.css' 
+import styles from './NavbarBarbeiro.module.css'
 import React from 'react';
 import { useNavigate } from "react-router-dom";
 
@@ -9,22 +9,25 @@ function NavbarBarbeiro(){
     function trocarTela(n){
         switch(n) {
             case 1:
-              navigate("/meus-cortes")
+              navigate("/agenda")
               break;
             case 2:
-              // Código para caso 2
+              navigate("/dashboard")
               break;
             case 3:
-              // Código para caso 3
+              navigate("/servicos")
               break;
             case 4:
-              // Código para caso 4
+              navigate("/fluxo-de-caixa")
               break;
             case 5:
-              navigate("/funcionario")
+              navigate("/funcionarios")
               break;
             case 6:
-              // Código para caso 6
+              navigate("/personalizacao")
+              break;
+            default:
+              navigate("/*")
               break;
           }
     }
