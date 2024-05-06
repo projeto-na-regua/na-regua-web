@@ -1,16 +1,19 @@
 // CardPage.js
 import React from 'react';
 import './MeusCortes.module.css';
-import HeaderUsuario from '../../components/HeaderUsuario/HeaderUsuario';
-import NavbarBarbeiro from '../../components/NavbarBarbeiro/NavbarBarbeiro'
-const CardPage = () => {
+import HeaderUsuario from '../../components/HeaderUsuario/HeaderUsuario'
+import NavbarCliente from '../../components/NavbarCliente/NavbarCliente'
+import CardMeusCortes from '../../components/CardMeusCortes/CardMeusCortes';
+
+const MeusCortesPage = () => {
 
   return (
     <div>
         <HeaderUsuario />
-        <NavbarBarbeiro />
+        <NavbarCliente />
+        <CardMeusCortes/>
     </div>
   );
 };
 
-export default CardPage;
+export default MeusCortesPage;
