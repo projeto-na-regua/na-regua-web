@@ -25,7 +25,7 @@ function Rotas() {
           <Route path="/cadastro-endereco" element={<CadastroEndereco />} />
           <Route path="/cadastro-barbearia" element={<CadastroBarbearia /> } />
           <Route path="/confirmacao" element={<Confirmacao />} />
-          <Route path="/funcionario" element={<Funcionarios />} />
+          <Route path="/funcionarios" element={<Funcionarios />} />
           <Route path="/meus-cortes" element={<MeusCortes />}/>
           <Route path="/minha-agenda" element={<AgendamentosBarbearia />}/>
           <Route path="/meus-agendamentos" element={<AgendamentosUsuario />}/>
