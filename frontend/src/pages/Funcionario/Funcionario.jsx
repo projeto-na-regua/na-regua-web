@@ -8,6 +8,7 @@ import { Button, TextField, Typography } from '@mui/material'
 import CardPequenoFuncionario from '../../components/CardPequenoFuncionario/CardPequenoFuncionario'
 import CardFuncionario from '../../components/CardFuncionario/CardFuncionario'
 import { ModalPersonalizado } from '../../components/ModalPaiEditarFuncionario/ModalPersonalizado'
+import api from '../../api'
 
 export function Funcionarios() {
   const [modal, setModal] = useState(false)
@@ -17,8 +18,34 @@ export function Funcionarios() {
     setModalAdicionar(true)
   }
 
-  return (
+  const [listaFuncionarios, setListaFuncionarios] = useState([])
+  const token = JSON.parse(sessionStorage.getItem('user'))
+  console.log(token);
 
+  React.useEffect(() => {
+    const fetchFuncionarios = async () => {
+      try {
+        const response = await api.get('/funcionarios', {
+          headers: {
+            Authorization: token
+          }
+        });
+        setListaFuncionarios(response.data);
+
+        console.log(response);
+      } catch (error) {
+        console.error('Erro ao buscar funcionários:', error);
+      }
+    };
+
+    fetchFuncionarios();
+
+  }, [token])
+
+
+    const totalFuncionarios = listaFuncionarios.length
+
+  return (
     <div className="Header">
 
       <HeaderUsuario />
@@ -31,24 +58,38 @@ export function Funcionarios() {
             <div style={{
               display: 'flex',
               marginTop: 32,
-              gap: 32
+              gap: 32,
+              width: '100%',
+              justifyContent: 'space-between',
             }}>
-              <TextField
-                label="Buscar por funcionário"
-                variant="outlined"
-              />
+              <div style={{
+                display: 'flex',
+                gap: 32
+              }}>
+                <TextField
+                  label="Buscar por funcionário"
+                  variant="outlined"
+                />
 
-              <TextField
-                label="Filtro por cargo"
-                variant="outlined"
-              />
+                <TextField
+                  label="Filtro por cargo"
+                  variant="outlined"
+                />
+              </div>
+
+              <Button
+                variant='contained'
+                onClick={() => setModalAdicionar(true)}
+              >
+                Extrair relatório
+              </Button>
             </div>
 
             <div className={styles.quadroFuncionarios}>
               <div className={styles.totalAdicionarFuncionarios}>
                 <CardPequenoFuncionario
                   title='Total de funcionários'
-                  icon={27}
+                  icon={totalFuncionarios}
                 />
 
                 <CardPequenoFuncionario
@@ -64,18 +105,12 @@ export function Funcionarios() {
               </div>
 
               <div className={styles.listaFuncionarios}>
-                <CardFuncionario
-                  name='Monique Farias'
-                  onClick={() => setModal(true)}
-                />
-
-                <CardFuncionario
-                  name='Monique Farias'
-                />
-
-                <CardFuncionario
-                  name='Monique Farias'
-                />
+                {listaFuncionarios.map((funcionario) => (
+                  <CardFuncionario
+                    name={funcionario.nome}
+                    onClick={() => setModal(true)}
+                  />
+                ))}
               </div>
             </div>
           </div>
@@ -129,7 +164,7 @@ export function Funcionarios() {
                     setModal(false)
                   }}
                 >
-                  Fechar
+                  Deletar funcionário
                 </Button>
 
                 <Button
@@ -185,13 +220,6 @@ export function Funcionarios() {
 
               <TextField
                 label='Telefone'
-                variant='outlined'
-                fullWidth
-                margin='normal'
-              />
-
-              <TextField
-                label='Cargo'
                 variant='outlined'
                 fullWidth
                 margin='normal'
