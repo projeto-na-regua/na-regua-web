@@ -2,7 +2,9 @@ import iconeSair from '../../utils/assets/IconsHeaderUsuario/Icone Sair.svg'
 import exemploImg from '../../utils/assets/IconsHeaderUsuario/exemplo.jpeg'
 import iconEditar from '../../utils/assets/IconsHeaderUsuario/IconEditar.svg'
 import editFoto from '../../utils/assets/IconsHeaderUsuario/photo-edit_svgrepo.com.png'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react';
+import api from '../../api'
+
 import { TextField } from '@mui/material'
 import styles from './HeaderUsuario.module.css'
 
@@ -11,12 +13,30 @@ function cadastroBarbearia() {
     window.location = '/cadastro-barbearia'
 }
 
+function abrirPerfilBarbeiro(){
+
+}
+
+function abrirPerfilBarbearia(){
+
+}
+
 function paginaLogin() {
     window.location = '/login'
 }
 
 function HeaderUsuario(props) {
+    const [isAuth, setIsAuth] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const token = JSON.parse(sessionStorage.getItem('user'));
+
+    useEffect(() => {
+        if(token) {
+          setIsAuth(true);
+        } else {
+          setIsAuth(false);
+        }
+    }, [token]);
 
     const openModal = () => {
         setIsModalOpen(true);
@@ -176,14 +196,38 @@ function HeaderUsuario(props) {
 
             {/* DIV BOTÃO PRA TROCAR DE AMBIENTE */}
 
-            <div className={styles.divTodoTrocaAmbiente}>
+
+            {isAuth ? (
+                <div className={styles.validacaoAmbiente}>
+                    <div className={styles.divTodoTrocaAmbiente}>
+                        <div className={styles.divConteudoTrocaAmbiente}>
+                            <button id={styles.perfil} className={styles.botaoTrocaAmbiente} onClick={abrirPerfilBarbeiro}>
+                                Perfil
+                            </button>
+                        </div>
+                    </div>
+
+                    <div className={styles.divTodoTrocaAmbiente}>
+                        <div className={styles.divConteudoTrocaAmbiente}>
+                            <button className={styles.botaoTrocaAmbiente} onClick={abrirPerfilBarbearia}>
+                                Dom bigode
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            ) : (
+                <div className={styles.validacaoAmbiente}>
+                <div className={styles.divTodoTrocaAmbiente}>
                 <div className={styles.divConteudoTrocaAmbiente}>
                     <button className={styles.botaoPossuiBarbearia} onClick={cadastroBarbearia}>
-                        Possui Barbearia ?
+                        Usuário
                     </button>
-
                 </div>
             </div>
+            </div>
+            )}
+
+
         </div>
     )
 }

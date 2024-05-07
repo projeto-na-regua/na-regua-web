@@ -312,19 +312,19 @@
 
 /* DIV BOTÃO TROCA DE AMBIENTE */
 .divTodoTrocaAmbiente {
-    width: 25%;
+    width: 100%;
     height: 100%;
     display: flex;
     justify-content: center;
 }
 
 .divConteudoTrocaAmbiente {
-    width: 50%;
-    height: 23%;
+    width: 100%;
+    height: 15%;
 }
 
-.botaoPossuiBarbearia {
-    width: 100%;
+.botaoTrocaAmbiente {
+    width: 150%;
     height: 100%;
     border: none;
     background-color: #E3A74F;
@@ -334,4 +334,31 @@
     cursor: pointer;
     border-bottom-left-radius: 15px;
     border-bottom-right-radius: 15px;
+    color: #F4F3EE;
+    font-weight: 400;
+}
+
+.validacaoAmbiente{
+    display: flex;
+    justify-content: flex-end;
+    gap: 50px;
+}
+
+#perfil{
+    background-color: #e3a84f9b;
+}
+
+.botaoPossuiBarbearia {
+    width: 150%;
+    height: 100%;
+    border: none;
+    background-color: #E3A74F;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    color: #F4F3EE;
+    font-weight: 400;
 }
