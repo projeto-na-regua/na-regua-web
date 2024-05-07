@@ -1,0 +1,72 @@
+.divTodo{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #082031;
+}
+
+.divConteudo{
+    width: 50%;
+    height: 70%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.divImagem{
+    width: 50%;
+    height: 60%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    
+}
+
+.imagem{
+    width: 95%;
+    height: 60%;
+    cursor: pointer;
+}
+
+.textoInfomarivo{
+    color: white;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.divLogoEBotaoVoltar{
+    display: flex;
+    width: 63%;
+    align-items: center;
+    justify-content: center;
+    
+}
+
+.logo{
+    width: 45%;
+    height: 100%;
+    cursor: pointer;
+}
+
+.botaoVoltar{
+    border: 2px solid #082031;
+    width: 50%;
+    height: 70%;
+    border-radius: 20px;
+    background-color: white;
+    cursor: pointer;
+}
+
+.textoBotao{
+    font-weight: bold;
+    font-family: Arial;
+    color: #082031;
+}
