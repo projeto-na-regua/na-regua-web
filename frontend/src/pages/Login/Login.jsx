@@ -27,11 +27,11 @@ function Login() {
         const data = response.data;
 
         sessionStorage.setItem('user', JSON.stringify(data));
-        
+
         toast.success("Login realizado com sucesso!", {
           autoClose: 2000 // 2 segundos
         });
-        
+
         const user = JSON.parse(sessionStorage.getItem('user'));
 
        setTimeout(() => {
@@ -43,7 +43,6 @@ function Login() {
           }
         }
        }, 4000);
-        
 
         console.log(data);
       } catch (error) {
@@ -52,10 +51,7 @@ function Login() {
           toast.error("Email ou senha inválidos!")
         }
       }
-
-
     },
-
     validationSchema: yup.object().shape({
       email: yup
         .string()
@@ -65,11 +61,7 @@ function Login() {
         .string()
         .required('Insira sua senha')
     })
-
-
   })
-
-  // console.log(formik)
 
   return (
     <ThemeProvider theme={theme}>
