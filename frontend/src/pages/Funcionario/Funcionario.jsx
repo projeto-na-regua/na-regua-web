@@ -11,6 +11,7 @@ import { ModalPersonalizado } from '../../components/ModalPaiEditarFuncionario/M
 import api from '../../api'
 import { Formik, useFormik } from 'formik'
 import * as yup from 'yup'
+import InputMask from 'react-input-mask'
 
 export function Funcionarios() {
   const [modal, setModal] = useState(false)
@@ -40,50 +41,6 @@ export function Funcionarios() {
   const handleAdicionar = () => {
     setModalAdicionar(true)
   }
-
-  const formik = useFormik({
-    initialValues: {
-      nome: '',
-      email: '',
-      senha: '',
-      celular: ''
-    },
-    validationSchema: yup.object().shape({
-      nome: yup
-        .string()
-        .required('Campo obrigatório'),
-      email: yup
-        .string()
-        .email('E-mail inválido')
-        .required('Campo obrigatório'),
-      senha: yup
-        .string()
-        .required('Campo obrigatório'),
-      celular: yup
-        .string()
-        .required('Campo obrigatório')
-    }),
-    onSubmit: async (values) => {
-      try {
-        const response = await api.post('/funcionarios/criar', values, {
-          headers: {
-            Authorization: token
-          }
-        })
-
-        if (response.status === 201) {
-          setModalAdicionar(false)
-        }
-      } catch (error) {
-        console.error('Erro ao adicionar funcionário:', error)
-        console.log('Erro completo:', error)
-      }
-
-      console.log('Valores do formulário:', values)
-
-      formik.resetForm()
-    }
-  })
 
   return (
     <div className="Header">
@@ -243,66 +200,110 @@ export function Funcionarios() {
               <Typography variant='h5'>Adicionar funcionário</Typography>
 
               <Formik
-                initialValues={formik.initialValues}
-                onSubmit={formik.handleSubmit}
-                validationSchema={formik.validationSchema}
+                initialValues={{
+                  name: '',
+                  email: '',
+                  password: '',
+                  celular: ''
+                }}
+                validationSchema={yup.object().shape({
+                  name: yup.string().required('Campo obrigatório'),
+                  email: yup.string().email('E-mail inválido').required('Campo obrigatório'),
+                  password: yup.string().required('Campo obrigatório').min(8, 'Senha deve ter no mínimo 8 caracteres'),
+                  celular: yup.string().matches(/^\d{10,11}$/, 'Telefone inválido').required('Campo obrigatório')
+                })}
+                onSubmit={async (values) => {
+                  try {
+                    const response = await api.post('/funcionarios/criar', {
+                      nome: values.name,
+                      email: values.email,
+                      senha: values.password,
+                      celular: values.celular
+                    }, {
+                      headers: {
+                        Authorization: token
+                      }
+                    })
+
+                    if (response.status === 201) {
+                      setModalAdicionar(false)
+                    }
+                  } catch (error) {
+                    console.error('Erro ao adicionar funcionário:', error)
+                  }
+                }}
               >
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-                  <TextField
-                    type="text"
-                    name="nome"
-                    value={formik.values.nome}
-                    placeholder="Nome"
-                    label="Nome"
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    error={formik.touched.nome && Boolean(formik.errors.nome)}
-                    helperText={formik.touched.nome ? formik.errors.nome : ''}
-                  />
+                {(formikProps) => (
+                  <form onSubmit={formikProps.handleSubmit} style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 16,
+                    width: '100%',
+                  }}>
+                    <TextField
+                      type="text"
+                      name="name"
+                      placeholder="Nome do funcionário"
+                      label="Nome do funcionário"
+                      value={formikProps.values.name}
+                      onChange={formikProps.handleChange}
+                      onBlur={formikProps.handleBlur}
+                      error={formikProps.touched.name && Boolean(formikProps.errors.name)}
+                      helperText={formikProps.touched.name ? formikProps.errors.name : ''}
+                    />
 
-                  <TextField
-                    type="email"
-                    name="email"
-                    value={formik.values.email}
-                    placeholder="E-mail"
-                    label="E-mail"
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    error={formik.touched.email && Boolean(formik.errors.email)}
-                    helperText={formik.touched.email ? formik.errors.email : ''}
-                  />
+                    <TextField
+                      type="email"
+                      name="email"
+                      placeholder="E-mail"
+                      label="E-mail"
+                      value={formikProps.values.email}
+                      onChange={formikProps.handleChange}
+                      onBlur={formikProps.handleBlur}
+                      error={formikProps.touched.email && Boolean(formikProps.errors.email)}
+                      helperText={formikProps.touched.email ? formikProps.errors.email : ''}
+                    />
 
-                  <TextField
-                    type="password"
-                    name="senha"
-                    value={formik.values.senha}
-                    placeholder="Senha"
-                    label="Senha"
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    error={formik.touched.senha && Boolean(formik.errors.senha)}
-                    helperText={formik.touched.senha ? formik.errors.senha : ''}
-                  />
+                    <TextField
+                      type="password"
+                      name="password"
+                      placeholder="Senha"
+                      label="Senha"
+                      value={formikProps.values.password}
+                      onChange={formikProps.handleChange}
+                      onBlur={formikProps.handleBlur}
+                      error={formikProps.touched.password && Boolean(formikProps.errors.password)}
+                      helperText={formikProps.touched.password ? formikProps.errors.password : ''}
+                    />
 
-                  <TextField
-                    type="text"
-                    name="celular"
-                    value={formik.values.celular}
-                    placeholder="Telefone"
-                    label="Telefone"
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                    error={formik.touched.celular && Boolean(formik.errors.celular)}
-                    helperText={formik.touched.celular ? formik.errors.celular : ''}
-                  />
+                    <InputMask
+                      mask="(99) 99999-9999"
+                      maskChar="_"
+                      value={formikProps.values.celular}
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/\D/g, '') // Remove caracteres não numéricos
+                        formikProps.handleChange({ target: { name: 'celular', value } })
+                      }}
+                      onBlur={formikProps.handleBlur}
+                    >
+                      {(inputProps) => (
+                        <TextField
+                          {...inputProps}
+                          type="text"
+                          name="celular"
+                          placeholder="Telefone"
+                          label="Telefone"
+                          error={formikProps.touched.celular && Boolean(formikProps.errors.celular)}
+                          helperText={formikProps.touched.celular ? formikProps.errors.celular : ''}
+                        />
+                      )}
+                    </InputMask>
 
-                  <Button
-                    variant='contained'
-                    onClick={formik.handleSubmit}
-                  >
-                    Adicionar funcionário
-                  </Button>
-                </div>
+                    <Button variant='contained' type="submit">
+                      Adicionar funcionário
+                    </Button>
+                  </form>
+                )}
               </Formik>
             </div>
           }
