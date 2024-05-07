@@ -1,7 +1,23 @@
 import { Button, ThemeProvider } from '@mui/material'
 import { theme } from '../../../theme.js'
+import api from '../../../api'
+import { toast } from "react-toastify"
 
 function Confirmacao() {
+  const userDataString = sessionStorage.getItem('user')
+  const userData = JSON.parse(userDataString)
+
+  const mandarDados = async () => {
+    try {
+      await api.post('/usuarios', userData)
+
+      toast.success('Cadastro realizado com sucesso!', { autoClose: 2000 })
+    } catch (error) {
+      toast.error('Erro ao cadastrar', { autoClose: 2000 })
+      console.error('Erro ao cadastrar:', error)
+    }
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <div style={{
@@ -20,7 +36,7 @@ function Confirmacao() {
           </h2>
         </div>
 
-        <Button>Acessar</Button>
+        <Button onClick={mandarDados}>Acessar</Button>
       </div>
     </ThemeProvider>
   )
