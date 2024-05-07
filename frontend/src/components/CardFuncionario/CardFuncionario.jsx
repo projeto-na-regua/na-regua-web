@@ -1,12 +1,10 @@
-// CardFuncionario.jsx
-
 import React, { useState } from 'react';
 import styles from './CardFuncionario.module.css';
 import { Button, Typography } from '@mui/material';
-import { ModalPersonalizado } from '../ModalPersonalizado/ModalPersonalizado';
 import api from '../../api';
 import { toast } from 'react-toastify';
 import CircularProgress from '@mui/material/CircularProgress';
+import { ModalPersonalizado } from '../ModalPersonalizado/ModalPersonalizado'
 
 function CardFuncionario(props) {
   const [carregando, setCarregando] = useState(false);

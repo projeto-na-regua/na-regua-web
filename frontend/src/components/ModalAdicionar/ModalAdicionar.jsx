@@ -1,11 +1,11 @@
 import { Button, CircularProgress, TextField, Typography } from '@mui/material'
-import { ModalPersonalizado } from '../ModalPersonalizado/ModalPersonalizado'
 import { useState } from 'react'
 import { Formik } from 'formik'
 import * as yup from 'yup'
 import api from '../../api'
 import { toast } from "react-toastify"
 import InputMask from 'react-input-mask'
+import { ModalPersonalizado } from '../ModalPersonalizado/ModalPersonalizado'
 
 function ModalAdicionar(props) {
   const [carregando, setCarregando] = useState(false)
