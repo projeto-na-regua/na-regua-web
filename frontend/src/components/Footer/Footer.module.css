@@ -1,0 +1,84 @@
+.divTodoFooter{
+    display: flex;
+    height: 17vh;
+    color: white;
+    background: #082031;
+}
+
+.divSaibaMais{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 15%;
+}
+
+.divFaleComAGente{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 70%;
+}
+
+.divSocial{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 15%;
+}
+
+.divConteudoSaibaMais{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    width: 50%;
+    height: 60%;
+}
+
+.divConteudoFaleComAGente{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    width: 22%;
+    height: 65%;
+}
+
+.divConteudoSaibaMais{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    width: 50%;
+    height: 60%;
+    
+}
+
+.titulo{
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.subTitulo{
+    font-size: 13px;
+}
+
+.subTituloSocial{
+    display: flex;
+    height: 40%;
+}
+
+.divIcons{
+    width: 60%;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.imagemSocial{
+    width: 45%;
+    height: 100%;
+}
+
+.subTituloFaleComAGente{
+    font-size: 13px;
+    display: flex;
+    justify-content: space-between;
+}
