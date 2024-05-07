@@ -4,20 +4,19 @@ import React from 'react'
 import styles from './Funcionario.module.css'
 import NavbarBarbeiro from '../../components/NavbarBarbeiro/NavbarBarbeiro'
 import HeaderUsuario from '../../components/HeaderUsuario/HeaderUsuario'
-import { Button, TextField, Typography, sliderClasses } from '@mui/material'
+import { Button, TextField } from '@mui/material'
 import CardPequenoFuncionario from '../../components/CardPequenoFuncionario/CardPequenoFuncionario'
 import CardFuncionario from '../../components/CardFuncionario/CardFuncionario'
-import { ModalPersonalizado } from '../../components/ModalPaiEditarFuncionario/ModalPersonalizado'
 import api from '../../api'
-import { Formik, useFormik } from 'formik'
-import * as yup from 'yup'
-import InputMask from 'react-input-mask'
+import CircularProgress from '@mui/material/CircularProgress'
+import ModalAdicionar from '../../components/ModalAdicionar/ModalAdicionar'
 
 export function Funcionarios() {
-  const [modal, setModal] = useState(false)
   const [modalAdicionar, setModalAdicionar] = useState(false)
+  const [verMais, setVerMais] = useState(false)
   const [listaFuncionarios, setListaFuncionarios] = useState([])
   const token = JSON.parse(sessionStorage.getItem('user'))
+  const [carregando, setCarregando] = useState(true)
   const totalFuncionarios = listaFuncionarios.length
 
   useEffect(() => {
@@ -30,6 +29,7 @@ export function Funcionarios() {
         })
 
         setListaFuncionarios(response.data)
+        setCarregando(false)
       } catch (error) {
         console.error('Erro ao buscar funcionários:', error)
       }
@@ -41,6 +41,8 @@ export function Funcionarios() {
   const handleAdicionar = () => {
     setModalAdicionar(true)
   }
+
+  console.log(listaFuncionarios)
 
   return (
     <div className="Header">
@@ -59,20 +61,10 @@ export function Funcionarios() {
               width: '100%',
               justifyContent: 'space-between',
             }}>
-              <div style={{
-                display: 'flex',
-                gap: 32
-              }}>
-                <TextField
-                  label="Buscar por funcionário"
-                  variant="outlined"
-                />
-
-                <TextField
-                  label="Filtro por cargo"
-                  variant="outlined"
-                />
-              </div>
+              <TextField
+                label="Buscar por funcionário"
+                variant="outlined"
+              />
 
               <Button
                 variant='contained'
@@ -101,215 +93,48 @@ export function Funcionarios() {
                 />
               </div>
 
-              <div className={styles.listaFuncionarios}>
-                {listaFuncionarios.length > 0 ? (
-                  listaFuncionarios.map((funcionario) => (
-                    <CardFuncionario
-                      key={funcionario.id}
-                      name={funcionario.nome}
-                      onClick={() => setModal(true)}
-                    />
-                  ))
+              <div style={{
+                display: 'flex',
+                width: '100%',
+                alignItems: 'center',
+                justifyContent: 'flex-start',
+                marginLeft: 64,
+                gap: 32
+              }}>
+                {carregando ? (
+                  <CircularProgress style={{
+                    alignSelf: 'center',
+                    justifySelf: 'center',
+                  }} />
                 ) : (
-                  <div>Nenhum funcionário encontrado.</div>
+                  listaFuncionarios.length > 0 ? (
+                    listaFuncionarios.map((funcionario) => (
+                      <CardFuncionario
+                        key={funcionario.id}
+                        name={funcionario.nome}
+                        email={funcionario.email}
+                        phone={funcionario.celular}
+                        onClick={() => setVerMais(funcionario.id)}
+                        setOpen={setVerMais}
+                        open={verMais === funcionario.id}
+                        atualizarFuncionarios={() => setListaFuncionarios(listaFuncionarios.filter((func) => func.id !== funcionario.id))}
+                      />
+                    ))
+                  ) : (
+                    <div>Nenhum funcionário encontrado.</div>
+                  )
                 )}
               </div>
             </div>
           </div>
         </div>
       </div>
-      {modal && (
-        <ModalPersonalizado
-          children={
-            <div style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 32,
-              padding: 32,
-              alignItems: 'center',
-              width: 400,
-            }}>
-              <Typography variant='h5'>Nome do Funcionário</Typography>
-
-              <div style={{
-                display: 'flex',
-                width: '100%',
-                justifyContent: 'space-between'
-              }}>
-                <div style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 16,
-                }}>
-                  <Typography variant='h7'>E-mail:</Typography>
-                  <Typography variant='h7'>Telefone:</Typography>
-                  <Typography variant='h7'>Cargo:</Typography>
-                </div>
-                <div style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 16,
-                }}>
-                  <Typography variant='h7'>Monique Farias</Typography>
-                  <Typography variant='h7'>(11) 99999-9999</Typography>
-                  <Typography variant='h7'>Cargo: Funcionário</Typography>
-                </div>
-              </div>
-
-              <div style={{
-                display: 'flex',
-                gap: 32,
-              }}>
-                <Button
-                  variant='outlined'
-                  onClick={() => {
-                    setModal(false)
-                  }}
-                >
-                  Fechar
-                </Button>
-
-                <Button
-                  variant='contained'
-                  onClick={() => {
-                    setModal(false)
-                  }}
-                >
-                  Editar funcionário
-                </Button>
-              </div>
-            </div>
-          }
-          open={modal}
-          setOpen={setModal}
-          handleClose={() => setModal(false)}
-        />
-      )}
-
       {modalAdicionar && (
-        <ModalPersonalizado
-          children={
-            <div style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 16,
-              padding: 32,
-              alignItems: 'center',
-              width: 400,
-            }}>
-              <Typography variant='h5'>Adicionar funcionário</Typography>
-
-              <Formik
-                initialValues={{
-                  name: '',
-                  email: '',
-                  password: '',
-                  celular: ''
-                }}
-                validationSchema={yup.object().shape({
-                  name: yup.string().required('Campo obrigatório'),
-                  email: yup.string().email('E-mail inválido').required('Campo obrigatório'),
-                  password: yup.string().required('Campo obrigatório').min(8, 'Senha deve ter no mínimo 8 caracteres'),
-                  celular: yup.string().matches(/^\d{10,11}$/, 'Telefone inválido').required('Campo obrigatório')
-                })}
-                onSubmit={async (values) => {
-                  try {
-                    const response = await api.post('/funcionarios/criar', {
-                      nome: values.name,
-                      email: values.email,
-                      senha: values.password,
-                      celular: values.celular
-                    }, {
-                      headers: {
-                        Authorization: token
-                      }
-                    })
-
-                    if (response.status === 201) {
-                      setModalAdicionar(false)
-                    }
-                  } catch (error) {
-                    console.error('Erro ao adicionar funcionário:', error)
-                  }
-                }}
-              >
-                {(formikProps) => (
-                  <form onSubmit={formikProps.handleSubmit} style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: 16,
-                    width: '100%',
-                  }}>
-                    <TextField
-                      type="text"
-                      name="name"
-                      placeholder="Nome do funcionário"
-                      label="Nome do funcionário"
-                      value={formikProps.values.name}
-                      onChange={formikProps.handleChange}
-                      onBlur={formikProps.handleBlur}
-                      error={formikProps.touched.name && Boolean(formikProps.errors.name)}
-                      helperText={formikProps.touched.name ? formikProps.errors.name : ''}
-                    />
-
-                    <TextField
-                      type="email"
-                      name="email"
-                      placeholder="E-mail"
-                      label="E-mail"
-                      value={formikProps.values.email}
-                      onChange={formikProps.handleChange}
-                      onBlur={formikProps.handleBlur}
-                      error={formikProps.touched.email && Boolean(formikProps.errors.email)}
-                      helperText={formikProps.touched.email ? formikProps.errors.email : ''}
-                    />
-
-                    <TextField
-                      type="password"
-                      name="password"
-                      placeholder="Senha"
-                      label="Senha"
-                      value={formikProps.values.password}
-                      onChange={formikProps.handleChange}
-                      onBlur={formikProps.handleBlur}
-                      error={formikProps.touched.password && Boolean(formikProps.errors.password)}
-                      helperText={formikProps.touched.password ? formikProps.errors.password : ''}
-                    />
-
-                    <InputMask
-                      mask="(99) 99999-9999"
-                      maskChar="_"
-                      value={formikProps.values.celular}
-                      onChange={(e) => {
-                        const value = e.target.value.replace(/\D/g, '') // Remove caracteres não numéricos
-                        formikProps.handleChange({ target: { name: 'celular', value } })
-                      }}
-                      onBlur={formikProps.handleBlur}
-                    >
-                      {(inputProps) => (
-                        <TextField
-                          {...inputProps}
-                          type="text"
-                          name="celular"
-                          placeholder="Telefone"
-                          label="Telefone"
-                          error={formikProps.touched.celular && Boolean(formikProps.errors.celular)}
-                          helperText={formikProps.touched.celular ? formikProps.errors.celular : ''}
-                        />
-                      )}
-                    </InputMask>
-
-                    <Button variant='contained' type="submit">
-                      Adicionar funcionário
-                    </Button>
-                  </form>
-                )}
-              </Formik>
-            </div>
-          }
-          open={modalAdicionar}
+        <ModalAdicionar
+          listaFuncionarios={listaFuncionarios}
+          setListaFuncionarios={setListaFuncionarios}
           setOpen={setModalAdicionar}
-          handleClose={() => setModalAdicionar(false)}
+          open={modalAdicionar}
         />
       )}
     </div>
