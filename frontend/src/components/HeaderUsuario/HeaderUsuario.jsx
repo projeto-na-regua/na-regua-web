@@ -14,11 +14,11 @@ function cadastroBarbearia() {
 }
 
 function abrirPerfilBarbeiro(){
-
+    window.location = '/not-found'
 }
 
 function abrirPerfilBarbearia(){
-
+    window.location = '/not-found'
 }
 
 function paginaLogin() {
@@ -31,12 +31,27 @@ function HeaderUsuario(props) {
     const token = JSON.parse(sessionStorage.getItem('user'));
 
     useEffect(() => {
-        if(token) {
-          setIsAuth(true);
-        } else {
-          setIsAuth(false);
+        const validarTipoUsuario = async () => {
+          try {
+            const response = await api.get('/usuarios/user', {
+              headers: {
+                Authorization: token
+              }
+            })
+    
+            console.log(response.data)
+            if(response.data.adm == null){
+                setIsAuth(false)
+            } else {
+                setIsAuth(true)
+            }
+          } catch (error) {
+            console.error('Erro ao validar o funcionário', error)
+          }
         }
-    }, [token]);
+    
+        validarTipoUsuario()
+      }, [token])
 
     const openModal = () => {
         setIsModalOpen(true);
