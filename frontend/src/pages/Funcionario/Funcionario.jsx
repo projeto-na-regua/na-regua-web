@@ -1,5 +1,5 @@
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import React from 'react'
 import styles from './Funcionario.module.css'
 import NavbarBarbeiro from '../../components/NavbarBarbeiro/NavbarBarbeiro'
@@ -9,41 +9,81 @@ import CardPequenoFuncionario from '../../components/CardPequenoFuncionario/Card
 import CardFuncionario from '../../components/CardFuncionario/CardFuncionario'
 import { ModalPersonalizado } from '../../components/ModalPaiEditarFuncionario/ModalPersonalizado'
 import api from '../../api'
+import { Formik, useFormik } from 'formik'
+import * as yup from 'yup'
 
 export function Funcionarios() {
   const [modal, setModal] = useState(false)
   const [modalAdicionar, setModalAdicionar] = useState(false)
-
-  const handleAdicionar = () => {
-    setModalAdicionar(true)
-  }
-
   const [listaFuncionarios, setListaFuncionarios] = useState([])
   const token = JSON.parse(sessionStorage.getItem('user'))
-  console.log(token);
+  const totalFuncionarios = listaFuncionarios.length
 
-  React.useEffect(() => {
+  useEffect(() => {
     const fetchFuncionarios = async () => {
       try {
         const response = await api.get('/funcionarios', {
           headers: {
             Authorization: token
           }
-        });
-        setListaFuncionarios(response.data);
+        })
 
-        console.log(response);
+        setListaFuncionarios(response.data)
       } catch (error) {
-        console.error('Erro ao buscar funcionários:', error);
+        console.error('Erro ao buscar funcionários:', error)
       }
-    };
+    }
 
-    fetchFuncionarios();
+    fetchFuncionarios()
+  }, [token, listaFuncionarios])
 
-  }, [token])
+  const handleAdicionar = () => {
+    setModalAdicionar(true)
+  }
 
+  const formik = useFormik({
+    initialValues: {
+      nome: '',
+      email: '',
+      senha: '',
+      celular: ''
+    },
+    validationSchema: yup.object().shape({
+      nome: yup
+        .string()
+        .required('Campo obrigatório'),
+      email: yup
+        .string()
+        .email('E-mail inválido')
+        .required('Campo obrigatório'),
+      senha: yup
+        .string()
+        .required('Campo obrigatório'),
+      celular: yup
+        .string()
+        .required('Campo obrigatório')
+    }),
+    onSubmit: async (values) => {
+      try {
+        const response = await api.post('/funcionarios/criar', values, {
+          headers: {
+            Authorization: token
+          }
+        })
 
-    const totalFuncionarios = listaFuncionarios.length
+        if (response.status === 201) {
+          setModalAdicionar(false)
+        }
+      } catch (error) {
+        console.error('Erro ao adicionar funcionário:', error)
+        console.log('Erro completo:', error)
+      }
+
+      console.log('Valores do formulário:', values)
+
+      formik.resetForm()
+    }
+  })
 
   return (
     <div className="Header">
@@ -105,12 +145,17 @@ export function Funcionarios() {
               </div>
 
               <div className={styles.listaFuncionarios}>
-                {listaFuncionarios.map((funcionario) => (
-                  <CardFuncionario
-                    name={funcionario.nome}
-                    onClick={() => setModal(true)}
-                  />
-                ))}
+                {listaFuncionarios.length > 0 ? (
+                  listaFuncionarios.map((funcionario) => (
+                    <CardFuncionario
+                      key={funcionario.id}
+                      name={funcionario.nome}
+                      onClick={() => setModal(true)}
+                    />
+                  ))
+                ) : (
+                  <div>Nenhum funcionário encontrado.</div>
+                )}
               </div>
             </div>
           </div>
@@ -164,7 +209,7 @@ export function Funcionarios() {
                     setModal(false)
                   }}
                 >
-                  Deletar funcionário
+                  Fechar
                 </Button>
 
                 <Button
@@ -197,42 +242,68 @@ export function Funcionarios() {
             }}>
               <Typography variant='h5'>Adicionar funcionário</Typography>
 
-              <TextField
-                label='Nome'
-                variant='outlined'
-                fullWidth
-                margin='normal'
-              />
-
-              <TextField
-                label='Email'
-                variant='outlined'
-                fullWidth
-                margin='normal'
-              />
-
-              <TextField
-                label='Senha'
-                variant='outlined'
-                fullWidth
-                margin='normal'
-              />
-
-              <TextField
-                label='Telefone'
-                variant='outlined'
-                fullWidth
-                margin='normal'
-              />
-
-              <Button
-                variant='contained'
-                onClick={() => {
-                  setModalAdicionar(false)
-                }}
+              <Formik
+                initialValues={formik.initialValues}
+                onSubmit={formik.handleSubmit}
+                validationSchema={formik.validationSchema}
               >
-                Adicionar funcionário
-              </Button>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                  <TextField
+                    type="text"
+                    name="nome"
+                    value={formik.values.nome}
+                    placeholder="Nome"
+                    label="Nome"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={formik.touched.nome && Boolean(formik.errors.nome)}
+                    helperText={formik.touched.nome ? formik.errors.nome : ''}
+                  />
+
+                  <TextField
+                    type="email"
+                    name="email"
+                    value={formik.values.email}
+                    placeholder="E-mail"
+                    label="E-mail"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={formik.touched.email && Boolean(formik.errors.email)}
+                    helperText={formik.touched.email ? formik.errors.email : ''}
+                  />
+
+                  <TextField
+                    type="password"
+                    name="senha"
+                    value={formik.values.senha}
+                    placeholder="Senha"
+                    label="Senha"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={formik.touched.senha && Boolean(formik.errors.senha)}
+                    helperText={formik.touched.senha ? formik.errors.senha : ''}
+                  />
+
+                  <TextField
+                    type="text"
+                    name="celular"
+                    value={formik.values.celular}
+                    placeholder="Telefone"
+                    label="Telefone"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={formik.touched.celular && Boolean(formik.errors.celular)}
+                    helperText={formik.touched.celular ? formik.errors.celular : ''}
+                  />
+
+                  <Button
+                    variant='contained'
+                    onClick={formik.handleSubmit}
+                  >
+                    Adicionar funcionário
+                  </Button>
+                </div>
+              </Formik>
             </div>
           }
           open={modalAdicionar}
