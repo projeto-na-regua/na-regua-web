@@ -5,7 +5,8 @@ export function ModalPersonalizado(props) {
     <>
       <Modal
         open={props.open}
-        onClose={() => props.setOpen(false)}
+        setOpen={() => props.setOpen}
+        onClose={props.handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
