@@ -12,6 +12,7 @@ import MeusCortes from './pages/MeusCortes/MeusCortes'
 import AgendamentosBarbearia from "./pages/Agendamento/Barbearia/AgendamentoBarbearia"
 import AgendamentosUsuario from "./pages/Agendamento/Usuario/AgendamentoUsuario"
 import Perfil from './pages/Perfil/Perfil'
+import ConfirmacaoBarbearia from './pages/Cadastro/ConfirmacaoBarbearia/ConfirmacaoBarbearia'
 
 function Rotas() {
   return (
@@ -25,6 +26,7 @@ function Rotas() {
           <Route path="/cadastro-endereco" element={<CadastroEndereco />} />
           <Route path="/cadastro-barbearia" element={<CadastroBarbearia /> } />
           <Route path="/confirmacao" element={<Confirmacao />} />
+          <Route path="/confirmacao-barbearia" element={<ConfirmacaoBarbearia />} />
           <Route path="/funcionarios" element={<Funcionarios />} />
           <Route path="/meus-cortes" element={<MeusCortes />}/>
           <Route path="/minha-agenda" element={<AgendamentosBarbearia />}/>

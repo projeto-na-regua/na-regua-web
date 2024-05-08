@@ -1,39 +1,18 @@
 import { Button, ThemeProvider } from '@mui/material'
 import { theme } from '../../../theme.js'
-import api from '../../../api'
+import api from '../../../api.js'
 import { toast } from "react-toastify"
-import { useNavigate } from 'react-router-dom'
 
-function Confirmacao() {
-  const navigate = useNavigate()
+function ConfirmacaoBarbearia() {
   const userDataString = sessionStorage.getItem('user')
-  const userDataStringEndereco = sessionStorage.getItem('endereco')
-
-  // merge dos dados do usuário e do endereço
-  const userData = {
-    ...JSON.parse(userDataString),
-    ...JSON.parse(userDataStringEndereco)
-  }
+  const userData = JSON.parse(userDataString)
 
   const mandarDados = async () => {
-    console.log(userData)
     try {
-      await api.post('/usuarios/cadastro', {
-        nome: userData.name,
-        email: userData.email,
-        senha: userData.password,
-        celular: userData.phone,
-        cep: userData.cep,
-        logradouro: userData.logradouro,
-        numero: userData.number,
-        complemento: userData.complement,
-        cidade: userData.cidade,
-        estado: userData.estado,
-      })
+      await api.post('/usuarios/cadastrar-barbearia', userData)
 
       toast.success('Cadastro realizado com sucesso!', { autoClose: 2000 })
-      navigate('/meus-agendamentos')
-      
+
     } catch (error) {
       toast.error('Erro ao cadastrar', { autoClose: 2000 })
       console.error('Erro ao cadastrar:', error)
@@ -68,11 +47,13 @@ function Confirmacao() {
             style={{
               height: 40,
               width: '100%'
-            }}>Acessar</Button>
+            }}
+            
+            >Acessar</Button>
         </div>
         </div>
     </ThemeProvider>
   )
 }
 
-export default Confirmacao
+export default ConfirmacaoBarbearia

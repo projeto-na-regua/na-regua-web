@@ -17,7 +17,6 @@ function CadastroUsuario() {
       email: '',
       password: '',
       confirmPassword: '',
-      birthDate: '',
       phone: ''
     },
     validationSchema: yup.object().shape({
@@ -25,7 +24,6 @@ function CadastroUsuario() {
       email: yup.string().email('Insira um e-mail válido').required('Insira seu e-mail'),
       password: yup.string().required('Insira sua senha'),
       confirmPassword: yup.string().oneOf([yup.ref('password'), null], 'As senhas precisam ser iguais').required('Confirme sua senha'),
-      birthDate: yup.string().required('Insira sua data de nascimento'),
       phone: yup.string().required('Insira seu telefone')
     }),
     onSubmit: async (values) => {
@@ -34,7 +32,7 @@ function CadastroUsuario() {
 
         sessionStorage.setItem('user', userDataString)
 
-        navigate('/cadastro-endereco');
+        navigate('/cadastro-endereco')
       } catch (error) {
         console.error('Erro ao cadastrar usuário:', error)
         toast.error('Erro ao cadastrar usuário', { autoClose: 2000 })
@@ -45,7 +43,9 @@ function CadastroUsuario() {
   return (
     <ThemeProvider theme={theme}>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Button onClick={() => navigate('/')} style={{ position: 'absolute', top: 16, left: 16 }}>Voltar</Button>
+        <Button variant='contained' onClick={() => navigate('/')} style={{ position: 'absolute', top: 16, left: 16, height: 40, width: 100 }}>
+          Voltar
+        </Button>
 
         <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 16, padding: 80, width: '100%' }}>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -85,6 +85,26 @@ function CadastroUsuario() {
                     helperText={formik.touched.email ? formik.errors.email : ''}
                   />
 
+                  <InputMask
+                    mask="(99) 99999-9999"
+                    value={formik.values.phone}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    maskChar="_"
+                  >
+                    {() => (
+                      <TextField
+                        type="text"
+                        name="phone"
+                        placeholder="Telefone"
+                        label="Telefone"
+                        error={formik.touched.phone && Boolean(formik.errors.phone)}
+                        helperText={formik.touched.phone ? formik.errors.phone : ''}
+
+                      />
+                    )}
+                  </InputMask>
+
                   <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
                     <TextField
                       type="password"
@@ -113,41 +133,7 @@ function CadastroUsuario() {
                     />
                   </div>
 
-                  <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
-                    <TextField
-                      type="date"
-                      name="birthDate"
-                      value={formik.values.birthDate}
-                      placeholder="Data de Nascimento"
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      error={formik.touched.birthDate && Boolean(formik.errors.birthDate)}
-                      helperText={formik.touched.birthDate ? formik.errors.birthDate : ''}
-                      style={{ width: '45%' }}
-                    />
-
-                    <InputMask
-                      mask="(99) 99999-9999"
-                      value={formik.values.phone}
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      maskChar="_"
-                    >
-                      {() => (
-                        <TextField
-                          type="text"
-                          name="phone"
-                          placeholder="Telefone"
-                          label="Telefone"
-                          error={formik.touched.phone && Boolean(formik.errors.phone)}
-                          helperText={formik.touched.phone ? formik.errors.phone : ''}
-                          style={{ width: '45%' }}
-                        />
-                      )}
-                    </InputMask>
-                  </div>
-
-                  <Button type="submit" onClick={() => formik.handleSubmit}>Cadastrar</Button>
+                  <Button variant='contained' type="submit" onClick={() => formik.handleSubmit}>Cadastrar</Button>
 
                   <div style={{ display: 'flex', gap: 8, alignSelf: 'center' }}>
                     <span>Já tem uma conta?</span>
