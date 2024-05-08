@@ -6,10 +6,9 @@ import { useNavigate } from 'react-router-dom'
 
 function Confirmacao() {
   const navigate = useNavigate()
-  const userDataString = sessionStorage.getItem('user')
+  const userDataString = sessionStorage.getItem('userInfo')
   const userDataStringEndereco = sessionStorage.getItem('endereco')
 
-  // merge dos dados do usuário e do endereço
   const userData = {
     ...JSON.parse(userDataString),
     ...JSON.parse(userDataStringEndereco)
@@ -18,22 +17,25 @@ function Confirmacao() {
   const mandarDados = async () => {
     console.log(userData)
     try {
-      await api.post('/usuarios/cadastro', {
-        nome: userData.name,
+      const response = await api.post('/usuarios/cadastro', {
+        nome: userData.nome,
         email: userData.email,
-        senha: userData.password,
-        celular: userData.phone,
+        senha: userData.senha,
+        celular: userData.celular,
         cep: userData.cep,
         logradouro: userData.logradouro,
-        numero: userData.number,
-        complemento: userData.complement,
+        numero: userData.numero,
+        complemento: userData.complemento,
         cidade: userData.cidade,
         estado: userData.estado,
       })
 
+      const token = response.data
+      sessionStorage.setItem('user', JSON.stringify(token))
+
       toast.success('Cadastro realizado com sucesso!', { autoClose: 2000 })
-      navigate('/meus-agendamentos')
-      
+      navigate('/meus-cortes')
+
     } catch (error) {
       toast.error('Erro ao cadastrar', { autoClose: 2000 })
       console.error('Erro ao cadastrar:', error)
