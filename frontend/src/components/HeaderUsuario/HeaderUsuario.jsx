@@ -11,12 +11,12 @@ function cadastroBarbearia() {
     window.location = '/cadastro-barbearia'
 }
 
-function abrirPerfilBarbeiro(){
-    window.location = '/not-found'
+function abrirPerfilBarbeiro() {
+    window.location = '/meus-cortes'
 }
 
-function abrirPerfilBarbearia(){
-    window.location = '/not-found'
+function abrirPerfilBarbearia() {
+    window.location = '/funcionarios'
 }
 
 function paginaLogin() {
@@ -26,30 +26,50 @@ function paginaLogin() {
 function HeaderUsuario(props) {
     const [isAuth, setIsAuth] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [userInfo, setUserInfo] = useState({ nome: '', celular: '', email: '', logradouro: '', numero: '', cidade: '', estado: '', cep: '' });
     const token = JSON.parse(sessionStorage.getItem('user'));
 
     useEffect(() => {
         const validarTipoUsuario = async () => {
-          try {
-            const response = await api.get('/usuarios/user', {
-              headers: {
-                Authorization: token
-              }
-            })
-    
-            console.log(response.data)
-            if(response.data.adm == null){
-                setIsAuth(false)
-            } else {
-                setIsAuth(true)
+            try {
+                const response = await api.get('/usuarios/user', {
+                    headers: {
+                        Authorization: token
+                    }
+                })
+
+                console.log(response.data)
+                if (response.data.adm == null) {
+                    setIsAuth(false)
+                } else {
+                    setIsAuth(true)
+                }
+            } catch (error) {
+                console.error('Erro ao validar o funcionário', error)
             }
-          } catch (error) {
-            console.error('Erro ao validar o funcionário', error)
-          }
         }
-    
+
         validarTipoUsuario()
-      }, [token])
+    }, [token])
+
+    useEffect(() => {
+        const fetchUserInfo = async () => {
+            try {
+                const response = await api.get('/usuarios/perfil', {
+                    headers: {
+                        Authorization: token
+                    }
+                });
+                const { nome, celular, email, logradouro, numero, cidade, estado, cep } = response.data;
+                console.log(response.data)
+                setUserInfo({ nome, celular, email, logradouro, numero, cidade, estado, cep });
+            } catch (error) {
+                console.error('Erro ao receber as informações do funcionário', error);
+            }
+        };
+
+        fetchUserInfo();
+    }, [token]);
 
     const openModal = () => {
         setIsModalOpen(true);
@@ -57,6 +77,34 @@ function HeaderUsuario(props) {
 
     const closeModal = () => {
         setIsModalOpen(false);
+    };
+
+    const [values, setValues] = useState({
+        nome: '',
+        email: '',
+        senha: '',
+        celular: '',
+        logradouro: '',
+        numero: '',
+        cidade: '',
+        cep: ''
+    });
+
+    const resetValues = () => {
+        setValues({
+            nome: '',
+            email: '',
+            senha: '',
+            celular: '',
+            logradouro: '',
+            numero: '',
+            cidade: '',
+            cep: ''
+        });
+    };
+
+    const handleChange = (prop) => (event) => {
+        setValues({ ...values, [prop]: event.target.value });
     };
 
     return (
@@ -87,31 +135,72 @@ function HeaderUsuario(props) {
 
                     {/* INPUTS */}
 
-                    <div className={styles.divTodoInputs} >
+                    <div className={styles.divTodoInputs}>
 
                         <div className={styles.divEsquerdaInputs}>
 
-                            <TextField label='Nome' placeholder='Digite Aqui' />
-                            <TextField label='Email' placeholder='Digite Aqui' />
-                            <TextField label='Senha' placeholder='Digite Aqui' type='password' />
+                            <TextField
+                                label='Nome'
+                                placeholder='Digite Aqui'
+                                value={values.nome}
+                                onChange={handleChange('nome')}
+                            />
+                            <TextField
+                                label='Email'
+                                placeholder='Digite Aqui'
+                                value={values.email}
+                                onChange={handleChange('email')}
+                            />
+                            <TextField
+                                label='Senha'
+                                placeholder='Digite Aqui'
+                                type='password'
+                                value={values.senha}
+                                onChange={handleChange('senha')}
+                            />
+                            <TextField
+                                label='Celular'
+                                placeholder='Digite Aqui'
+                                value={values.celular}
+                                onChange={handleChange('celular')}
+                            />
 
                         </div>
 
                         <div className={styles.divDireitaInputs}>
-                            <TextField label='Celular' placeholder='Digite Aqui' />
-                            <TextField label='Endereço' placeholder='Digite Aqui' />
+                            <TextField
+                                label='Logradouro'
+                                placeholder='Digite Aqui'
+                                value={values.logradouro}
+                                onChange={handleChange('logradouro')}
+                            />
+                            <TextField
+                                label='Número'
+                                placeholder='Digite Aqui'
+                                value={values.numero}
+                                onChange={handleChange('numero')}
+                            />
+                            <TextField
+                                label='Cidade'
+                                placeholder='Digite Aqui'
+                                value={values.cidade}
+                                onChange={handleChange('cidade')}
+                            />
+                            <TextField
+                                label='CEP'
+                                placeholder='Digite Aqui'
+                                value={values.cep}
+                                onChange={handleChange('cep')}
+                            />
 
                         </div>
-
-
                     </div>
 
                     {/* SALVAR E DESCARTAR INFORMAÇÕES */}
 
                     <div className={styles.divButtonDescartarESalvar}>
-                        <button className={styles.buttonDescartarInfos}>Descartar Informações</button>
-
-                        <button className={styles.buttonSalvarInfos}>Salvar Informações
+                    <button className={styles.buttonDescartarInfos} onClick={() => {resetValues()}}>Descartar Informações</button>
+                        <button className={styles.buttonSalvarInfos} onClick={() => {}}>Salvar Informações
                         </button>
 
                     </div>
@@ -153,7 +242,7 @@ function HeaderUsuario(props) {
 
                     <div className={styles.divBemVindo}>
                         <div className={styles.divBemVindoConteudo}>
-                            Bem-vindo,<span style={{ color: "#E3A74F" }}>&nbsp; Antonello</span>!
+                            Bem-vindo,<span style={{ color: "#E3A74F" }}>&nbsp; {userInfo.nome}</span>!
                         </div>
 
                         <div className={styles.divBotaoEditar}>
@@ -172,11 +261,11 @@ function HeaderUsuario(props) {
                         <div className={styles.divTelefoneEEmail}>
 
                             <div className={styles.divInfoConteudo}>
-                                (xx) x xxxx - xxxx
+                                {userInfo.celular}
                             </div>
 
                             <div className={styles.divInfoConteudo}>
-                                antonello@gmail.com
+                                {userInfo.email}
                             </div>
 
                         </div>
@@ -191,7 +280,7 @@ function HeaderUsuario(props) {
                         <div className={styles.divConteudoEndereco}>
 
                             <div className={styles.divConteudoEnderecoTexto}>
-                                Rua xxxxxxxxxxxxxxx, 212 - SP
+                                {userInfo.logradouro}, {userInfo.numero}, {userInfo.cidade} - {userInfo.estado}, {userInfo.cep}
                             </div>
 
                         </div>
@@ -247,8 +336,6 @@ function HeaderUsuario(props) {
                         Possui barbearia?
                     </Button>
                 </div>
-            </div>
-            </div>
             )}
 
 
