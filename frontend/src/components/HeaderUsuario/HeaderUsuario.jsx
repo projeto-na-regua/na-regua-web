@@ -3,7 +3,7 @@ import exemploImg from '../../utils/assets/IconsHeaderUsuario/exemplo.jpeg'
 import iconEditar from '../../utils/assets/IconsHeaderUsuario/IconEditar.svg'
 import editFoto from '../../utils/assets/IconsHeaderUsuario/photo-edit_svgrepo.com.png'
 import React, { useState } from 'react'
-import { TextField } from '@mui/material'
+import { Button, TextField } from '@mui/material'
 import styles from './HeaderUsuario.module.css'
 
 
@@ -109,7 +109,7 @@ function HeaderUsuario(props) {
                 {/* IMAGEM */}
                 <div className={styles.divImagem}>
 
-                    <img src={exemploImg} style={{ height: '101%', width: '100%', borderRadius: '100%' }} alt="" />
+                    <img style={{ height: '101%', width: '100%', borderRadius: '100%' }} alt="" />
 
                 </div>
             </div>
@@ -178,10 +178,20 @@ function HeaderUsuario(props) {
 
             <div className={styles.divTodoTrocaAmbiente}>
                 <div className={styles.divConteudoTrocaAmbiente}>
-                    <button className={styles.botaoPossuiBarbearia} onClick={cadastroBarbearia}>
-                        Possui Barbearia ?
-                    </button>
+                    <Button
+                    variant='contained'
+                    className={styles.botaoTrocaAmbiente}
+                    onClick={cadastroBarbearia}
+                    style={{
+                        backgroundColor: '#E3A74F',
+                        color: '#FFF',
+                        borderRadius: '0 0 10px 10px',
+                        width: '100%',
+                        height: '100%'
 
+                    }}>
+                        Possui barbearia?
+                    </Button>
                 </div>
             </div>
         </div>
