@@ -12,6 +12,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 import ModalAdicionar from '../../components/ModalAdicionar/ModalAdicionar'
 import { theme } from '../../theme'
 
+
 export function Funcionarios() {
   const [modalAdicionar, setModalAdicionar] = useState(false)
   const [verMais, setVerMais] = useState(false)

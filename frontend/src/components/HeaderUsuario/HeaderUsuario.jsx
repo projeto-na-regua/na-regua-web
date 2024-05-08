@@ -4,6 +4,7 @@ import iconEditar from '../../utils/assets/IconsHeaderUsuario/IconEditar.svg'
 import editFoto from '../../utils/assets/IconsHeaderUsuario/photo-edit_svgrepo.com.png'
 import React, { useState, useEffect } from 'react';
 import api from '../../api'
+import utils from "../../utils/globals";
 
 import { TextField } from '@mui/material'
 import styles from './HeaderUsuario.module.css'
@@ -101,6 +102,10 @@ function HeaderUsuario(props) {
     const closeModal = () => {
         setIsModalOpen(false);
     };
+
+    const handleLogout = () => {
+        utils.logout(); 
+      }
 
     const [values, setValues] = useState({
         nome: '',
@@ -230,6 +235,8 @@ function HeaderUsuario(props) {
                 </div>
             )}
 
+            
+
             {/* HEADER */}
             {/* DIV BOTÃO DE SAIR */}
             <div className={styles.divTodoBotaoSair}>
@@ -240,7 +247,7 @@ function HeaderUsuario(props) {
 
                         <div className={styles.divConteudoDentroBotao}>
                             <img src={iconeSair} style={{ height: '23px' }} alt="" />
-                            <div className={styles.textoSair}>Sair</div>
+                            <div className={styles.textoSair} onClick={handleLogout}>Sair</div>
                         </div>
 
                     </button>
