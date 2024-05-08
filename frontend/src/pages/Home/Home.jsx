@@ -1,7 +1,7 @@
 import { ThemeProvider } from '@emotion/react'
 import { theme } from '../../theme.js'
 import Header from '../../components/Header/Header.jsx'
-import { Button } from '@mui/material'
+import { Button, Typography } from '@mui/material'
 import logo from '../../utils/assets/logo-scale0.svg'
 import GrupoDeInputs from '../../components/GrupoDeInput/GrupoDeInputs.jsx'
 import image from '../../utils/assets/Group 221.svg'
@@ -10,19 +10,20 @@ import imageTeste from '../../utils/assets/Design sem nome.png'
 import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import MenuLateralUsuario from '../../components/MenuLateralUsuario/MenuLateralUsuario.jsx'
+import { Footer } from '../../components/Footer/Footer.jsx'
 
 function validar(navigate) {
-  const token = JSON.parse(sessionStorage.getItem('user'));
+  const token = JSON.parse(sessionStorage.getItem('user'))
 
   if (token) {
-    return <div>salve chupetinhas</div>;
+    return <div>salve chupetinhas</div>
   } else {
     return (
       <div>
         <Button variant='contained' onClick={() => navigate('/login')}>Entrar</Button>
       </div>
-    );
-}
+    )
+  }
 }
 
 function Home() {
@@ -33,7 +34,7 @@ function Home() {
   const [open, setOpen] = useState(false)
 
   useEffect(() => {
-    if(!token) {
+    if (!token) {
       setIsAuth(false)
     } else {
       setIsAuth(true)
@@ -57,22 +58,22 @@ function Home() {
               cursor: 'pointer'
             }}
             >
-            <svg width="30" height="30" viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
-<path d="M5 21C5 17.134 8.13401 14 12 14C15.866 14 19 17.134 19 21M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
+                <path d="M5 21C5 17.134 8.13401 14 12 14C15.866 14 19 17.134 19 21M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
               Usuário
               <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none">
-  <path fill="#ffffff" fill-rule="evenodd" d="M19 4a1 1 0 01-1 1H2a1 1 0 010-2h16a1 1 0 011 1zm0 6a1 1 0 01-1 1H2a1 1 0 110-2h16a1 1 0 011 1zm-1 7a1 1 0 100-2H2a1 1 0 100 2h16z"/>
-</svg>
-              <MenuLateralUsuario open={open}/>
-              </Button>
-            : <Button onClick={() => navigate('/login')} variant='contained'>Entrar</Button>}
+                <path fill="#ffffff" fill-rule="evenodd" d="M19 4a1 1 0 01-1 1H2a1 1 0 010-2h16a1 1 0 011 1zm0 6a1 1 0 01-1 1H2a1 1 0 110-2h16a1 1 0 011 1zm-1 7a1 1 0 100-2H2a1 1 0 100 2h16z" />
+              </svg>
+              <MenuLateralUsuario open={open} />
+            </Button>
+            : <Button onClick={() => navigate('/login')} variant='contained' style={{ width: 100 }}>Entrar</Button>}
         </div>}
       />
 
       <div style={{
         display: 'flex',
-        height: '60vh',
+        height: '45vh',
         justifyContent: 'flex-end',
         alignItems: 'center',
         flexDirection: 'column',
@@ -82,21 +83,16 @@ function Home() {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          width: 600,
+          width: 800,
+          gap: 16
         }}>
-          <h1 style={{
-            color: '#E3A74F',
-            textAlign: 'center'
-          }}>
-            Barbearias à sua volta
-          </h1>
+          <Typography variant='h1' style={{ color: '#082031', textAlign: 'center' }}>
+            <span style={{ color: '#E3A74F' }}>Barbearia Moderna:</span> A Experiência que Você Merece
+          </Typography>
 
-          <span style={{
-            color: '#082031',
-            textAlign: 'center'
-          }}>
-            Estilo e conveniência ao alcance de suas mãos!
-          </span>
+          <Typography variant='body1' style={{ color: '#082031', textAlign: 'center', fontSize: 16 }}>
+            Agende seu horário com facilidade e agilidade através da nossa plataforma intuitiva para uma experiência de barbearia sem estresse!
+          </Typography>
         </div>
 
         <GrupoDeInputs />
@@ -129,23 +125,23 @@ function Home() {
         height: '60vh',
         display: 'flex',
         justifyContent: 'space-around',
-        alignItems: 'center'
+        alignItems: 'center',
+        marginBottom: 128
       }}>
         <div style={{
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          width: 600
+          width: 600,
+          gap: 16
         }}>
-          <h1 style={{
-            color: 'white'
-          }}>
-            <span style={{ color: '#E3A74F'}}>Agende com Facilidade:</span> Barbearias Modernas ao Seu Alcance
-          </h1>
+          <Typography variant='h1' style={{ color: '#E3A74F', textAlign: 'center' }}>
+              <span style={{ color: '#fff' }}>Barbearia Moderna:</span> A Experiência que Você Merece
+          </Typography>
 
-          <span style={{
-            color: 'white'
-          }}>Reserve seu horário com facilidade e agilidade através da nossa plataforma intuitiva para uma experiência de barbearia sem estresse!</span>
+          <Typography variant='h2' style={{ color: '#ffffff', textAlign: 'center' }}>
+            Agende seu horário com facilidade e agilidade através da nossa plataforma intuitiva para uma experiência de barbearia sem estresse!
+          </Typography>
         </div>
         <div style={{
           width: 500,
@@ -165,6 +161,8 @@ function Home() {
           }} />
         </div>
       </div>
+
+      <Footer />
     </ThemeProvider>
   )
 }
