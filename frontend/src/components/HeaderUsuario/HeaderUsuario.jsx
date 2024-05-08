@@ -2,13 +2,21 @@ import iconeSair from '../../utils/assets/IconsHeaderUsuario/Icone Sair.svg'
 import exemploImg from '../../utils/assets/IconsHeaderUsuario/exemplo.jpeg'
 import iconEditar from '../../utils/assets/IconsHeaderUsuario/IconEditar.svg'
 import editFoto from '../../utils/assets/IconsHeaderUsuario/photo-edit_svgrepo.com.png'
-import React, { useState } from 'react'
 import { Button, TextField } from '@mui/material'
+import React, { useState, useEffect } from 'react';
+import api from '../../api'
 import styles from './HeaderUsuario.module.css'
-
 
 function cadastroBarbearia() {
     window.location = '/cadastro-barbearia'
+}
+
+function abrirPerfilBarbeiro(){
+    window.location = '/not-found'
+}
+
+function abrirPerfilBarbearia(){
+    window.location = '/not-found'
 }
 
 function paginaLogin() {
@@ -16,7 +24,32 @@ function paginaLogin() {
 }
 
 function HeaderUsuario(props) {
+    const [isAuth, setIsAuth] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const token = JSON.parse(sessionStorage.getItem('user'));
+
+    useEffect(() => {
+        const validarTipoUsuario = async () => {
+          try {
+            const response = await api.get('/usuarios/user', {
+              headers: {
+                Authorization: token
+              }
+            })
+    
+            console.log(response.data)
+            if(response.data.adm == null){
+                setIsAuth(false)
+            } else {
+                setIsAuth(true)
+            }
+          } catch (error) {
+            console.error('Erro ao validar o funcionário', error)
+          }
+        }
+    
+        validarTipoUsuario()
+      }, [token])
 
     const openModal = () => {
         setIsModalOpen(true);
@@ -176,7 +209,28 @@ function HeaderUsuario(props) {
 
             {/* DIV BOTÃO PRA TROCAR DE AMBIENTE */}
 
-            <div className={styles.divTodoTrocaAmbiente}>
+
+            {isAuth ? (
+                <div className={styles.validacaoAmbiente}>
+                    <div className={styles.divTodoTrocaAmbiente}>
+                        <div className={styles.divConteudoTrocaAmbiente}>
+                            <button id={styles.perfil} className={styles.botaoTrocaAmbiente} onClick={abrirPerfilBarbeiro}>
+                                Perfil
+                            </button>
+                        </div>
+                    </div>
+
+                    <div className={styles.divTodoTrocaAmbiente}>
+                        <div className={styles.divConteudoTrocaAmbiente}>
+                            <button className={styles.botaoTrocaAmbiente} onClick={abrirPerfilBarbearia}>
+                                Dom bigode
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            ) : (
+                <div className={styles.validacaoAmbiente}>
+                <div className={styles.divTodoTrocaAmbiente}>
                 <div className={styles.divConteudoTrocaAmbiente}>
                     <Button
                     variant='contained'
@@ -194,6 +248,10 @@ function HeaderUsuario(props) {
                     </Button>
                 </div>
             </div>
+            </div>
+            )}
+
+
         </div>
     )
 }
