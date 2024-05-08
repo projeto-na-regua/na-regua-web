@@ -5,7 +5,11 @@ import editFoto from '../../utils/assets/IconsHeaderUsuario/photo-edit_svgrepo.c
 import { Button, TextField } from '@mui/material'
 import React, { useState, useEffect } from 'react'
 import api from '../../api'
+import utils from "../../utils/globals";
+
+import { TextField } from '@mui/material'
 import styles from './HeaderUsuario.module.css'
+
 
 function cadastroBarbearia() {
     window.location = '/cadastro-barbearia'
@@ -53,6 +57,27 @@ function HeaderUsuario(props) {
         validarTipoUsuario()
     }, [token])
 
+    function enviarAtualizacaoUsuario(email, nome, celular) {
+        const enviarAtualizacaoUsuario = async () => {
+            try {
+                const response = await api.put('usuarios/editar-perfil', {
+                    nome: nome,
+                    email: email,
+                    celular: celular
+                }, {
+                    headers: {
+                        Authorization: token
+                    }
+                });
+                console.log(response.data);
+                closeModal(true);
+            } catch (error) {
+                console.error('Erro ao enviar a atualização do funcionário', error);
+            }
+        };
+        enviarAtualizacaoUsuario();
+    }
+
     useEffect(() => {
         const fetchUserInfo = async () => {
             try {
@@ -79,6 +104,10 @@ function HeaderUsuario(props) {
     const closeModal = () => {
         setIsModalOpen(false)
     }
+
+    const handleLogout = () => {
+        utils.logout(); 
+      }
 
     const [values, setValues] = useState({
         nome: '',
@@ -200,13 +229,15 @@ function HeaderUsuario(props) {
                     {/* SALVAR E DESCARTAR INFORMAÇÕES */}
 
                     <div className={styles.divButtonDescartarESalvar}>
-                        <button className={styles.buttonDescartarInfos} onClick={() => { resetValues() }}>Descartar Informações</button>
-                        <button className={styles.buttonSalvarInfos} onClick={() => { }}>Salvar Informações
+                    <button className={styles.buttonDescartarInfos} onClick={() => {resetValues()}}>Descartar Informações</button>
+                        <button className={styles.buttonSalvarInfos} onClick={() => {enviarAtualizacaoUsuario(values.email, values.nome, values.celular)}}>Salvar Informações
                         </button>
 
                     </div>
                 </div>
             )}
+
+            
 
             {/* HEADER */}
             {/* DIV BOTÃO DE SAIR */}
@@ -218,7 +249,7 @@ function HeaderUsuario(props) {
 
                         <div className={styles.divConteudoDentroBotao}>
                             <img src={iconeSair} style={{ height: '23px' }} alt="" />
-                            <div className={styles.textoSair}>Sair</div>
+                            <div className={styles.textoSair} onClick={handleLogout}>Sair</div>
                         </div>
 
                     </button>
@@ -232,7 +263,7 @@ function HeaderUsuario(props) {
                 {/* IMAGEM */}
                 <div className={styles.divImagem}>
 
-                    <img style={{ height: '101%', width: '100%', borderRadius: '100%' }} alt="" />
+                    <img src={exemploImg} style={{ height: '101%', width: '100%', borderRadius: '100%' }} alt="" />
 
                 </div>
             </div>
@@ -281,7 +312,7 @@ function HeaderUsuario(props) {
                         <div className={styles.divConteudoEndereco}>
 
                             <div className={styles.divConteudoEnderecoTexto}>
-                                {userInfo.logradouro}, {userInfo.numero}, {userInfo.cidade} - {userInfo.estado}, {userInfo.cep}
+                                Rua Jericoacara, 147 - São Paulo - SP
                             </div>
 
                         </div>
@@ -340,10 +371,8 @@ function HeaderUsuario(props) {
                     </div>
                 </div>
             )}
-
-
-                    </div>
-                    )
+        </div>
+    )
 }
 
                     export default HeaderUsuario;
