@@ -1,39 +1,48 @@
-import api from '../../../api'
 import { Button, TextField, ThemeProvider } from '@mui/material'
 import { Formik, useFormik } from 'formik'
 import * as yup from 'yup'
 import { theme } from '../../../theme.js'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
-function CadastroUsuario() {
+function CadastroBarbearia() {
   const navigate = useNavigate()
 
   const formik = useFormik({
     initialValues: {
-      name: '',
+      nomeDoNegocio: '',
       cep: '',
+      estado: '',
+      cidade: '',
       bairro: '',
       logradouro: '',
       number: '',
       complement: ''
     },
     onSubmit: async (values) => {
-      const response = await api.post('/enderecos', values)
+      try {
+        sessionStorage.setItem('barbearia', JSON.stringify(values))
 
-      if (response.status === 201) {
-        alert('Endereço cadastrado com sucesso!')
-        navigate('/cadastro-barbearia')
-      } else {
-        alert('Erro ao cadastrar endereço')
+        navigate('/confirmacao-barbearia')
+      } catch (error) {
+        if (error.response) {
+          toast.error("Erro ao cadastrar endereço!")
+        }
       }
     },
     validationSchema: yup.object().shape({
-      name: yup
+      nomeDoNegocio: yup
         .string()
         .required('Insira o nome da barbearia'),
       cep: yup
         .string()
         .required('Insira seu CEP'),
+      estado: yup
+        .string()
+        .required('Insira seu estado'),
+      cidade: yup
+        .string()
+        .required('Insira sua cidade'),
       bairro: yup
         .string()
         .required('Insira seu bairro'),
@@ -45,7 +54,7 @@ function CadastroUsuario() {
         .required('Insira seu número'),
       complement: yup
         .string()
-    })
+    }),
   })
 
   const usuário = localStorage.getItem('usuário')
@@ -53,12 +62,15 @@ function CadastroUsuario() {
   return (
     <ThemeProvider theme={theme}>
       <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <Button onClick={() => navigate('/')} style={{ position: 'absolute', top: 16, left: 16 }}>Voltar</Button>
+        <Button variant='contained' onClick={() => navigate('/')} style={{ position: 'absolute', top: 16, left: 16, height: 40, width: 100 }}>
+          Voltar
+        </Button>
 
         <div style={{
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
+          alignItems: 'center',
           gap: 16,
           width: '50vw',
           height: '100vh',
@@ -72,21 +84,20 @@ function CadastroUsuario() {
 
           <Formik
             initialValues={formik.initialValues}
-            onSubmit={formik.onSubmit}
+            onSubmit={formik.handleSubmit}
             validationSchema={formik.validationSchema}
           >
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-            <TextField
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16, width: 600 }}>
+              <TextField
                 type="text"
-                name="name"
-                value={formik.values.name}
+                name="nomeDoNegocio"
+                value={formik.values.nomeDoNegocio}
                 label="Nome da barbearia"
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                error={formik.touched.name && Boolean(formik.errors.name)}
-                helperText={formik.touched.name ? formik.errors.name : ''}
+                error={formik.touched.nomeDoNegocio && Boolean(formik.errors.nomeDoNegocio)}
+                helperText={formik.touched.nomeDoNegocio ? formik.errors.nomeDoNegocio : ''}
               />
-
               <TextField
                 type="text"
                 name="cep"
@@ -98,7 +109,33 @@ function CadastroUsuario() {
                 helperText={formik.touched.cep ? formik.errors.cep : ''}
               />
 
-              <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
+              <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', gap: 32 }}>
+                <TextField
+                  type="text"
+                  name="estado"
+                  value={formik.values.estado}
+                  label="Estado"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={formik.touched.estado && Boolean(formik.errors.estado)}
+                  helperText={formik.touched.estado ? formik.errors.estado : ''}
+                  fullWidth
+                />
+
+                <TextField
+                  type="text"
+                  name="cidade"
+                  value={formik.values.cidade}
+                  label="Cidade"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={formik.touched.cidade && Boolean(formik.errors.cidade)}
+                  helperText={formik.touched.cidade ? formik.errors.cidade : ''}
+                  fullWidth
+                />
+              </div>
+
+              <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', gap: 32 }}>
                 <TextField
                   type="text"
                   name="bairro"
@@ -108,7 +145,7 @@ function CadastroUsuario() {
                   onBlur={formik.handleBlur}
                   error={formik.touched.bairro && Boolean(formik.errors.bairro)}
                   helperText={formik.touched.bairro ? formik.errors.bairro : ''}
-                  style={{ width: '45%' }}
+                  fullWidth
                 />
 
                 <TextField
@@ -120,11 +157,11 @@ function CadastroUsuario() {
                   onBlur={formik.handleBlur}
                   error={formik.touched.logradouro && Boolean(formik.errors.logradouro)}
                   helperText={formik.touched.logradouro ? formik.errors.logradouro : ''}
-                  style={{ width: '45%' }}
+                  fullWidth
                 />
               </div>
 
-              <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
+              <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', gap: 32 }}>
                 <TextField
                   type="number"
                   name="number"
@@ -134,7 +171,7 @@ function CadastroUsuario() {
                   onBlur={formik.handleBlur}
                   error={formik.touched.number && Boolean(formik.errors.number)}
                   helperText={formik.touched.number ? formik.errors.number : ''}
-                  style={{ width: '45%' }}
+                  fullWidth
                 />
 
                 <TextField
@@ -146,11 +183,16 @@ function CadastroUsuario() {
                   onBlur={formik.handleBlur}
                   error={formik.touched.complement && Boolean(formik.errors.complement)}
                   helperText={formik.touched.complement ? formik.errors.complement : ''}
-                  style={{ width: '45%' }}
+                  fullWidth
                 />
               </div>
 
-              <Button type='submit' onClick={() => { navigate('/confirmacao') }}>Próximo</Button>
+              <Button
+                variant='contained'
+                type='submit'
+                onClick={formik.handleSubmit}>
+                Próximo
+              </Button>
             </div>
           </Formik>
         </div>
@@ -158,4 +200,4 @@ function CadastroUsuario() {
     </ThemeProvider>
   )
 }
-export default CadastroUsuario
+export default CadastroBarbearia

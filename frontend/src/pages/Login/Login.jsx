@@ -66,7 +66,7 @@ function Login() {
   return (
     <ThemeProvider theme={theme}>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Button onClick={() => navigate('/')} style={{ position: 'absolute', top: 16, left: 16 }}>Voltar</Button>
+        <Button variant='contained' onClick={() => navigate('/')} style={{ position: 'absolute', top: 16, left: 16, height: 40, width: 100 }}>Voltar</Button>
 
         <div style={{
           width: '50vw',
@@ -124,7 +124,7 @@ function Login() {
 
                 <Link to="/cadastro" alignSelf='flex-end' style={{ cursor: 'pointer' }}>Esqueceu sua senha?</Link>
 
-                <Button type='submit' onClick={formik.handleSubmit}>Entrar</Button>
+                <Button variant='contained' type='submit' onClick={formik.handleSubmit}>Entrar</Button>
 
                 <div style={{ display: 'flex', gap: 8, alignSelf: 'center' }}>
                   <span>Não tem uma conta?</span>
