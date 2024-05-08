@@ -7,7 +7,7 @@ import { toast } from "react-toastify"
 
 function CadastroEndereco() {
   const navigate = useNavigate()
-  const nomeUsuario = JSON.parse(sessionStorage.getItem('user')).name
+  const nomeUsuario = JSON.parse(sessionStorage.getItem('userInfo')).nome
 
   const formik = useFormik({
     initialValues: {

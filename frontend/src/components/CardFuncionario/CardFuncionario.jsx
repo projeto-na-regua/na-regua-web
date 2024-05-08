@@ -1,37 +1,37 @@
-import React, { useState } from 'react';
-import styles from './CardFuncionario.module.css';
-import { Button, Typography } from '@mui/material';
-import api from '../../api';
-import { toast } from 'react-toastify';
-import CircularProgress from '@mui/material/CircularProgress';
+import React, { useState } from 'react'
+import styles from './CardFuncionario.module.css'
+import { Button, Typography } from '@mui/material'
+import api from '../../api'
+import { toast } from 'react-toastify'
+import CircularProgress from '@mui/material/CircularProgress'
 import { ModalPersonalizado } from '../ModalPersonalizado/ModalPersonalizado'
 
 function CardFuncionario(props) {
-  const [carregando, setCarregando] = useState(false);
-  const [verMais, setVerMais] = useState(false); // Estado local para controlar a abertura do modal
+  const [carregando, setCarregando] = useState(false)
+  const [verMais, setVerMais] = useState(false) // Estado local para controlar a abertura do modal
 
   const deletarFuncionario = async () => {
-    setCarregando(true);
+    setCarregando(true)
 
     try {
       await api.delete(`/funcionarios/${props.email}`, {
         headers: {
           Authorization: JSON.parse(sessionStorage.getItem('user'))
         }
-      });
+      })
 
       toast.success('Funcionário deletado com sucesso!', {
         autoClose: 2000
-      });
+      })
 
-      setCarregando(false);
-      props.atualizarFuncionarios();
-      props.setOpen(false);
+      setCarregando(false)
+      props.atualizarFuncionarios()
+      props.setOpen(false)
 
     } catch (error) {
-      console.error('Erro ao deletar funcionário:', error);
+      console.error('Erro ao deletar funcionário:', error)
     }
-  };
+  }
 
   return (
     <div className={styles.funcionario}>
@@ -43,7 +43,9 @@ function CardFuncionario(props) {
         <span>{props.name}</span>
       </div>
 
-      <Button onClick={() => setVerMais(true)} variant='contained'> {/* Atualizando o estado local `verMais` */}
+      <Button onClick={() => setVerMais(true)} variant='contained' style={{
+        height: 50,
+      }}>
         Ver mais
       </Button>
 
@@ -71,7 +73,6 @@ function CardFuncionario(props) {
                 gap: 16,
               }}>
                 <Typography variant='h7'>E-mail:</Typography>
-                <Typography variant='h7'>Telefone:</Typography>
               </div>
               <div style={{
                 display: 'flex',
@@ -79,7 +80,6 @@ function CardFuncionario(props) {
                 gap: 16,
               }}>
                 <Typography variant='h7'>{props.email}</Typography>
-                <Typography variant='h7'>{props.phone}</Typography>
               </div>
             </div>
             <div style={{
@@ -90,8 +90,7 @@ function CardFuncionario(props) {
             }}>
               <Button
                 variant='outlined'
-                onClick={() => setVerMais(false)}
-              >
+                onClick={() => setVerMais(false)}>
                 Fechar
               </Button>
 
@@ -109,7 +108,7 @@ function CardFuncionario(props) {
         handleClose={() => setVerMais(false)}
       />
     </div>
-  );
+  )
 }
 
-export default CardFuncionario;
+export default CardFuncionario

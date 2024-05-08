@@ -11,13 +11,14 @@ function CadastroBarbearia() {
   const formik = useFormik({
     initialValues: {
       nomeDoNegocio: '',
+      cpf: '',
       cep: '',
       estado: '',
       cidade: '',
       bairro: '',
       logradouro: '',
-      number: '',
-      complement: ''
+      numero: '',
+      complemento: ''
     },
     onSubmit: async (values) => {
       try {
@@ -33,27 +34,31 @@ function CadastroBarbearia() {
     validationSchema: yup.object().shape({
       nomeDoNegocio: yup
         .string()
-        .required('Insira o nome da barbearia'),
+        .required('Nome do negócio é obrigatório'),
       cep: yup
         .string()
-        .required('Insira seu CEP'),
+        .required('CEP é obrigatório'),
       estado: yup
         .string()
-        .required('Insira seu estado'),
+        .required('Estado é obrigatório'),
       cidade: yup
         .string()
-        .required('Insira sua cidade'),
+        .required('Cidade é obrigatória'),
       bairro: yup
         .string()
-        .required('Insira seu bairro'),
+        .required('Bairro é obrigatório'),
       logradouro: yup
         .string()
-        .required('Insira seu logradouro'),
-      number: yup
+        .required('Logradouro é obrigatório'),
+      numero: yup
         .string()
-        .required('Insira seu número'),
-      complement: yup
+        .required('Número é obrigatório'),
+      complemento: yup
         .string()
+        .required('Complemento é obrigatório'),
+      cpf: yup
+        .string()
+        .required('CPF é obrigatório')
     }),
   })
 
@@ -98,6 +103,18 @@ function CadastroBarbearia() {
                 error={formik.touched.nomeDoNegocio && Boolean(formik.errors.nomeDoNegocio)}
                 helperText={formik.touched.nomeDoNegocio ? formik.errors.nomeDoNegocio : ''}
               />
+
+              <TextField
+                type="text"
+                name="cpf"
+                value={formik.values.cpf}
+                label="CPF"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={formik.touched.cpf && Boolean(formik.errors.cpf)}
+                helperText={formik.touched.cpf ? formik.errors.cpf : ''}
+              />
+
               <TextField
                 type="text"
                 name="cep"
@@ -163,26 +180,26 @@ function CadastroBarbearia() {
 
               <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', gap: 32 }}>
                 <TextField
-                  type="number"
-                  name="number"
-                  value={formik.values.number}
+                  type="text"
+                  name="numero"
+                  value={formik.values.numero}
                   label="Número"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  error={formik.touched.number && Boolean(formik.errors.number)}
-                  helperText={formik.touched.number ? formik.errors.number : ''}
+                  error={formik.touched.numero && Boolean(formik.errors.numero)}
+                  helperText={formik.touched.numero ? formik.errors.numero : ''}
                   fullWidth
                 />
 
                 <TextField
                   type="text"
-                  name="complement"
-                  value={formik.values.complement}
+                  name="complemento"
+                  value={formik.values.complemento}
                   label="Complemento"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  error={formik.touched.complement && Boolean(formik.errors.complement)}
-                  helperText={formik.touched.complement ? formik.errors.complement : ''}
+                  error={formik.touched.complemento && Boolean(formik.errors.complemento)}
+                  helperText={formik.touched.complemento ? formik.errors.complemento : ''}
                   fullWidth
                 />
               </div>
