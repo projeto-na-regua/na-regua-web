@@ -2,16 +2,27 @@ import { Button, ThemeProvider } from '@mui/material'
 import { theme } from '../../../theme.js'
 import api from '../../../api.js'
 import { toast } from "react-toastify"
+import { useNavigate } from 'react-router-dom'
 
 function ConfirmacaoBarbearia() {
-  const userDataString = sessionStorage.getItem('user')
+  const token = JSON.parse(sessionStorage.getItem('user'))
+  const userDataString = sessionStorage.getItem('barbearia')
   const userData = JSON.parse(userDataString)
+  const navigate = useNavigate()
 
   const mandarDados = async () => {
+    console.log(userData)
     try {
-      await api.post('/usuarios/cadastrar-barbearia', userData)
+      await api.post('/usuarios/cadastro-barbearia', userData,
+      {
+        headers: {
+          'Authorization': token
+        }
+      }
+      )
 
       toast.success('Cadastro realizado com sucesso!', { autoClose: 2000 })
+      navigate('/funcionarios')
 
     } catch (error) {
       toast.error('Erro ao cadastrar', { autoClose: 2000 })
@@ -48,7 +59,7 @@ function ConfirmacaoBarbearia() {
               height: 40,
               width: '100%'
             }}
-            
+
             >Acessar</Button>
         </div>
         </div>

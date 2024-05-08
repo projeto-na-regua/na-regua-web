@@ -37,9 +37,9 @@ function Login() {
        setTimeout(() => {
         if(user){
           if(data.tipo === "Barbeiro" && data.idBarbearia !== null){
-            navigate("/minha-agenda")
+            navigate("/meus-cortes")
           }else{
-            navigate("/meus-agendamentos")
+            navigate("/meus-cortes")
           }
         }
        }, 4000);

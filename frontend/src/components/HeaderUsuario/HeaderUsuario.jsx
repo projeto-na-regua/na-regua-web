@@ -3,7 +3,7 @@ import exemploImg from '../../utils/assets/IconsHeaderUsuario/exemplo.jpeg'
 import iconEditar from '../../utils/assets/IconsHeaderUsuario/IconEditar.svg'
 import editFoto from '../../utils/assets/IconsHeaderUsuario/photo-edit_svgrepo.com.png'
 import { Button, TextField } from '@mui/material'
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
 import api from '../../api'
 import styles from './HeaderUsuario.module.css'
 
@@ -21,13 +21,14 @@ function abrirPerfilBarbearia() {
 
 function paginaLogin() {
     window.location = '/login'
+    sessionStorage.clear()
 }
 
 function HeaderUsuario(props) {
-    const [isAuth, setIsAuth] = useState(false);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [userInfo, setUserInfo] = useState({ nome: '', celular: '', email: '', logradouro: '', numero: '', cidade: '', estado: '', cep: '' });
-    const token = JSON.parse(sessionStorage.getItem('user'));
+    const [isAuth, setIsAuth] = useState(false)
+    const [isModalOpen, setIsModalOpen] = useState(false)
+    const [userInfo, setUserInfo] = useState({ nome: '', celular: '', email: '', logradouro: '', numero: '', cidade: '', estado: '', cep: '' })
+    const token = JSON.parse(sessionStorage.getItem('user'))
 
     useEffect(() => {
         const validarTipoUsuario = async () => {
@@ -59,25 +60,25 @@ function HeaderUsuario(props) {
                     headers: {
                         Authorization: token
                     }
-                });
-                const { nome, celular, email, logradouro, numero, cidade, estado, cep } = response.data;
+                })
+                const { nome, celular, email, logradouro, numero, cidade, estado, cep } = response.data
                 console.log(response.data)
-                setUserInfo({ nome, celular, email, logradouro, numero, cidade, estado, cep });
+                setUserInfo({ nome, celular, email, logradouro, numero, cidade, estado, cep })
             } catch (error) {
-                console.error('Erro ao receber as informações do funcionário', error);
+                console.error('Erro ao receber as informações do funcionário', error)
             }
-        };
+        }
 
-        fetchUserInfo();
-    }, [token]);
+        fetchUserInfo()
+    }, [token])
 
     const openModal = () => {
-        setIsModalOpen(true);
-    };
+        setIsModalOpen(true)
+    }
 
     const closeModal = () => {
-        setIsModalOpen(false);
-    };
+        setIsModalOpen(false)
+    }
 
     const [values, setValues] = useState({
         nome: '',
@@ -88,7 +89,7 @@ function HeaderUsuario(props) {
         numero: '',
         cidade: '',
         cep: ''
-    });
+    })
 
     const resetValues = () => {
         setValues({
@@ -100,12 +101,12 @@ function HeaderUsuario(props) {
             numero: '',
             cidade: '',
             cep: ''
-        });
-    };
+        })
+    }
 
     const handleChange = (prop) => (event) => {
-        setValues({ ...values, [prop]: event.target.value });
-    };
+        setValues({ ...values, [prop]: event.target.value })
+    }
 
     return (
         <div className={styles.headerDivGrande}>
@@ -125,7 +126,7 @@ function HeaderUsuario(props) {
                     <div className={styles.divImagemModal}>
                         <div className={styles.imagemModal}>
                             <img src={exemploImg} style={{ height: '100%', width: '100%', borderRadius: '100%' }} alt="" />
-                            <button className={styles.buttonDentroImagemModal} onClick={() => { openModal(); }}
+                            <button className={styles.buttonDentroImagemModal} onClick={() => { openModal() }}
                             >
                                 <img src={editFoto} style={{ height: '50px', width: '50px' }} alt="Editar Imagem" />
                             </button>
@@ -199,8 +200,8 @@ function HeaderUsuario(props) {
                     {/* SALVAR E DESCARTAR INFORMAÇÕES */}
 
                     <div className={styles.divButtonDescartarESalvar}>
-                    <button className={styles.buttonDescartarInfos} onClick={() => {resetValues()}}>Descartar Informações</button>
-                        <button className={styles.buttonSalvarInfos} onClick={() => {}}>Salvar Informações
+                        <button className={styles.buttonDescartarInfos} onClick={() => { resetValues() }}>Descartar Informações</button>
+                        <button className={styles.buttonSalvarInfos} onClick={() => { }}>Salvar Informações
                         </button>
 
                     </div>
@@ -319,28 +320,30 @@ function HeaderUsuario(props) {
                 </div>
             ) : (
                 <div className={styles.validacaoAmbiente}>
-                <div className={styles.divTodoTrocaAmbiente}>
-                <div className={styles.divConteudoTrocaAmbiente}>
-                    <Button
-                    variant='contained'
-                    className={styles.botaoTrocaAmbiente}
-                    onClick={cadastroBarbearia}
-                    style={{
-                        backgroundColor: '#E3A74F',
-                        color: '#FFF',
-                        borderRadius: '0 0 10px 10px',
-                        width: '100%',
-                        height: '100%'
+                    <div className={styles.divTodoTrocaAmbiente}>
+                        <div className={styles.divConteudoTrocaAmbiente}>
+                            <Button
+                                variant='contained'
+                                className={styles.botaoTrocaAmbiente}
+                                onClick={cadastroBarbearia}
+                                style={{
+                                    backgroundColor: '#E3A74F',
+                                    color: '#FFF',
+                                    borderRadius: '0 0 10px 10px',
+                                    width: '100%',
+                                    height: '100%'
 
-                    }}>
-                        Possui barbearia?
-                    </Button>
+                                }}>
+                                Possui barbearia?
+                            </Button>
+                        </div>
+                    </div>
                 </div>
             )}
 
 
-        </div>
-    )
+                    </div>
+                    )
 }
 
-export default HeaderUsuario;
+                    export default HeaderUsuario;
