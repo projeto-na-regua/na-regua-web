@@ -54,6 +54,27 @@ function HeaderUsuario(props) {
         validarTipoUsuario()
     }, [token])
 
+    function enviarAtualizacaoUsuario(email, nome, celular) {
+        const enviarAtualizacaoUsuario = async () => {
+            try {
+                const response = await api.put('usuarios/editar-perfil', {
+                    nome: nome,
+                    email: email,
+                    celular: celular
+                }, {
+                    headers: {
+                        Authorization: token
+                    }
+                });
+                console.log(response.data);
+                closeModal(true);
+            } catch (error) {
+                console.error('Erro ao enviar a atualização do funcionário', error);
+            }
+        };
+        enviarAtualizacaoUsuario();
+    }
+
     useEffect(() => {
         const fetchUserInfo = async () => {
             try {
@@ -202,7 +223,7 @@ function HeaderUsuario(props) {
 
                     <div className={styles.divButtonDescartarESalvar}>
                     <button className={styles.buttonDescartarInfos} onClick={() => {resetValues()}}>Descartar Informações</button>
-                        <button className={styles.buttonSalvarInfos} onClick={() => {}}>Salvar Informações
+                        <button className={styles.buttonSalvarInfos} onClick={() => {enviarAtualizacaoUsuario(values.email, values.nome, values.celular)}}>Salvar Informações
                         </button>
 
                     </div>
@@ -282,7 +303,7 @@ function HeaderUsuario(props) {
                         <div className={styles.divConteudoEndereco}>
 
                             <div className={styles.divConteudoEnderecoTexto}>
-                                {userInfo.logradouro}, {userInfo.numero}, {userInfo.cidade} - {userInfo.estado}, {userInfo.cep}
+                                Rua Jericoacara, 147 - São Paulo - SP
                             </div>
 
                         </div>
