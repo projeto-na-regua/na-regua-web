@@ -43,7 +43,8 @@ export const theme = createTheme({
           props: { variant: 'outlined' },
           style: {
             color: '#E3A74F',
-            border: '1px solid #E3A74F'
+            border: '1px solid #E3A74F',
+            borderRadius: 10,
           }
         }
       ]
