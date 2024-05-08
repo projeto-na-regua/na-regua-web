@@ -13,24 +13,24 @@ function CadastroUsuario() {
 
   const formik = useFormik({
     initialValues: {
-      name: '',
+      nome: '',
       email: '',
-      password: '',
-      confirmPassword: '',
-      phone: ''
+      senha: '',
+      confirmarSenha: '',
+      celular: ''
     },
     validationSchema: yup.object().shape({
-      name: yup.string().required('Insira seu nome'),
+      nome: yup.string().required('Insira seu nome'),
       email: yup.string().email('Insira um e-mail válido').required('Insira seu e-mail'),
-      password: yup.string().required('Insira sua senha'),
-      confirmPassword: yup.string().oneOf([yup.ref('password'), null], 'As senhas precisam ser iguais').required('Confirme sua senha'),
-      phone: yup.string().required('Insira seu telefone')
+      senha: yup.string().required('Insira sua senha'),
+      confirmarSenha: yup.string().oneOf([yup.ref('senha'), null], 'As senhas precisam ser iguais').required('Confirme sua senha'),
+      celular: yup.string().required('Insira seu telefone')
     }),
     onSubmit: async (values) => {
       try {
         const userDataString = JSON.stringify(values)
 
-        sessionStorage.setItem('user', userDataString)
+        sessionStorage.setItem('userInfo', userDataString)
 
         navigate('/cadastro-endereco')
       } catch (error) {
@@ -63,14 +63,14 @@ function CadastroUsuario() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                   <TextField
                     type="text"
-                    name="name"
-                    value={formik.values.name}
+                    name="nome"
+                    value={formik.values.nome}
                     placeholder="Nome"
                     label="Nome"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    error={formik.touched.name && Boolean(formik.errors.name)}
-                    helperText={formik.touched.name ? formik.errors.name : ''}
+                    error={formik.touched.nome && Boolean(formik.errors.nome)}
+                    helperText={formik.touched.nome ? formik.errors.nome : ''}
                   />
 
                   <TextField
@@ -95,11 +95,11 @@ function CadastroUsuario() {
                     {() => (
                       <TextField
                         type="text"
-                        name="phone"
+                        name="celular"
                         placeholder="Telefone"
                         label="Telefone"
-                        error={formik.touched.phone && Boolean(formik.errors.phone)}
-                        helperText={formik.touched.phone ? formik.errors.phone : ''}
+                        error={formik.touched.celular && Boolean(formik.errors.celular)}
+                        helperText={formik.touched.celular ? formik.errors.celular : ''}
 
                       />
                     )}
@@ -108,27 +108,27 @@ function CadastroUsuario() {
                   <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
                     <TextField
                       type="password"
-                      name="password"
-                      value={formik.values.password}
+                      name="senha"
+                      value={formik.values.senha}
                       placeholder="Senha"
                       label="Senha"
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
-                      error={formik.touched.password && Boolean(formik.errors.password)}
-                      helperText={formik.touched.password ? formik.errors.password : ''}
+                      error={formik.touched.senha && Boolean(formik.errors.senha)}
+                      helperText={formik.touched.senha ? formik.errors.senha : ''}
                       style={{ width: '45%' }}
                     />
 
                     <TextField
                       type="password"
-                      name="confirmPassword"
-                      value={formik.values.confirmPassword}
+                      name="confirmarSenha"
+                      value={formik.values.confirmarSenha}
                       placeholder="Confirme sua senha"
                       label="Confirme sua senha"
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
-                      error={formik.touched.confirmPassword && Boolean(formik.errors.confirmPassword)}
-                      helperText={formik.touched.confirmPassword ? formik.errors.confirmPassword : ''}
+                      error={formik.touched.confirmarSenha && Boolean(formik.errors.confirmarSenha)}
+                      helperText={formik.touched.confirmarSenha ? formik.errors.confirmarSenha : ''}
                       style={{ width: '45%' }}
                     />
                   </div>
