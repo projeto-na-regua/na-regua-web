@@ -10,44 +10,6 @@ export const theme = createTheme({
       main: '#E3A74F',
       contrastText: '#082031',
     }
-  },
-  typography: {
-    fontFamily: 'Jakarta, sans-serif',
-    h1: {
-      fontSize: 48,
-      fontWeight: 700,
-      color: '#082031'
-    },
-    h2: {
-      fontSize: 32,
-      fontWeight: 700,
-      color: '#082031'
-    },
-    h3: {
-      fontSize: 24,
-      fontWeight: 700,
-      color: '#082031'
-    },
-    h4: {
-      fontSize: 20,
-      fontWeight: 700,
-      color: '#082031'
-    },
-    h5: {
-      fontSize: 16,
-      fontWeight: 700,
-      color: '#082031'
-    },
-    h6: {
-      fontSize: 14,
-      fontWeight: 700,
-      color: '#082031'
-    },
-    body1: {
-      fontSize: 16,
-      fontWeight: 400,
-      color: '#082031'
-    }
   }
   ,
   components: {
@@ -63,7 +25,26 @@ export const theme = createTheme({
           props: { variant: 'contained' },
           style: {
             backgroundColor: '#E3A74F',
-            color: '#082031'
+            color: '#082031',
+            borderRadius: 10,
+            height: '100%',
+            paddingTop: 12,
+            paddingBottom: 12,
+            fontFamily: 'Plus Jakarta Sans, sans-serif',
+            fontSize: 14,
+            fontWeight: 500,
+            '&:hover': {
+              backgroundColor: '#082031',
+              color: '#E3A74F',
+            },
+          },
+        },
+        {
+          props: { variant: 'outlined' },
+          style: {
+            color: '#E3A74F',
+            border: '1px solid #E3A74F',
+            borderRadius: 10,
           }
         }
       ]
@@ -74,6 +55,62 @@ export const theme = createTheme({
           color: '#E3A74F'
         }
       }
-    }
+    },
+    MuiTypography: {
+      styleOverrides: {
+        root: {
+          fontFamily: 'Plus Jakarta Sans, sans-serif'
+        }
+      },
+      variants: [
+        {
+          props: { variant: 'h1' },
+          style: {
+            fontSize: 32,
+            fontWeight: 600,
+            color: '#082031'
+          }
+        },
+        {
+          props: { variant: 'h2' },
+          style: {
+            fontSize: 16,
+            fontWeight: 500,
+            color: '#082031'
+          }
+        },
+        {
+          props: { variant: 'body1' },
+          style: {
+            fontSize: 14,
+            fontWeight: 400,
+            color: '#082031'
+          }
+        },
+      ]
+    },
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          borderRadius: 12
+        }
+      },
+      defaultProps: {
+        InputProps: {
+          style: {
+            borderRadius: 12,
+            fontFamily: 'Plus Jakarta Sans, sans-serif',
+            fontSize: 14,
+            color: '#082031'
+          }
+        },
+        InputLabelProps: {
+          style: {
+            fontFamily: 'Plus Jakarta Sans, sans-serif',
+            fontSize: 14
+          }
+        }
+      }
+    },
   }
 })

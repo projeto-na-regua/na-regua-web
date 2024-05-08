@@ -15,7 +15,7 @@ export default function MultiActionAreaCard() {
           component="img"
           height="200"
           image={image}
-          alt="green iguana"
+          alt="barbearia"
         />
       </CardActionArea>
       <CardActions style={{
@@ -23,7 +23,9 @@ export default function MultiActionAreaCard() {
         justifyContent: 'space-between',
         alignItems: 'center',
       }}>
-        <Typography variant="h5">
+        <Typography variant="body1" style={{
+          fontWeight: 800,
+        }}>
           Dom Bigode
         </Typography>
         <Button>
