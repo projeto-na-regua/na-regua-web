@@ -2,20 +2,18 @@ function Header(props) {
   return (
     <div style={{
       display: 'flex',
-      alignItems: 'space-between',
-      padding: 10,
-      flexGrow: 1,
+      alignItems: 'center',
+      justifyContent: 'space-between',
       height: '10vh',
-      backgroundColor: '#082031',
+      width: '100%',
     }}>
 
       <div style={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        width: '15%',
         height: '100%',
-
+        marginLeft: 32
       }}>{props.esquerda}
       </div>
 
@@ -23,30 +21,16 @@ function Header(props) {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        width: '70%',
         height: '100%',
-
       }}>{props.meio}</div>
 
       <div style={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        width: '15%',
         height: '100%',
-
+        marginRight: 32
       }}>{props.direita}
-
-        {/* MODAL PARA FAZER */}
-        {/* <div style={{
-                display: 'none',
-                alignItems: 'center',
-                justifyContent: 'center',
-                backgroundColor: 'red',
-                width: '100%',
-                height: '100%',
-            }}>{direitaModal}
-            </div> */}
       </div>
     </div>
   )
