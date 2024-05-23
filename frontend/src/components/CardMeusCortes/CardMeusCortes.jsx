@@ -4,9 +4,7 @@ import imgExemplo from '../../utils/assets/IconsHeaderUsuario/exemplo.jpeg'
 
 function CardMeusCortes() {
   return (
-    <div className={styles.DivTodoCards}>
-      <div className={styles.containerCards}>
-        <div className={styles.gridContainer}>
+    <div className={styles.gridContainer}>
 
           {/* CARD */}
           <div className={styles.card}>
@@ -78,8 +76,6 @@ function CardMeusCortes() {
           </div>          
 
         </div>
-      </div>
-    </div>
 
   );
 }
