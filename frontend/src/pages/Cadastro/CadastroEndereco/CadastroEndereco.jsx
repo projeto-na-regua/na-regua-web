@@ -21,7 +21,6 @@ function CadastroEndereco() {
     onSubmit: async (values) => {
       try {
         sessionStorage.setItem('endereco', JSON.stringify(values))
-
         navigate('/confirmacao')
       } catch (error) {
         if (error.response) {
@@ -49,6 +48,30 @@ function CadastroEndereco() {
         .string()
     }),
   })
+
+  const handleCEPChange = async (event) => {
+    const cep = event.target.value
+    if (cep.length === 8) {
+      try {
+        const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`)
+        if (response.ok) {
+          const data = await response.json()
+          formik.setValues({
+            ...formik.values,
+            logradouro: data.logradouro || '',
+            cidade: data.localidade || '',
+            estado: data.uf || ''
+          })
+          // Mantém o valor do CEP no estado do formulário
+          formik.setFieldValue('cep', cep)
+        } else {
+          toast.error("CEP não encontrado")
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error)
+      }
+    }
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -88,7 +111,7 @@ function CadastroEndereco() {
                 name="cep"
                 value={formik.values.cep}
                 label="CEP"
-                onChange={formik.handleChange}
+                onChange={(e) => { formik.handleChange(e); handleCEPChange(e); }}
                 onBlur={formik.handleBlur}
                 error={formik.touched.cep && Boolean(formik.errors.cep)}
                 helperText={formik.touched.cep ? formik.errors.cep : ''}
@@ -103,6 +126,7 @@ function CadastroEndereco() {
                 onBlur={formik.handleBlur}
                 error={formik.touched.logradouro && Boolean(formik.errors.logradouro)}
                 helperText={formik.touched.logradouro ? formik.errors.logradouro : ''}
+                disabled={Boolean(formik.values.logradouro)}
               />
 
               <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
@@ -116,6 +140,7 @@ function CadastroEndereco() {
                   error={formik.touched.cidade && Boolean(formik.errors.cidade)}
                   helperText={formik.touched.cidade ? formik.errors.cidade : ''}
                   style={{ width: '45%' }}
+                  disabled={Boolean(formik.values.cidade)}
                 />
 
                 <TextField
@@ -128,6 +153,7 @@ function CadastroEndereco() {
                   error={formik.touched.estado && Boolean(formik.errors.estado)}
                   helperText={formik.touched.estado ? formik.errors.estado : ''}
                   style={{ width: '45%' }}
+                  disabled={Boolean(formik.values.estado)}
                 />
               </div>
 
