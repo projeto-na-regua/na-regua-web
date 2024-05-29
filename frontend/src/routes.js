@@ -13,6 +13,7 @@ import AgendamentosBarbearia from "./pages/Agendamento/Barbearia/AgendamentoBarb
 import AgendamentosUsuario from "./pages/Agendamento/Usuario/AgendamentoUsuario"
 import Perfil from './pages/Perfil/Perfil'
 import ConfirmacaoBarbearia from './pages/Cadastro/ConfirmacaoBarbearia/ConfirmacaoBarbearia'
+import ServicoBarbeiro from "./pages/ServicoBarbeiro/ServicoBarbeiro"
 
 function Rotas() {
   return (
@@ -32,9 +33,10 @@ function Rotas() {
           <Route path="/minha-agenda" element={<AgendamentosBarbearia />}/>
           <Route path="/meus-agendamentos" element={<AgendamentosUsuario />}/>
           <Route path="/perfil" element={<Perfil />} />
+          <Route path="/servicos" element={<ServicoBarbeiro />} />
         </Routes>
       </BrowserRouter>
     </>
   )
 }
-export default Rotas
+export default Rotas;
