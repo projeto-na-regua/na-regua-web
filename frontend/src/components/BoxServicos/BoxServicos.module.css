@@ -1,0 +1,151 @@
+.gridContainer {
+    margin-top: 3%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.boxTodoServico {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.headerFixoServico {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    width: 95%;
+    height: 50px;
+    margin-bottom: 10px;
+}
+
+
+
+.divCheckbox {
+    width: 5%;
+    height: 95%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.Checkbox input {
+    width: 100%;
+    height: 100%;
+}
+
+.divServico {
+    width: 20%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.divDescricao {
+    width: 35%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.divDuracao {
+    width: 10%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.divValor {
+    width: 15%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.divVazia {
+    width: 8%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.divVaziaGrid {
+    width: 10%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+.divVaziaGrid button {
+    width: 55%;
+    height: 100%;
+    border: none;
+    cursor: pointer;
+    background-color: transparent;
+}
+
+.divVaziaGrid img {
+    width: 100%;
+}
+
+
+
+.servico {
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    height: 50px;
+    border-radius: 10px;
+}
+
+.gridServico {
+    width: 100%;
+    display: grid;
+    gap: 20px;
+
+}
+
+.divServicoGrid {
+    width: 20%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #E3A74F;
+}
+
+.divValorGrid {
+    width: 15%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #E3A74F;
+    border-top-right-radius: 7px;
+    border-bottom-right-radius: 7px;
+}
+
+.borda {
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    height: 50px;
+    border: 2px solid #082031;
+    border-radius: 10px;
+}
