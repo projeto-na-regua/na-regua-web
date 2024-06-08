@@ -7,7 +7,6 @@ import React, { useState, useEffect } from 'react'
 import api from '../../api'
 import utils from "../../utils/globals";
 
-import { TextField } from '@mui/material'
 import styles from './HeaderUsuario.module.css'
 
 
@@ -262,6 +261,7 @@ function HeaderUsuario(props) {
             <div className={styles.divTodoImagem}>
                 {/* IMAGEM */}
                 <div className={styles.divImagem}>
+                    
 
                     <img src={exemploImg} style={{ height: '101%', width: '100%', borderRadius: '100%' }} alt="" />
 
@@ -375,4 +375,4 @@ function HeaderUsuario(props) {
     )
 }
 
-                    export default HeaderUsuario;
+export default HeaderUsuario;

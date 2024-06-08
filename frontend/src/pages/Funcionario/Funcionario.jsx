@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import React from 'react'
 import styles from './Funcionario.module.css'
 import NavbarBarbeiro from '../../components/NavbarBarbeiro/NavbarBarbeiro'
-import HeaderUsuario from '../../components/HeaderUsuario/HeaderUsuario'
+import HeaderBarbeiro from '../../components/HeaderUsuario/HeaderUsuario'
 import { Button, TextField, ThemeProvider } from '@mui/material'
 import CardPequenoFuncionario from '../../components/CardPequenoFuncionario/CardPequenoFuncionario'
 import CardFuncionario from '../../components/CardFuncionario/CardFuncionario'
@@ -50,7 +50,7 @@ export function Funcionarios() {
     <ThemeProvider theme={theme}>
       <div className="Header">
 
-        <HeaderUsuario />
+        <HeaderBarbeiro />
 
         <div className={styles.conteudo}>
           <div className={styles.container}>
