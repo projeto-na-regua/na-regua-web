@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react'; // Importe useState do React
 import styles from './Dashboard.module.css';
 import HeaderUsuario from '../../components/HeaderUsuario/HeaderUsuario';
 import NavbarBarbeiro from '../../components/NavbarBarbeiro/NavbarBarbeiro';
@@ -8,36 +8,28 @@ import CardDashboardStatus from '../../components/CardDashboardStatus/CardDashbo
 import LinhaReserva from '../../components/LinhaReserva/LinhaReserva';
 import chartConfig from './Dashboard';
 import CardAvalicoes from '../../components/CardAvaliacoes/CardAvaliacoes';
+import ProgressBar from '../../components/ProgressBar/ProgressBar';
 
 export function Dashboard() {
     const graficoTotalClientesRef = useRef(null);
-    const graficoContentamentoRef = useRef(null);
     const totalClientesChartRef = useRef(null);
-    const contentamentoChartRef = useRef(null);
+    const [reviewScore, setReviewScore] = useState(100);
 
     useEffect(() => {
         const ctxTotalClientes = graficoTotalClientesRef.current.getContext('2d');
-        const ctxContentamento = graficoContentamentoRef.current.getContext('2d');
 
         // Destroy previous chart instances if they exist
         if (totalClientesChartRef.current) {
             totalClientesChartRef.current.destroy();
         }
-        if (contentamentoChartRef.current) {
-            contentamentoChartRef.current.destroy();
-        }
 
         // Create new chart instances
         totalClientesChartRef.current = chartConfig.createGraficoTotalClientes(ctxTotalClientes);
-        contentamentoChartRef.current = chartConfig.createGraficoContentamento(ctxContentamento);
 
         // Cleanup function to destroy charts on component unmount
         return () => {
             if (totalClientesChartRef.current) {
                 totalClientesChartRef.current.destroy();
-            }
-            if (contentamentoChartRef.current) {
-                contentamentoChartRef.current.destroy();
             }
         };
     }, []); // Run effect only once after the initial render
@@ -94,7 +86,9 @@ export function Dashboard() {
                             </div>
 
                             <div className={styles.porcentagemContentamento}>
-                                <canvas ref={graficoContentamentoRef} id="graficoContentamento" />
+                                <div className={styles.progressBar}>
+                                <ProgressBar score={reviewScore}/>
+                                </div>
                             </div>
 
                         </div>
