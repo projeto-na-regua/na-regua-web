@@ -15,6 +15,7 @@ import Perfil from './pages/Perfil/Perfil'
 import ConfirmacaoBarbearia from './pages/Cadastro/ConfirmacaoBarbearia/ConfirmacaoBarbearia'
 import Dashboard from './pages/Dashboard/Dashboard.jsx'
 import ServicoBarbeiro from "./pages/ServicoBarbeiro/ServicoBarbeiro"
+import FluxoDeCaixa from "./pages/FluxoDeCaixa/FluxoDeCaixa.jsx"
 
 function Rotas() {
   return (
@@ -36,6 +37,8 @@ function Rotas() {
           <Route path="/perfil" element={<Perfil />} />
           <Route path="/dashboard" element={<Dashboard/>}/>
           <Route path="/servicos" element={<ServicoBarbeiro />} />
+          <Route path="/fluxo-de-caixa" element={<FluxoDeCaixa />} />
+
         </Routes>
       </BrowserRouter>
     </>
