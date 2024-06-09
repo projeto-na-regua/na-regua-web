@@ -104,7 +104,14 @@
 }
 
 .porcentagemContentamento{
-    margin-bottom: 5%;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.progressBar{
+    width: 50%;
+    margin-bottom: -15%;
 }
 
 .melhoresAvaliacoes{
