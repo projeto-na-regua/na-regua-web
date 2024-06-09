@@ -1,24 +1,19 @@
 import React from 'react'
-import styles from './CardDashboardStatus.module.css'
+import styles from './CardLancarValores.module.css'
 
-export function CardDashboardStatus({iconStyle, spanValue}) {
+export function CardLancarValores() {
     return (
         <>
             <div className={styles.cardTodo}>
                 <div className={styles.conteudoCard}>
                     <div className={styles.divIcon}>
-                        <div className={styles.icone} style={iconStyle}>
-                            <span>V</span>
+                        <div className={styles.icone}>
                         </div>
                     </div>
 
                     <div className={styles.divInformacoes}>
                         <div className={styles.labelCard}>
-                            <span>{spanValue}</span>
-                        </div>
-
-                        <div className={styles.qtdStatus}>
-                            <span>5</span>
+                            <span>Lançar valores</span>
                         </div>
                     </div>
 
@@ -28,4 +23,4 @@ export function CardDashboardStatus({iconStyle, spanValue}) {
         </>
     )
 }
-export default CardDashboardStatus;
+export default CardLancarValores;

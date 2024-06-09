@@ -1,8 +1,7 @@
 import { Chart, registerables } from 'chart.js';
 
-Chart.register(...registerables); // Register all necessary components
-
-export const createGraficoTotalClientes = (ctx) => {
+Chart.register(...registerables);
+export const createGraficoFluxoDeCaixa = (ctx) => {
     const data = {
         labels: ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'],
         datasets: [{
@@ -74,7 +73,7 @@ export const createGraficoTotalClientes = (ctx) => {
     return new Chart(ctx, config);
 };
 
-export const createGraficoContentamento = (ctx) => {
+export const createGraficoLucratividade = (ctx) => {
     const data = {
         labels: ['Categoria A', 'Categoria B', 'Categoria C', 'Categoria D'],
         datasets: [{
@@ -101,6 +100,6 @@ export const createGraficoContentamento = (ctx) => {
     return new Chart(ctx, config);
 };
 
-const chartConfig = { createGraficoTotalClientes, createGraficoContentamento };
+const chartConfig = { createGraficoFluxoDeCaixa, createGraficoLucratividade };
 
 export default chartConfig;

@@ -1,0 +1,77 @@
+.containerFluxoCaixa {
+    width: 85%;
+    margin: auto;
+}
+
+.cardFluxoCaixa {
+    margin-top: 3%;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.graficos {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    margin: 3% 0;
+}
+
+.graficoLinhaConteudo {
+    display: flex;
+    background-color: #082031;
+    flex-direction: column;
+    width: 67.5%;
+    border-radius: 15px;
+    padding: 1%;
+}
+
+.titulosGraficoLinha {
+    color: white;
+    font-size: 18px;
+    display: flex;
+    margin: 1.5% 5%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.selectBox {
+    font-size: 18px;
+    padding: .5%;
+    border-radius: 10px;
+    background-color: #082031;
+    color: white;
+    border: 0px;
+}
+
+
+.graficoLinha {
+    background-color: #082031;
+    border-radius: 10px;
+    height: 250px;
+}
+
+.graficoLucratividadeConteudo{
+    background-color: #082031;
+    display: flex;
+    flex-direction: column;
+    border-radius: 15px;
+    width: 27.5%;
+}
+
+.tituloGraficoLucratividade{
+    color: white;
+    font-size: 18px;
+    margin: 5% 0;
+    display: flex;
+    justify-content: center;
+}
+
+.graficoLucratividade{
+    display: flex;
+    width: 80%;
+    margin: 2.5% auto;
+    justify-content: center;
+    align-items: center;
+    height: 70%;
+}

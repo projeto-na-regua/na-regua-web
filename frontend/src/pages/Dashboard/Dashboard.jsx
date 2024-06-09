@@ -10,34 +10,34 @@ import chartConfig from './Dashboard';
 import CardAvalicoes from '../../components/CardAvaliacoes/CardAvaliacoes';
 
 export function Dashboard() {
-    const graficoFluxoCaixaRef = useRef(null);
-    const graficoLucratividadeRef = useRef(null);
-    const fluxoCaixaChartRef = useRef(null);
-    const lucratividadeChartRef = useRef(null);
+    const graficoTotalClientesRef = useRef(null);
+    const graficoContentamentoRef = useRef(null);
+    const totalClientesChartRef = useRef(null);
+    const contentamentoChartRef = useRef(null);
 
     useEffect(() => {
-        const ctxFluxoCaixa = graficoFluxoCaixaRef.current.getContext('2d');
-        const ctxLucratividade = graficoLucratividadeRef.current.getContext('2d');
+        const ctxTotalClientes = graficoTotalClientesRef.current.getContext('2d');
+        const ctxContentamento = graficoContentamentoRef.current.getContext('2d');
 
         // Destroy previous chart instances if they exist
-        if (fluxoCaixaChartRef.current) {
-            fluxoCaixaChartRef.current.destroy();
+        if (totalClientesChartRef.current) {
+            totalClientesChartRef.current.destroy();
         }
-        if (lucratividadeChartRef.current) {
-            lucratividadeChartRef.current.destroy();
+        if (contentamentoChartRef.current) {
+            contentamentoChartRef.current.destroy();
         }
 
         // Create new chart instances
-        fluxoCaixaChartRef.current = chartConfig.createGraficoFluxoCaixa(ctxFluxoCaixa);
-        lucratividadeChartRef.current = chartConfig.createGraficoLucratividade(ctxLucratividade);
+        totalClientesChartRef.current = chartConfig.createGraficoTotalClientes(ctxTotalClientes);
+        contentamentoChartRef.current = chartConfig.createGraficoContentamento(ctxContentamento);
 
         // Cleanup function to destroy charts on component unmount
         return () => {
-            if (fluxoCaixaChartRef.current) {
-                fluxoCaixaChartRef.current.destroy();
+            if (totalClientesChartRef.current) {
+                totalClientesChartRef.current.destroy();
             }
-            if (lucratividadeChartRef.current) {
-                lucratividadeChartRef.current.destroy();
+            if (contentamentoChartRef.current) {
+                contentamentoChartRef.current.destroy();
             }
         };
     }, []); // Run effect only once after the initial render
@@ -48,9 +48,9 @@ export function Dashboard() {
             <NavbarBarbeiro />
             <div className={styles.containerDashboard}>
                 <div className={styles.cardDashboards}>
-                    <CardDashboardStatus />
-                    <CardDashboardStatus />
-                    <CardDashboardStatus />
+                    <CardDashboardStatus iconStyle={{backgroundColor: '#56B064'}} spanValue={"Confirmado"}/>
+                    <CardDashboardStatus iconStyle={{backgroundColor: '#E3A74F'}} spanValue={"Pendente"}/>
+                    <CardDashboardStatus iconStyle={{backgroundColor: '#CC2828'}} spanValue={"Cancelado"}/>
                 </div>
                 <div className={styles.reserva}>
                     <div className={styles.conteudoReserva}>
@@ -83,7 +83,7 @@ export function Dashboard() {
                             </div>
 
                             <div className={styles.graficoLinha}>
-                                <canvas ref={graficoFluxoCaixaRef} id="graficoFluxoCaixa" />
+                                <canvas ref={graficoTotalClientesRef} id="graficoTotalClientes" />
                             </div>
                         </div>
 
@@ -94,7 +94,7 @@ export function Dashboard() {
                             </div>
 
                             <div className={styles.porcentagemContentamento}>
-                                <canvas ref={graficoLucratividadeRef} id="graficoLucratividade" />
+                                <canvas ref={graficoContentamentoRef} id="graficoContentamento" />
                             </div>
 
                         </div>
