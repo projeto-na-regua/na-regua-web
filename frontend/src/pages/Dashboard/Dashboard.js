@@ -1,5 +1,6 @@
-// src/chartConfig.js
-import { Chart } from 'chart.js';
+import { Chart, registerables } from 'chart.js';
+
+Chart.register(...registerables); // Register all necessary components
 
 export const createGraficoFluxoCaixa = (ctx) => {
     const data = {
@@ -99,4 +100,7 @@ export const createGraficoLucratividade = (ctx) => {
 
     return new Chart(ctx, config);
 };
-export default { createGraficoFluxoCaixa, createGraficoLucratividade };
+
+const chartConfig = { createGraficoFluxoCaixa, createGraficoLucratividade };
+
+export default chartConfig;

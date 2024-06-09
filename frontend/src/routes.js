@@ -13,7 +13,7 @@ import AgendamentosBarbearia from "./pages/Agendamento/Barbearia/AgendamentoBarb
 import AgendamentosUsuario from "./pages/Agendamento/Usuario/AgendamentoUsuario"
 import Perfil from './pages/Perfil/Perfil'
 import ConfirmacaoBarbearia from './pages/Cadastro/ConfirmacaoBarbearia/ConfirmacaoBarbearia'
-import Dashboard from './pages/Dashboard/Dashboard' =======
+import Dashboard from './pages/Dashboard/Dashboard.jsx'
 import ServicoBarbeiro from "./pages/ServicoBarbeiro/ServicoBarbeiro"
 
 function Rotas() {
