@@ -5,7 +5,7 @@ import HeaderUsuario from '../../components/HeaderUsuario/HeaderUsuario'
 import Footer from '../../components/Footer/Footer'
 import api from '../../api'
 import { theme } from '../../theme'
-import { TextField, ThemeProvider } from '@mui/material'
+import { Button, TextField, ThemeProvider } from '@mui/material'
 import BoxServicos from '../../components/BoxServicos/BoxServicos'
 
 export function ServicoBarbeiro() {
@@ -15,10 +15,34 @@ export function ServicoBarbeiro() {
                 <HeaderUsuario />
                 <NavbarBarbeiro />
             </div>
-
+            <div>
+            </div>
             <div className={styles.conteudo}>
-                <div className={styles.container}>
-                    <BoxServicos />
+                <div className={styles.containerTodo}>
+                    <div style={{
+                display: 'flex',
+                marginTop: 32,
+                gap: 32,
+                width: '100%',
+                justifyContent: 'space-between',
+              }}>
+                <TextField
+                  label="Buscar por funcionário"
+                  style={{
+                    width: '20vw'
+                  }}
+                />
+
+                <Button
+                  variant='contained'
+                >
+                  Cadastrar Serviço
+                </Button>
+              </div>
+
+                    <div className={styles.container}>
+                        <BoxServicos />
+                    </div>
                 </div>
             </div>
 

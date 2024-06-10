@@ -1,0 +1,12 @@
+.conteudo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.containerTodo{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;;
+    width: 80%;
+}
