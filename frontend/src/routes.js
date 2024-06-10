@@ -16,6 +16,7 @@ import ConfirmacaoBarbearia from './pages/Cadastro/ConfirmacaoBarbearia/Confirma
 import Dashboard from './pages/Dashboard/Dashboard.jsx'
 import ServicoBarbeiro from "./pages/ServicoBarbeiro/ServicoBarbeiro"
 import FluxoDeCaixa from "./pages/FluxoDeCaixa/FluxoDeCaixa.jsx"
+import BuscaBarbearia from "./pages/BuscaBarbearia/BuscaBarbearia.jsx"
 
 function Rotas() {
   return (
@@ -38,6 +39,7 @@ function Rotas() {
           <Route path="/dashboard" element={<Dashboard/>}/>
           <Route path="/servicos" element={<ServicoBarbeiro />} />
           <Route path="/fluxo-de-caixa" element={<FluxoDeCaixa />} />
+          <Route path="/busca-barbearia" element={<BuscaBarbearia />} />
 
         </Routes>
       </BrowserRouter>
