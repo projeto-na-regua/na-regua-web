@@ -1,20 +1,28 @@
-.buscarBarbearias{
+.buscarBarbearias {
     display: flex;
     background-color: #F4F3EE;
 }
 
-.containerBuscarBarbearias{
+.containerBuscarBarbearias {
     width: 90%;
     margin: auto;
 }
 
-.conteudoBuscarBarbearias{
+.conteudoBuscarBarbearias {
     display: flex;
     flex-direction: column;
     margin: 2.5% 0;
 }
 
-.header{
+.header {
     background-color: #082031;
     padding: 1% 0;
+}
+
+.CardsBarbeariaEncontrada {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 3% 0 5% 0;
+    gap: 50px;
 }
