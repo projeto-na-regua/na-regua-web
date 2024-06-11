@@ -17,6 +17,7 @@ import Dashboard from './pages/Dashboard/Dashboard.jsx'
 import ServicoBarbeiro from "./pages/ServicoBarbeiro/ServicoBarbeiro"
 import FluxoDeCaixa from "./pages/FluxoDeCaixa/FluxoDeCaixa.jsx"
 import BuscaBarbearia from "./pages/BuscaBarbearia/BuscaBarbearia.jsx"
+import ImagePerfil from "./pages/ImagePerfil.jsx"
 
 function Rotas() {
   return (
@@ -40,6 +41,7 @@ function Rotas() {
           <Route path="/servicos" element={<ServicoBarbeiro />} />
           <Route path="/fluxo-de-caixa" element={<FluxoDeCaixa />} />
           <Route path="/busca-barbearia" element={<BuscaBarbearia />} />
+          <Route path="/imagem-perfil" element={<ImagePerfil />} />
 
         </Routes>
       </BrowserRouter>
