@@ -1,0 +1,37 @@
+.linhaReserva{
+    background-color: #F4F3EE;
+    display: flex;
+    border-radius: 15px;
+}
+
+.containerLinhaReserva{
+    width: 100%;
+    margin: auto;
+}
+
+.conteudoLinhaReserva{
+    display: flex;
+    flex-direction: row;
+    padding: 2% 0;
+}
+
+.nomeCliente, .servicoEscolhido, .horario, .statusReserva, .nomeBarbeiro{
+    width: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+}
+
+.nomeCliente, .nomeBarbeiro{
+    color: #E3A74F;
+}
+
+.statusReserva{
+    background-color: #E3A74F;
+    border-radius: 10px;
+}
+
+.spanStatusReserva{
+    padding: 5% 0;
+}

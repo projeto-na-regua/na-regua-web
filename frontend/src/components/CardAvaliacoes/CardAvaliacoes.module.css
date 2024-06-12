@@ -1,0 +1,22 @@
+.cardTodo{
+    background-color: #F4F3EE;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 3% 10%;
+}
+
+.nomeCliente{
+    font-size: 18px;
+    color: #E3A74F;
+    font-weight: 600;
+}
+
+.notaAvaliacao{
+    background-color: #E3A74F;
+    border-radius: 100%;
+    padding: 3%;
+    font-weight: 600;
+}
+

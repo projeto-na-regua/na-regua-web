@@ -13,6 +13,9 @@ import AgendamentosBarbearia from "./pages/Agendamento/Barbearia/AgendamentoBarb
 import AgendamentosUsuario from "./pages/Agendamento/Usuario/AgendamentoUsuario"
 import Perfil from './pages/Perfil/Perfil'
 import ConfirmacaoBarbearia from './pages/Cadastro/ConfirmacaoBarbearia/ConfirmacaoBarbearia'
+import Dashboard from './pages/Dashboard/Dashboard.jsx'
+import ServicoBarbeiro from "./pages/ServicoBarbeiro/ServicoBarbeiro"
+import FluxoDeCaixa from "./pages/FluxoDeCaixa/FluxoDeCaixa.jsx"
 import PersonalizarBarbearia from './pages/Personalizacao/Personalizacao'
 
 function Rotas() {
@@ -34,9 +37,13 @@ function Rotas() {
           <Route path="/meus-agendamentos" element={<AgendamentosUsuario />}/>
           <Route path="/perfil" element={<Perfil />} />
           <Route path="/personalizar-barbearia" element={<PersonalizarBarbearia />} />
+          <Route path="/dashboard" element={<Dashboard/>}/>
+          <Route path="/servicos" element={<ServicoBarbeiro />} />
+          <Route path="/fluxo-de-caixa" element={<FluxoDeCaixa />} />
+
         </Routes>
       </BrowserRouter>
     </>
   )
 }
-export default Rotas
+export default Rotas;

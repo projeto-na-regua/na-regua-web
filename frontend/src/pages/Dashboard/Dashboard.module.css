@@ -1,0 +1,147 @@
+.cardDashboards {
+    margin-top: 2%;
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+}
+
+.containerDashboard {
+    width: 85%;
+    margin: auto;
+}
+
+.reserva {
+    margin-top: 2.5%;
+    width: 100%;
+}
+
+.containerReserva {
+    width: 90%;
+    margin: auto;
+}
+
+.conteudoReserva {
+    display: flex;
+    flex-direction: column;
+    background-color: #082031;
+    border-radius: 15px;
+}
+
+.spanReservas {
+    color: white;
+    font-size: 25px;
+    margin: 2.5% 0;
+}
+
+.linhasReservas {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    margin-bottom: 2.5%;
+    max-height: 350px;
+    overflow-y: auto;
+    padding-right: 20px;
+}
+
+.indicadores {
+    margin-top: 2.5%;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    margin-bottom: 5%;
+}
+
+.graficos {
+    display: flex;
+    flex-direction: column;
+    width: 47.5%;
+}
+
+.graficoLinhaConteudo{
+    background-color: #082031;
+    display: flex;
+    flex-direction: column;
+    border-radius: 15px;
+    padding: 1.5%;
+}
+
+.titulosGraficoLinha {
+    height: 50px;
+    align-items: center;
+    display: flex;
+    color: white;
+    justify-content: space-between;
+    width: 95%;
+    margin: auto;
+    font-size: 18px;
+}
+
+.graficoLinha {
+    background-color: #082031;
+    border-radius: 10px;
+    height: 300px;
+}
+
+.selectBox{
+    font-size: 18px;
+    padding: .5%;
+    border-radius: 10px;
+    background-color: #082031;
+    color: white;
+    border: 0px;
+}
+
+.contentamentoConteudo{
+    background-color: #082031;
+    margin-top: 7.5%;
+    border-radius: 15px;
+}
+
+.tituloContentamento{
+    color: white;
+    font-size: 18px;
+    margin: 5%;
+}
+
+.porcentagemContentamento{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.progressBar{
+    width: 50%;
+    margin-bottom: -15%;
+}
+
+.melhoresAvaliacoes{
+    background-color: #082031;
+    width: 47.5%;
+    display: flex;
+    flex-direction: column;
+    border-radius: 15px;
+}
+
+.containerAvaliacoes{
+    width: 90%;
+    margin: 0 auto;
+}
+
+.tituloAvaliacoes{
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.conteudoAvaliacoes{
+    margin-top: 5%;
+}
+
+.linhasAvaliacoes{
+    display: flex;
+    flex-direction: column;
+    margin-top: 5%;
+    gap: 20px;    
+    max-height: 700px;
+    overflow-y: auto;
+}
