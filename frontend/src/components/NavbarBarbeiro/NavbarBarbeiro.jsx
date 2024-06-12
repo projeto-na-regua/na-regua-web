@@ -11,7 +11,7 @@ function NavbarBarbeiro(){
       setActiveButton(n);
         switch(n) {
             case 1:
-              //navigate("/agenda")
+              navigate("/minha-agenda")
               break;
             case 2:
               //navigate("/dashboard")

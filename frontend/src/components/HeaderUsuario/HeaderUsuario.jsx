@@ -104,8 +104,8 @@ function HeaderUsuario(props) {
     }
 
     const handleLogout = () => {
-        utils.logout(); 
-      }
+        utils.logout();
+    }
 
     const [values, setValues] = useState({
         nome: '',
@@ -227,15 +227,15 @@ function HeaderUsuario(props) {
                     {/* SALVAR E DESCARTAR INFORMAÇÕES */}
 
                     <div className={styles.divButtonDescartarESalvar}>
-                    <button className={styles.buttonDescartarInfos} onClick={() => {resetValues()}}>Descartar Informações</button>
-                        <button className={styles.buttonSalvarInfos} onClick={() => {enviarAtualizacaoUsuario(values.email, values.nome, values.celular)}}>Salvar Informações
+                        <button className={styles.buttonDescartarInfos} onClick={() => { resetValues() }}>Descartar Informações</button>
+                        <button className={styles.buttonSalvarInfos} onClick={() => { enviarAtualizacaoUsuario(values.email, values.nome, values.celular) }}>Salvar Informações
                         </button>
 
                     </div>
                 </div>
             )}
 
-            
+
 
             {/* HEADER */}
             {/* DIV BOTÃO DE SAIR */}

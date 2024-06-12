@@ -11,16 +11,16 @@ function NavbarCliente(){
         setActiveButton(n);
         switch(n) {
             case 1:
-              navigate('/perfil');
+              navigate('/meus-agendamentos');
               break;
             case 2:
-              //navigate('/meus-cortes');
+              navigate('/meus-cortes');
               break;
             case 3:
-              //navigate('/historico');
+              navigate('/historico');
               break;
             default:
-              navigate('/perfil');
+              navigate('/meus-agendamentos');
         }
     }
 

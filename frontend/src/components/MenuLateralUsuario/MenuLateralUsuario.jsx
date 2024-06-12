@@ -1,4 +1,6 @@
 import { useNavigate } from 'react-router-dom';
+import utils from "../../utils/globals";
+
 
 function MenuLateralUsuario(props) {
     const { open } = props;
@@ -7,6 +9,10 @@ function MenuLateralUsuario(props) {
     const handleNavigate = (path) => {
         navigate(path); // Função para navegar para a rota especificada
     };
+
+    const handleLogout = () => {
+        utils.logout();
+    }
 
     return (
         <>
@@ -27,7 +33,7 @@ function MenuLateralUsuario(props) {
                 padding: '15px 0',
                 borderRadius: '0 0 12px 12px'
             }}>
-                <div onClick={() => handleNavigate('/meu-perfil')}>Meu perfil</div>
+                <div onClick={() => handleNavigate('/meus-cortes')}>Meus cortes</div>
                 <div style={{
                     width: '80%',
                     backgroundColor: '#082031',
@@ -39,7 +45,7 @@ function MenuLateralUsuario(props) {
                     backgroundColor: '#082031',
                     height: '1px'
                 }}></div>
-                <div onClick={() => handleNavigate('/login')}>Sair</div>
+                <div onClick={handleLogout}>Sair</div>
             </div>
            )}
         </>

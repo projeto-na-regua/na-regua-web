@@ -138,7 +138,7 @@ function CadastroUsuario() {
                   <div style={{ display: 'flex', gap: 8, alignSelf: 'center' }}>
                     <span>Já tem uma conta?</span>
 
-                    <Link href='/cadastro' style={{ cursor: 'pointer' }}>Entre</Link>
+                    <Link href='/login' style={{ cursor: 'pointer' }}>Entre</Link>
                   </div>
                 </div>
               </form>
