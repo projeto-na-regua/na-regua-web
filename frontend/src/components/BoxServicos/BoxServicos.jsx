@@ -1,17 +1,69 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./BoxServicos.module.css";
-import TresPontinhos from "../../utils/assets/Group 69.png";
 import Checkbox from '@mui/material/Checkbox';
+import { Menu, MenuItem as MenuItemMUI, IconButton, Dialog, DialogActions, DialogContent, DialogTitle, Button } from '@mui/material';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
-function BoxServicos() {
+function BoxServicos({ services, onEdit, onDelete }) {
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [selectedService, setSelectedService] = useState(null);
+    const [confirmOpen, setConfirmOpen] = useState(false);
+    const [selectedServices, setSelectedServices] = useState([]);
+
+    const handleClick = (event, service) => {
+        setAnchorEl(event.currentTarget);
+        setSelectedService(service);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+    const handleEdit = () => {
+        onEdit(selectedService);
+        handleClose();
+    };
+
+    const handleDeleteOpen = () => {
+        setConfirmOpen(true);
+        handleClose();
+    };
+
+    const handleDeleteConfirm = () => {
+        onDelete(selectedService.id);
+        setConfirmOpen(false);
+    };
+
+    const handleDeleteCancel = () => {
+        setConfirmOpen(false);
+    };
+
+    const handleSelectService = (service) => {
+        if (selectedServices.includes(service)) {
+            setSelectedServices(selectedServices.filter(selected => selected !== service));
+        } else {
+            setSelectedServices([...selectedServices, service]);
+        }
+    };
+
+    const handleSelectAll = () => {
+        if (selectedServices.length === services.length) {
+            setSelectedServices([]);
+        } else {
+            setSelectedServices(services.map(service => service));
+        }
+    };
+
     return (
-        <div className={styles.gridContainer}>
+        <div className={`${styles.gridContainer} ${styles.widerBox}`}>
             <div className={styles.boxTodoServico}>
-
                 {/* HEADER FIXO */}
                 <div className={styles.headerFixoServico}>
                     <div>
-                        <Checkbox />
+                        <Checkbox
+                            checked={selectedServices.length === services.length}
+                            onChange={handleSelectAll}
+                        />
                     </div>
                     <div className={styles.divServico}>Serviço</div>
                     <div className={styles.divDescricao}>Descrição</div>
@@ -19,66 +71,50 @@ function BoxServicos() {
                     <div className={styles.divValor}>Valor</div>
                     <div className={styles.divVazia}> </div>
                 </div>
-
                 <div className={styles.gridServico}>
-
-                    {/* SERVIÇO */}
-                    <div className={styles.servico}>
-                        <div className={styles.borda}>
-                            <div className={styles.divCheckbox}>
-                                <Checkbox className={styles.Checkbox} />
+                    {services.map((service, index) => (
+                        <div className={styles.servico} key={index}>
+                            <div className={styles.borda}>
+                                <div className={styles.divCheckbox}>
+                                    <Checkbox
+                                        checked={selectedServices.includes(service)}
+                                        onChange={() => handleSelectService(service)}
+                                    />
+                                </div>
+                                <div className={styles.divServicoGrid}>{service.name}</div>
+                                <div className={styles.divDescricao}>{service.description}</div>
+                                <div className={styles.divDuracao}>{service.duration}</div>
+                                <div className={styles.divValorGrid}>{service.value}</div>
                             </div>
-                            <div className={styles.divServicoGrid}>Corte</div>
-                            <div className={styles.divDescricao}>Inclui apenas corte</div>
-                            <div className={styles.divDuracao}>1h</div>
-                            <div className={styles.divValorGrid}>30,00</div>
-
-                        </div>
-                        <div className={styles.divVaziaGrid}>
-                            <button><img src={TresPontinhos} alt="" /></button>
-                        </div>
-                    </div>
-
-                    {/* SERVIÇO */}
-                    <div className={styles.servico}>
-                        <div className={styles.borda}>
-                            <div className={styles.divCheckbox}>
-                                <Checkbox className={styles.Checkbox} />
+                            <div className={styles.divVaziaGrid}>
+                                <IconButton aria-controls="simple-menu" aria-haspopup="true" onClick={(e) => handleClick(e, service)}>
+                                    <MoreVertIcon />
+                                </IconButton>
+                                <Menu
+                                    id="simple-menu"
+                                    anchorEl={anchorEl}
+                                    keepMounted
+                                    open={Boolean(anchorEl)}
+                                    onClose={handleClose}
+                                >
+                                    <MenuItemMUI onClick={handleEdit}>Editar</MenuItemMUI>
+                                    <MenuItemMUI onClick={handleDeleteOpen}>Excluir</MenuItemMUI>
+                                </Menu>
                             </div>
-                            <div className={styles.divServicoGrid}>Escova</div>
-                            <div className={styles.divDescricao}>Lavagem + Escova</div>
-                            <div className={styles.divDuracao}>1h30</div>
-                            <div className={styles.divValorGrid}>80,00</div>
-
                         </div>
-                        <div className={styles.divVaziaGrid}>
-                            <button><img src={TresPontinhos} alt="" /></button>
-                        </div>
-                    </div>
-
-                    {/* SERVIÇO */}
-                    <div className={styles.servico}>
-                        <div className={styles.borda}>
-                            <div className={styles.divCheckbox}>
-                                <Checkbox className={styles.Checkbox} />
-                            </div>
-                            <div className={styles.divServicoGrid}>Coloração</div>
-                            <div className={styles.divDescricao}>Pintura capilar</div>
-                            <div className={styles.divDuracao}>1h15</div>
-                            <div className={styles.divValorGrid}>50,00</div>
-
-                        </div>
-                        <div className={styles.divVaziaGrid}>
-                            <button><img src={TresPontinhos}  alt="" /></button>
-                        </div>
-                    </div>
-
+                    ))}
                 </div>
-
-
-
             </div>
-
+            <Dialog open={confirmOpen} onClose={handleDeleteCancel}>
+                <DialogTitle>Confirmar Exclusão</DialogTitle>
+                <DialogContent>
+                    Tem certeza de que deseja excluir este serviço?
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleDeleteCancel}>Cancelar</Button>
+                    <Button onClick={handleDeleteConfirm}>Confirmar</Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 }
