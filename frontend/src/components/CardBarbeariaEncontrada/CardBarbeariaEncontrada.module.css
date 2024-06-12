@@ -1,0 +1,60 @@
+
+.conteudoCardBarbeariaEncontrada {
+    background-color: #082031;
+    display: flex;
+    justify-content: space-between;
+    border-radius: 15px;
+    width: 40%;
+    align-items: center;
+    padding: 1.5% 3%;
+}
+
+.fotoBarbearia {
+    border-radius: 15px;
+}
+
+.fotoBarbearia img {
+    width: 180px;
+    height: 180px;
+    border-radius: 15px;
+}
+
+.informacoesBarbearia {
+    width: 60%;
+    height: 180px;
+    display: flex;
+    flex-direction: column;
+    background-color: #F4F3EE;
+    border-radius: 15px;
+}
+
+.nomeDistancia {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 4%;
+    padding-top: 7.5%;
+    font-weight: 800;
+}
+
+.endereco {
+    padding: 4%;
+    font-weight: 500;
+}
+
+.botaoVisualizarPerfil {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 7.5%;
+}
+
+.botaoVisualizarPerfil button {
+    border: 0px;
+    cursor: pointer;
+    background-color: #E3A74F;
+    width: 85%;
+    padding: 5% 0;
+    border-radius: 10px;
+    letter-spacing: 1px;
+    font-weight: 600;
+}
