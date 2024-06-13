@@ -17,7 +17,7 @@ function NavbarBarbeiro(){
               //navigate("/dashboard")
               break;
             case 3:
-              //navigate("/servicos")
+              navigate("/servicos")
               break;
             case 4:
               //navigate("/fluxo-de-caixa")

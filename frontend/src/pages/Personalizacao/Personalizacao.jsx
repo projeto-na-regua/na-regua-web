@@ -1,67 +1,192 @@
+import React, { useEffect, useState } from 'react';
+import styles from './Personalizacao.module.css';
+import NavbarBarbeiro from '../../components/NavbarBarbeiro/NavbarBarbeiro';
+import HeaderUsuario from '../../components/HeaderUsuario/HeaderUsuario';
+import imagemPerfilDefault from '../../utils/assets/imagem-perfil.svg';
+import imagemCapaDefault from '../../utils/assets/capa-barbearia.svg';
+import editIcon from '../../utils/assets/IconsHeaderUsuario/IconEditar.svg';
+import { Button, TextField, ThemeProvider } from '@mui/material';
+import { useFormik } from 'formik';
+import { theme } from '../../theme';
+import { toast } from 'react-toastify';
+import api from '../../api';
+import { ModalEditar } from '../../components/ModalEditarBarbearia/ModalEditarBarbearia';
+import { ModalDescartar } from '../../components/ModalDescartarInformacoes/ModalDescartarInformacoes';
 
-import React, { useEffect } from 'react';
-import styles from './Personalizacao.module.css'
-import NavbarBarbeiro from '../../components/NavbarBarbeiro/NavbarBarbeiro'
-import HeaderUsuario from '../../components/HeaderUsuario/HeaderUsuario'
-import imagemPerfil from  '../../utils/assets/imagem-perfil.svg'
-import imagemCapa from '../../utils/assets/capa-barbearia.svg'
-import editIcon from '../../utils/assets/IconsHeaderUsuario/IconEditar.svg'
-import { Button } from '@mui/material'
-import { TextField, ThemeProvider } from '@mui/material'
-import { useFormik } from 'formik'
-import { theme } from '../../theme'
-import { toast } from 'react-toastify'
+export function Personalizacao() {
+  const token = JSON.parse(sessionStorage.getItem('user'));
+  const [diaSelecionado, setDiaSelecionado] = useState(null);
+  const [horarios, setHorarios] = useState([]);
+  const [modalEditarOpen, setModalEditarOpen] = useState(false);
+  const [modalDescartarOpen, setModalDescartarOpen] = useState(false);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
+  const [imgCapa, setImgCapa] = useState(null);
+  const [imgPerfil, setImgPerfil] = useState(null);
 
-export function Personalizacao(){
+  const handleDiaChange = (e) => {
+    setDiaSelecionado(parseInt(e.target.value));
+  };
+
+  const handleHorarioChange = (e, tipo) => {
+    const { value } = e.target;
+    setHorarios((prevHorarios) =>
+      prevHorarios.map((dia) =>
+        dia.id === diaSelecionado
+          ? { ...dia, [tipo]: value }
+          : dia
+      )
+    );
+  };
 
   const formik = useFormik({
     initialValues: {
-      nomeDoNegocio: '',
-      sobre: '',
-      celular: '',
+      nomeNegocio: '',
+      descricao: '',
+      celularNegocio: '',
       cep: '',
       estado: '',
       cidade: '',
-      bairro: '',
       logradouro: '',
       numero: '',
       complemento: ''
     },
-      onSubmit: async (values) => {
-        try {
-          sessionStorage.getItem('barbearia')
+    onSubmit: async (values) => {
+      try {
+        const formData = {
+          nomeNegocio: values.nomeNegocio,
+          descricao: values.descricao,
+          celularNegocio: values.celularNegocio,
+          cep: values.cep,
+          estado: values.estado,
+          cidade: values.cidade,
+          logradouro: values.logradouro,
+          numero: values.numero,
+          complemento: values.complemento,
+          diaSemanas: horarios
+        };
 
-        } catch (error) {
-          if (error.response) {
-            toast.error("Erro ao obter dados da barbearia!")
+        await api.put('/barbearias/perfil', formData, {
+          headers: {
+            Authorization: token
           }
-        }
+        });
+
+        toast.success("Informações principais atualizadas com sucesso!");
+        setModalEditarOpen(false);
+        
+        await handleCapaChange();
+        await handlePerfilChange();
+      } catch (error) {
+        console.error("Erro ao atualizar as informações principais:", error);
+        toast.error("Erro ao atualizar as informações principais!");
       }
+    }
   });
 
-  function handleEditClick() {
-    document.getElementById('fileInput').click();
-  }
-  
   useEffect(() => {
-    const fileInput = document.getElementById('fileInput');
-    const handleFileChange = (event) => {
-      const file = event.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const newProfileImage = e.target.result;
-          document.querySelector(`.${styles.containerFotoPerfil} img`).src = newProfileImage;
-        };
-        reader.readAsDataURL(file);
+    const fetchBarbeariaData = async () => {
+      try {
+        const response = await api.get('/barbearias/perfil', {
+          headers: {
+            Authorization: token
+          }
+        });
+        const barbeariaData = response.data;
+
+        console.log(barbeariaData)
+    
+        formik.setValues({
+          nomeNegocio: barbeariaData.nomeNegocio || '',
+          descricao: barbeariaData.descricao || '',
+          celularNegocio: barbeariaData.celularNegocio || '',
+          cep: barbeariaData.cep || '',
+          estado: barbeariaData.estado || '',
+          cidade: barbeariaData.cidade || '',
+          logradouro: barbeariaData.logradouro || '',
+          numero: barbeariaData.numero || '',
+          complemento: barbeariaData.complemento || ''
+        });
+        setHorarios(barbeariaData.diaSemanas);
+        setDiaSelecionado(barbeariaData.diaSemanas[0]?.id || null);
+        setIsInitialLoad(false);
+    
+      } catch (error) {
+        console.error('Erro ao obter dados da barbearia', error);
       }
     };
-    fileInput.addEventListener('change', handleFileChange);
 
-    return () => {
-      fileInput.removeEventListener('change', handleFileChange);
-    };
-  }, []);
+    if (isInitialLoad) {
+      fetchBarbeariaData();
+    }
+  }, [token, formik, isInitialLoad]);
+
+  const diaAtual = horarios.find((dia) => dia.id === diaSelecionado) || { horaAbertura: '', horaFechamento: '' };
+
+  const handleDescartarConfirm = () => {
+    formik.resetForm();
+    setModalDescartarOpen(false);
+    toast.info("Alterações descartadas");
+  };
+
+  const handleEditarConfirm = async () => {
+    try {
+      await formik.handleSubmit();
+      await handleCapaChange();
+      await handlePerfilChange();
+    } catch (error) {
+      toast.error("Erro ao atualizar as informações!");
+    }
+  };
+
+  const handleCapaChange = async () => {
+    if (imgCapa && imgCapa !== imagemCapaDefault) {
+      try {
+        const blobCapa = await fetch(imgCapa).then(res => res.blob());
+        const formData = new FormData();
+        formData.append('file', blobCapa, 'image.png');
+  
+        const response = await api.put('/barbearias/image-banner', formData, {
+          headers: {
+            Authorization: token,
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+  
+        console.log("Imagem de capa atualizada:", response.data);
+      } catch (error) {
+        console.error("Erro ao atualizar imagem de capa:", error);
+      }
+    }
+  };
+  
+  const handlePerfilChange = async () => {
+    if (imgPerfil && imgPerfil !== imagemPerfilDefault) {
+      try {
+        const blobPerfil = await fetch(imgPerfil).then(res => res.blob());
+        const formData = new FormData();
+        formData.append('file', blobPerfil, 'image.png');
+  
+        const response = await api.put('/barbearias/image-perfil', formData, {
+          headers: {
+            Authorization: token,
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+  
+        console.log("Imagem de perfil atualizada:", response.data);
+      } catch (error) {
+        console.error("Erro ao atualizar imagem de perfil:", error);
+      }
+    }
+  };
+
+  const handleCapaClick = () => {
+    document.getElementById('fileInputCapa').click();
+  };
+
+  const handlePerfilClick = () => {
+    document.getElementById('fileInputPerfil').click();
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -69,77 +194,82 @@ export function Personalizacao(){
         <HeaderUsuario />
         <div className={styles.conteudo}>
           <div className={styles.container}>
-          <NavbarBarbeiro />
+            <NavbarBarbeiro />
             <div className={styles.conteudoFotos}>
-              <div className={styles.containerFotoCapa}>
-                {
-                  <img src={imagemCapa} style={{ height: '100%', width: '100%', }}/>
-                }
-                <div className={styles.overlay} onClick={handleEditClick}>
+              <div className={styles.containerFotoCapa} onClick={handleCapaClick}>
+                <img src={imgCapa || imagemCapaDefault} style={{ height: '100%', width: '100%' }} />
+                <div className={styles.overlay}>
                   <img src={editIcon} alt="Editar Capa" className={styles.editIcon} />
                 </div>
               </div>
-              <div className={styles.containerFotoPerfil}>
-                {
-                  <img src={imagemPerfil} style={{ height: '100%', width: '100%', }}/>
-                }
-                <div className={styles.overlay} onClick={handleEditClick}>
+              <div className={styles.containerFotoPerfil} onClick={handlePerfilClick}>
+                <img src={imgPerfil || imagemPerfilDefault} style={{ height: '100%', width: '100%' }} />
+                <div className={styles.overlay}>
                   <img src={editIcon} alt="Editar Perfil" className={styles.editIcon} />
                 </div>
               </div>
             </div>
 
-            <input type="file" id="fileInput" style={{ display: 'none' }} />
+            <input
+              type="file"
+              id="fileInputCapa"
+              style={{ display: 'none' }}
+              onChange={(e) => setImgCapa(e.target.files[0])}
+            />
+            <input
+              type="file"
+              id="fileInputPerfil"
+              style={{ display: 'none' }}
+              onChange={(e) => setImgPerfil(e.target.files[0])}
+            />
+
             <div className={styles.formularioEditarBarbearia}>
               <h2 style={{ fontSize: 26, fontWeight: 600, color: '#082031' }}>Informações</h2>
               <div className={styles.formularioInformacoes}>
-                <TextField 
+                <TextField
                   className={styles.input}
                   type="text"
-                  name="nomeDoNegocio"
-                  value={formik.values.nomeDoNegocio}
-                  label="Nome da barbearia"
+                  name="nomeNegocio"
+                  value={formik.values.nomeNegocio || ''}
+                  label="Nome do negócio"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  error={formik.touched.nomeDoNegocio && Boolean(formik.errors.nomeDoNegocio)}
-                  helperText={formik.touched.nomeDoNegocio ? formik.errors.nomeDoNegocio : ''}
+                  error={formik.touched.nomeNegocio && Boolean(formik.errors.nomeNegocio)}
+                  helperText={formik.touched.nomeNegocio ? formik.errors.nomeNegocio : ''}
                   fullWidth
                 />
 
                 <TextField
                   className={styles.input}
                   type="text"
-                  name="celular"
-                  value={formik.values.celular}
+                  name="descricao"
+                  value={formik.values.descricao || ''}
+                  label="Descrição"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={formik.touched.descricao && Boolean(formik.errors.descricao)}
+                  helperText={formik.touched.descricao ? formik.errors.descricao : ''}
+                  fullWidth
+                />
+
+                <TextField
+                  className={styles.input}
+                  type="tel"
+                  name="celularNegocio"
+                  value={formik.values.celularNegocio || ''}
                   label="Celular"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  error={formik.touched.celular && Boolean(formik.errors.celular)}
-                  helperText={formik.touched.celular ? formik.errors.celular : ''}
+                  error={formik.touched.celularNegocio && Boolean(formik.errors.celularNegocio)}
+                  helperText={formik.touched.celularNegocio ? formik.errors.celularNegocio : ''}
                   fullWidth
                 />
 
-                <TextField
-                  className={styles.input}
-                  type="text"
-                  name="sobre"
-                  value={formik.values.sobre}
-                  label="Sobre"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  error={formik.touched.sobre && Boolean(formik.errors.sobre)}
-                  helperText={formik.touched.sobre ? formik.errors.sobre : ''}
-                  fullWidth
-                />
-              </div>
-
-              <h2 style={{ fontSize: 26, fontWeight: 600, color: '#082031' }}>Endereço</h2>
-              <div className={styles.formularioEndereco}>
                 <TextField
                   className={styles.input}
                   type="text"
                   name="cep"
-                  value={formik.values.cep}
+                  value={formik.values.cep || ''}
                   label="CEP"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -147,12 +277,12 @@ export function Personalizacao(){
                   helperText={formik.touched.cep ? formik.errors.cep : ''}
                   fullWidth
                 />
-                
+
                 <TextField
                   className={styles.input}
                   type="text"
                   name="estado"
-                  value={formik.values.estado}
+                  value={formik.values.estado || ''}
                   label="Estado"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -165,7 +295,7 @@ export function Personalizacao(){
                   className={styles.input}
                   type="text"
                   name="cidade"
-                  value={formik.values.cidade}
+                  value={formik.values.cidade || ''}
                   label="Cidade"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -173,25 +303,12 @@ export function Personalizacao(){
                   helperText={formik.touched.cidade ? formik.errors.cidade : ''}
                   fullWidth
                 />
-              
-                <TextField
-                  className={styles.input}
-                  type="text"
-                  name="bairro"
-                  value={formik.values.bairro}
-                  label="Bairro"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  error={formik.touched.bairro && Boolean(formik.errors.bairro)}
-                  helperText={formik.touched.bairro ? formik.errors.bairro : ''}
-                  fullWidth
-                />
 
                 <TextField
                   className={styles.input}
                   type="text"
                   name="logradouro"
-                  value={formik.values.logradouro}
+                  value={formik.values.logradouro || ''}
                   label="Logradouro"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -199,12 +316,12 @@ export function Personalizacao(){
                   helperText={formik.touched.logradouro ? formik.errors.logradouro : ''}
                   fullWidth
                 />
-              
+
                 <TextField
-                  className={styles.input}  
+                  className={styles.input}
                   type="text"
                   name="numero"
-                  value={formik.values.numero}
+                  value={formik.values.numero || ''}
                   label="Número"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -217,7 +334,7 @@ export function Personalizacao(){
                   className={styles.input}
                   type="text"
                   name="complemento"
-                  value={formik.values.complemento}
+                  value={formik.values.complemento || ''}
                   label="Complemento"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -229,54 +346,77 @@ export function Personalizacao(){
 
               <h2 style={{ fontSize: 26, fontWeight: 600, color: '#082031' }}>Informações adicionais</h2>
               <div className={styles.formularioInformacoesAdicionais}>
-                <TextField
-                  className={styles.input}
-                  type="date"
-                  name="inicio"
-                  value={formik.values.inicio}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  error={formik.touched.inicio && Boolean(formik.errors.inicio)}
-                  helperText={formik.touched.inicio ? formik.errors.inicio : ''}
-                  fullWidth
-                />
+                <div>
+                  <select onChange={handleDiaChange} value={diaSelecionado || ''}>
+                    {horarios.map((dia) => (
+                      <option key={dia.id} value={dia.id}>
+                        {dia.nome}
+                      </option>
+                    ))}
+                  </select>
 
-                <TextField
-                  className={styles.input}
-                  type="date"
-                  name="fim"
-                  value={formik.values.fim}
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  error={formik.touched.fim && Boolean(formik.errors.fim)}
-                  helperText={formik.touched.fim ? formik.errors.fim : ''}
-                  fullWidth
-                />
+                  <div>
+                    <label>
+                      Hora de Abertura:
+                      <input
+                        type="time"
+                        value={diaAtual.horaAbertura}
+                        onChange={(e) => handleHorarioChange(e, 'horaAbertura')}
+                      />
+                    </label>
+                  </div>
+
+                  <div>
+                    <label>
+                      Hora de Fechamento:
+                      <input
+                        type="time"
+                        value={diaAtual.horaFechamento}
+                        onChange={(e) => handleHorarioChange(e, 'horaFechamento')}
+                      />
+                    </label>
+                  </div>
+
+                  <pre>{JSON.stringify(horarios, null, 2)}</pre>
+                </div>
+              </div>
+              <div className={styles.botoesFormulario}>
+                <Button
+                  className={styles.botaoDescartar}
+                  variant='outlined'
+                  type='button'
+                  onClick={() => setModalDescartarOpen(true)}
+                >
+                  Descartar informações
+                </Button>
+
+                <Button
+                  className={styles.botaoEditar}
+                  variant='contained'
+                  type='button'
+                  onClick={() => setModalEditarOpen(true)}
+                >
+                  Editar informações
+                </Button>
               </div>
             </div>
-          <div className={styles.botoesFormulario}>
-              <Button
-                className={styles.botaoDescartar}
-                variant='outlined'
-                type='button'
-                onClick={formik.handleSubmit}>
-                Descartar informações
-              </Button>
-
-              <Button
-                className={styles.botaoEditar}
-                variant='contained'
-                type='button'
-                onClick={formik.handleSubmit}>
-                Editar informações
-              </Button>
           </div>
         </div>
-      </div>     
-    </div>
-    </ThemeProvider>  
-  )
+      </div>
 
+      <ModalEditar 
+        open={modalEditarOpen} 
+        handleClose={() => setModalEditarOpen(false)} 
+        handleConfirm={handleEditarConfirm} 
+      />
+
+      <ModalDescartar 
+        open={modalDescartarOpen} 
+        handleClose={() => setModalDescartarOpen(false)} 
+        handleConfirm={handleDescartarConfirm} 
+      />
+    </ThemeProvider>
+  );
 }
 
-export default Personalizacao
+export default Personalizacao;

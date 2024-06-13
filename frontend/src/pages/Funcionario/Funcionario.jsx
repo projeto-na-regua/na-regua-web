@@ -46,7 +46,7 @@ export function Funcionarios() {
 
   const handleExtrairRelatorio = async () => {
     try {
-      const response = await axios.get('https://naregua-backend.azurewebsites.net/funcionarios/relatorio', {
+      const response = await api.get('/funcionarios/relatorio', {
         headers: {
           Authorization: token
         },
