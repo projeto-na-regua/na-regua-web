@@ -4,13 +4,13 @@ import Header from '../../components/Header/Header.jsx'
 import { Button, Typography } from '@mui/material'
 import logo from '../../utils/assets/logo-scale0.svg'
 import GrupoDeInputs from '../../components/GrupoDeInput/GrupoDeInputs.jsx'
-import MultiActionAreaCard from '../../components/CardComImagem/CardComImagem.jsx'
-import imageTeste from '../../utils/assets/Design sem nome.png'
+import mockup from '../../utils/assets/mockup.png'
 import { useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import MenuLateralUsuario from '../../components/MenuLateralUsuario/MenuLateralUsuario.jsx'
-import imageHome from '../../utils/assets/fotoHome.png'
+import imageHome from '../../utils/assets/imagem-barbeiro-home.jpg'
 import { Footer } from '../../components/Footer/Footer.jsx'
+import { Logo } from '../../components/Logo/Logo.jsx'
 
 function Home() {
   const navigate = useNavigate()
@@ -74,7 +74,6 @@ function Home() {
           alignItems: 'center',
           flexDirection: 'column',
           gap: 32,
-          backgroundColor: '#f4f3eee1',
           borderRadius: 24,
           padding: '32px 64px 32px 64px',
           marginTop: 120
@@ -86,12 +85,12 @@ function Home() {
             width: 800,
             gap: 16
           }}>
-            <Typography variant='h1' style={{ color: '#082031', textAlign: 'center' }}>
-              <span style={{ color: '#E3A74F' }}>Barbearia Moderna:</span> A Experiência que Você Merece
+            <Typography variant='h1' style={{ color: '#F4F3EE', textAlign: 'center' }}>
+              Fique <Logo /> com a gente!
             </Typography>
 
-            <Typography variant='body1' style={{ color: '#082031', textAlign: 'center', fontSize: 16 }}>
-              Agende seu horário com facilidade e agilidade através da nossa plataforma intuitiva para uma experiência de barbearia sem estresse!
+            <Typography variant='body1' style={{ color: '#F4F3EE', textAlign: 'center', fontSize: 16 }}>
+              Estilo e conveniência ao alcance de suas mãos!
             </Typography>
           </div>
 
@@ -99,27 +98,40 @@ function Home() {
         </div>
       </div>
 
+
       <div style={{
         display: 'flex',
+        gap: 16,
+        position: 'relative',
         flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: 32,
-        height: '70vh',
+        marginTop: 64
       }}>
-        <Typography variant='h1' style={{ color: '#082031', fontWeight: 800 }}>
-          Melhores avaliações
-        </Typography>
+        <div style={{
+          background: 'linear-gradient(114deg, rgba(227,167,79,1) 8%, rgba(8,32,49,1) 70%)',
+          width: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'flex-end',
+          gap: 16,
+          padding: '64px 0 64px 0',
+        }}>
+          <Typography variant='h1' style={{ color: '#ffffff', textAlign: 'center', marginRight: 80 }}>
+            Melhores avaliações
+          </Typography>
+
+          <Typography variant='h6' style={{ color: '#ffffff', textAlign: 'center', marginRight: 80 }}>
+            Veja as barbearias mais bem avaliadas do <span style={{ color: '#E3A74F' }}>cenário</span>!
+          </Typography>
+        </div>
 
         <div style={{
           display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          gap: 32
+          height: '60vh',
+          width: '30%',
+          justifyContent: 'space-between'
         }}>
-          <MultiActionAreaCard />
-          <MultiActionAreaCard />
-          <MultiActionAreaCard />
+
         </div>
       </div>
 
@@ -147,8 +159,8 @@ function Home() {
           </Typography>
         </div>
         <div style={{
-          width: 500,
-          height: 500,
+          width: 600,
+          height: 600,
           backgroundColor: '#E3A74F',
           borderRadius: '50%',
           border: '25px solid white',
@@ -156,9 +168,9 @@ function Home() {
           justifyContent: 'center',
           alignItems: 'center'
         }}>
-          <img src={imageTeste} alt='homem-usando-aplicativo' style={{
-            width: '90%',
-            height: '90%',
+          <img src={mockup} alt='homem-usando-aplicativo' style={{
+            width: '100%',
+            height: '100%',
             borderRadius: '50%',
             objectFit: 'cover'
           }} />
