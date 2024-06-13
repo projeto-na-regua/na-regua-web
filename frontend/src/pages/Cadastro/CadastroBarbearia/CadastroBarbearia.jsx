@@ -54,8 +54,7 @@ function CadastroBarbearia() {
         .string()
         .required('Número é obrigatório'),
       complemento: yup
-        .string()
-        .required('Complemento é obrigatório'),
+        .string(),
       cpf: yup
         .string()
         .required('CPF é obrigatório')
