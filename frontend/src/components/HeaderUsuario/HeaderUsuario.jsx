@@ -261,6 +261,7 @@ function HeaderUsuario(props) {
             <div className={styles.divTodoImagem}>
                 {/* IMAGEM */}
                 <div className={styles.divImagem}>
+                    
 
                     <img src={exemploImg} style={{ height: '101%', width: '100%', borderRadius: '100%' }} alt="" />
 

@@ -20,6 +20,7 @@ import Historico from "./pages/HistoricoUsuario/HistoricoUsuario.jsx"
 import BuscaBarbearia from "./pages/BuscaBarbearia/BuscaBarbearia.jsx"
 import ImagePerfil from "./pages/ImagePerfil.jsx"
 import VisualizarBarbearia from "./pages/VisualizarBarbearia/VisualizarBarbearia.jsx"
+import PersonalizarBarbearia from './pages/Personalizacao/Personalizacao'
 import SelecionarDataHora from "./pages/SelecionarDataHora/SelecionarDataHora.jsx"
 
 function Rotas() {
@@ -40,6 +41,7 @@ function Rotas() {
           <Route path="/minha-agenda" element={<AgendamentosBarbearia />}/>
           <Route path="/meus-agendamentos" element={<AgendamentosUsuario />}/>
           <Route path="/perfil" element={<Perfil />} />
+          <Route path="/personalizar-barbearia" element={<PersonalizarBarbearia />} />
           <Route path="/dashboard" element={<Dashboard/>}/>
           <Route path="/servicos" element={<ServicoBarbeiro />} />
           <Route path="/fluxo-de-caixa" element={<FluxoDeCaixa />} />
