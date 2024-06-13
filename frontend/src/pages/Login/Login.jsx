@@ -6,17 +6,15 @@ import * as yup from 'yup'
 import { ThemeProvider } from '@emotion/react'
 import { theme } from '../../theme.js'
 import { Button, Link } from '@mui/material'
-import image from '../../utils/assets/cuate.svg'
+import image from '../../utils/assets/Imagem Login.png'
 import logo from '../../utils/assets/logo-scale1.svg'
-import { toast } from "react-toastify";
-import { validarEmail } from '../../utils/globals.js'
+import { toast } from "react-toastify"
 
 function Login() {
   const navigate = useNavigate()
 
   const formik = useFormik({
     initialValues: { email: '', password: '' },
-
     onSubmit: async (values) => {
       try {
         const response = await api.post('/usuarios', {
@@ -69,7 +67,7 @@ function Login() {
         <Button variant='contained' onClick={() => navigate('/')} style={{ position: 'absolute', top: 16, left: 16, height: 40, width: 100 }}>Voltar</Button>
 
         <div style={{
-          width: '50vw',
+          width: '60vw',
           height: '100vh',
           display: 'flex',
           justifyContent: 'center',
@@ -136,8 +134,8 @@ function Login() {
           </div>
         </div>
 
-        <div style={{ width: '50vw', display: 'flex', justifyContent: 'center', backgroundColor: '#082031', height: '100vh' }}>
-          <img src={image} alt='barber' style={{ padding: 64 }} />
+        <div style={{ display: 'flex', justifyContent: 'flex-end', backgroundColor: '#F4F3EE', height: '100vh' }}>
+          <img src={image} alt='barber' />
         </div>
       </div>
     </ThemeProvider>

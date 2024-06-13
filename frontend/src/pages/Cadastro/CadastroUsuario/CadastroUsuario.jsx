@@ -3,7 +3,7 @@ import { Button, Link, TextField, ThemeProvider } from '@mui/material'
 import { Formik, useFormik } from 'formik'
 import * as yup from 'yup'
 import { theme } from '../../../theme.js'
-import image from '../../../utils/assets/amico.svg'
+import image from '../../../utils/assets/Imagem Login.png'
 import { useNavigate } from 'react-router-dom'
 import { toast } from "react-toastify"
 import InputMask from 'react-input-mask'
@@ -46,6 +46,10 @@ function CadastroUsuario() {
         <Button variant='contained' onClick={() => navigate('/')} style={{ position: 'absolute', top: 16, left: 16, height: 40, width: 100 }}>
           Voltar
         </Button>
+
+        <div style={{ display: 'flex', justifyContent: 'flex-end', backgroundColor: '#F4F3EE', height: '100vh' }}>
+          <img src={image} alt='barber' />
+        </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 16, padding: 80, width: '100%' }}>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -138,16 +142,12 @@ function CadastroUsuario() {
                   <div style={{ display: 'flex', gap: 8, alignSelf: 'center' }}>
                     <span>Já tem uma conta?</span>
 
-                    <Link href='/login' style={{ cursor: 'pointer' }}>Entre</Link>
+                    <Link href='/cadastro' style={{ cursor: 'pointer' }}>Entre</Link>
                   </div>
                 </div>
               </form>
             )}
           </Formik>
-        </div>
-
-        <div style={{ width: '50vw', display: 'flex', justifyContent: 'center', backgroundColor: '#082031', height: '100vh' }}>
-          <img src={image} alt='barber' style={{ padding: 64 }} />
         </div>
       </div>
     </ThemeProvider>
