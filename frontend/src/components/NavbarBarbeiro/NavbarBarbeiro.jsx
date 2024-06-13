@@ -39,7 +39,7 @@ function NavbarBarbeiro(){
                 <div className={styles.opcoesTelas} onClick={() => trocarTela(2)}><span>Dashboard</span></div>
                 <div className={styles.opcoesTelas} onClick={() => trocarTela(3)}><span>Serviços</span></div>
                 <div className={styles.opcoesTelas} onClick={() => trocarTela(4)}><span>Fluxo de Caixa</span></div>
-                <div className={styles.opcoesTelas} onClick={() => trocarTela(5)}><span>Funcionarios</span></div>
+                <div className={styles.opcoesTelas} onClick={() => trocarTela(5)}><span>Funcionários</span></div>
                 <div className={styles.opcoesTelas} onClick={() => trocarTela(6)}><span>Personalização</span></div>
             </div>
         </div>
