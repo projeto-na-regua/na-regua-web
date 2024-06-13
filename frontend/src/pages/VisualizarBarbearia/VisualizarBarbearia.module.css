@@ -2,3 +2,221 @@
     background-color: #082031;
     padding: 1% 0;
 }
+
+.visualizarBarbearia{
+    background-color: #F4F3EE;
+}
+
+.containerVisualizarBarbearia {
+    width: 90%;
+    margin: auto;
+}
+
+.conteudoVisualizarBarbearia {
+    background-color: #F4F3EE;
+}
+
+.nomeAvaliacaoBarbearia {
+    padding: 1% 0;
+}
+
+.bannerFotoPerfilBarbearia {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.bannerBarbearia {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.bannerBarbearia img {
+    width: 100%;
+    border-radius: 15px;
+}
+
+.circuloPerfilBarbearia {
+    position: absolute;
+    z-index: 2;
+    left: 50%;
+    bottom: -75px;
+    transform: translateX(-50%);
+    border-radius: 50%;
+}
+
+.servicosMapaEnderecoBarbearia {
+    display: flex;
+    width: 100%;
+}
+
+.esquerdaServicos {
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    margin-top: 7.5%;
+}
+
+.tituloServicos {
+    color: #082031;
+    font-size: 25px;
+    font-weight: 600;
+}
+
+.servicosBarbearia {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 5%;
+    gap: 50px;
+}
+
+.botaoVerMais {
+    display: flex;
+    justify-content: center;
+    color: #E3A74F;
+    margin-top: 2.5%;
+    font-weight: 600;
+}
+
+.direitaMapaEnderecoContatoBarbearia {
+    display: flex;
+    flex-direction: column;
+    width: 30%;
+    margin-top: 3%;
+    align-items: center;
+}
+
+.mapaBarbearia {
+    background-color: #082031;
+    display: flex;
+    border-radius: 15px;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.mapaBarbearia img {
+    width: 100%;
+}
+
+.enderecoBarbearia {
+    display: flex;
+    width: 100%;
+    margin-top: 5%;
+}
+
+.linhaLateral {
+    background-color: #E3A74F;
+    height: 50px;
+    width: 3px;
+}
+
+.spansEnderecoBarbearia {
+    display: flex;
+    flex-direction: column;
+    margin-left: 5%;
+    gap: 10px;
+}
+
+.spanRua {
+    font-weight: 500;
+    color: #082031;
+}
+
+.spanBairroCep {
+    font-weight: 500;
+    color: #E3A74F;
+}
+
+.contatoBarbearia {
+    display: flex;
+    width: 100%;
+    margin-top: 5%;
+}
+
+.contatoBarbearia .linhaLateral {
+    height: 100px;
+}
+
+.tituloSpansContatoBarbearia {
+    margin-left: 5%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+}
+
+.tituloContatos {
+    font-weight: 600;
+    color: #082031;
+}
+
+.spansContatoBarbearia {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    color: #082031;
+}
+
+.botaoEntrarEmContato button {
+    border: 0px;
+    width: 55%;
+    background-color: #E3A74F;
+    color: white;
+    display: flex;
+    align-items: center;
+    padding: 2.5% 0;
+    justify-content: center;
+    gap: 10px;
+    border-radius: 10px;
+    font-weight: 500;
+    font-size: 15px;
+}
+
+.conteudoNossaEquipeAvaliacoes{
+    display: flex;
+    padding: 5% 0;
+}
+
+.nossaEquipe{
+    display: flex;
+    width: 70%;
+    flex-direction: column;
+}
+
+.tituloNossaEquipe{
+    font-size: 25px;
+    font-weight: 800;
+    color: #082031;
+}
+
+.fotosEquipe{
+    display: flex;
+    gap: 25px;
+    overflow-x: auto;
+    max-width: 95%;
+    margin-top: 2.5%;
+    padding: 0 0 3% 0;
+}
+
+.avaliacoes{
+    display: flex;
+    flex-direction: column;
+    width: 30%;
+}
+
+.tituloAvaliacoes{
+    font-size: 25px;
+    font-weight: 800;
+    color: #082031;
+}
+
+.cardAvaliacoes{
+    margin-top: 5%;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}

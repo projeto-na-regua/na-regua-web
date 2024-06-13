@@ -4,11 +4,17 @@ import { Footer } from "../../components/Footer/Footer";
 import logo from '../../utils/assets/logo-scale0.svg';
 import Header from "../../components/Header/Header";
 import NomeAvaliacaoBarbearia from "../../components/NomeAvaliacaoBarbearia/NomeAvaliacaoBarbearia.jsx";
+import CirculoPerfilBarbearia from "../../components/CirculoPerfilBarbearia/CirculoPerfilBarbearia.jsx";
+import CardAvaliacoesVisualizarBarbearia from "../../components/CardAvaliacoesVisualizarBarbearia/CardAvaliacoesVisualizarBarbearia.jsx";
+import LinhaServicos from "../../components/LinhaServicos/LinhaServicos.jsx";
+import FotoPerfilEquipe from "../../components/FotoPerfilEquipe/FotoPerfilEquipe.jsx";
 import { theme } from '../../theme';
 import { ThemeProvider } from '@emotion/react';
 import { useNavigate } from 'react-router-dom';
 import MenuLateralUsuario from '../../components/MenuLateralUsuario/MenuLateralUsuario.jsx';
-import { Button } from '@mui/material';
+import { Button, Card } from '@mui/material';
+import bannerBarbearia from '../../utils/assets/bannerBarbearia.jpg';
+import mapaBarbearia from '../../utils/assets/mapaBarbearia.png';
 
 export function VisualizarBarbearia() {
     const navigate = useNavigate();
@@ -66,6 +72,112 @@ export function VisualizarBarbearia() {
                             <NomeAvaliacaoBarbearia />
                         </div>
 
+                        <div className={styles.bannerFotoPerfilBarbearia}>
+
+                            <div className={styles.bannerBarbearia}>
+                                <img src={bannerBarbearia} alt="" />
+                            </div>
+
+                            <div className={styles.circuloPerfilBarbearia}>
+                                <CirculoPerfilBarbearia />
+                            </div>
+                        </div>
+
+                        <div className={styles.servicosMapaEnderecoBarbearia}>
+                            <div className={styles.esquerdaServicos}>
+                                <div className={styles.tituloServicos}>
+                                    <span>Serviços</span>
+                                </div>
+
+                                <div className={styles.servicosBarbearia}>
+                                    <LinhaServicos />
+                                    <LinhaServicos />
+                                    <LinhaServicos />
+                                    <LinhaServicos />
+                                </div>
+
+                                <div className={styles.botaoVerMais}>
+                                    <span>Ver mais</span>
+                                </div>
+                            </div>
+
+                            <div className={styles.direitaMapaEnderecoContatoBarbearia}>
+
+                                <div className={styles.mapaBarbearia}>
+                                    <img src={mapaBarbearia} alt="" />
+                                </div>
+
+                                <div className={styles.enderecoBarbearia}>
+                                    <div className={styles.linhaLateral}>
+                                    </div>
+
+                                    <div className={styles.spansEnderecoBarbearia}>
+                                        <div className={styles.spanRua}>
+                                            <span>Rua Flores de Cinzas, 341</span>
+                                        </div>
+
+                                        <div className={styles.spanBairroCep}>
+                                            <span>Vila Madalena - 09234-410</span>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className={styles.contatoBarbearia}>
+                                    <div className={styles.linhaLateral}>
+                                    </div>
+
+                                    <div className={styles.tituloSpansContatoBarbearia}>
+                                        <div className={styles.tituloContatos}>
+                                            <span>Contato</span>
+                                        </div>
+
+                                        <div className={styles.spansContatoBarbearia}>
+                                            <span>{"(11) 4234-9090"}</span>
+                                            <span>{"+55 (11) 98989-8989"}</span>
+                                        </div>
+
+                                        <div className={styles.botaoEntrarEmContato}>
+                                            <button>
+                                                <svg width="32" height="27" viewBox="0 0 32 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <path d="M23.3254 2.67228C21.2289 1.60871 18.7948 1 16.1987 1C8.32677 1 1.94531 6.59644 1.94531 13.5C1.94531 15.4996 2.4807 17.3895 3.4326 19.0656C3.68557 19.511 3.76976 20.0201 3.62311 20.5007L2.77416 23.2834C2.40563 24.4913 3.66571 25.5963 5.04307 25.2731L8.21594 24.5286C8.76404 24.4 9.34455 24.4739 9.85243 24.6956C11.7636 25.5305 13.9186 26 16.1987 26C24.0706 26 30.4521 20.4035 30.4521 13.5C30.4521 11.2232 29.758 9.08859 28.5453 7.25" stroke="#F4F3EE" stroke-width="2" stroke-linecap="round" />
+                                                </svg>
+                                                Entre em contato</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div className={styles.conteudoNossaEquipeAvaliacoes}>
+                            <div className={styles.nossaEquipe}>
+                                <div className={styles.tituloNossaEquipe}>
+                                    <span>Nossa equipe</span>
+                                </div>
+
+                                <div className={styles.fotosEquipe}>
+                                    <FotoPerfilEquipe />
+                                    <FotoPerfilEquipe />
+                                    <FotoPerfilEquipe />
+                                    <FotoPerfilEquipe />
+                                    <FotoPerfilEquipe />
+                                    <FotoPerfilEquipe />
+                                    <FotoPerfilEquipe />
+                                </div>
+                            </div>
+
+                            <div className={styles.avaliacoes}>
+                                <div className={styles.tituloAvaliacoes}>
+                                    <span>Avaliações</span>
+                                </div>
+
+                                <div className={styles.cardAvaliacoes}>
+                                    <CardAvaliacoesVisualizarBarbearia />
+                                    <CardAvaliacoesVisualizarBarbearia />
+                                </div>
+                            </div>
+                        </div>
 
                     </div>
                 </div>
