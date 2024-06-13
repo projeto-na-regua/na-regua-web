@@ -31,6 +31,7 @@ function HeaderUsuario(props) {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [userInfo, setUserInfo] = useState({ nome: '', celular: '', email: '', logradouro: '', numero: '', cidade: '', estado: '', cep: '' })
     const token = JSON.parse(sessionStorage.getItem('user'))
+    const nomeBarbearia = JSON.parse(sessionStorage.getItem('user')).nomeBarbearia
 
     useEffect(() => {
         const validarTipoUsuario = async () => {
@@ -342,7 +343,7 @@ function HeaderUsuario(props) {
                     <div className={styles.divTodoTrocaAmbiente}>
                         <div className={styles.divConteudoTrocaAmbiente}>
                             <button className={styles.botaoTrocaAmbiente} onClick={abrirPerfilBarbearia}>
-                                Dom bigode
+                                {nomeBarbearia}
                             </button>
                         </div>
                     </div>
