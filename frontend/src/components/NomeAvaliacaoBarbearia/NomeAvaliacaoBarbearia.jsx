@@ -8,20 +8,23 @@ export function NomeAvaliacaoBarbearia() {
     return (
         <>
             <div className={styles.conteudoNomeAvaliacaoBarbearia}>
-                <div className={styles.nomeBarbearia}>
-                    <span>Dom Bigode</span>
+                <div className={styles.nomeEstrelasBarbearia}>
+                    <div className={styles.nomeBarbearia}>
+                        <span>Dom Bigode</span>
+                    </div>
+                    <div className={styles.estrelasHorarioBarbearia}>
+                        <div className={styles.estrelasBarbearia}>
+                            <EstrelasAvaliacao value={2.5}/>
+                        </div>
+                        <div className={styles.ponto}>
+                            <span>•</span>
+                        </div>
+                        <div className={styles.horarioBarbearia}>
+                            <span>Aberto até as 19h</span>
+                        </div>
+                    </div>
                 </div>
-                <div className={styles.estrelasHorarioBarbearia}>
-                    <div className={styles.estrelasBarbearia}>
-                    <EstrelasAvaliacao value={2.5} />
-                    </div>
-                    <div className={styles.ponto}>
-                        <span>•</span>
-                    </div>
-                    <div className={styles.horarioBarbearia}>
-                        <span>Aberto até as 19h</span>
-                    </div>
-                </div>
+
             </div>
         </>
     );

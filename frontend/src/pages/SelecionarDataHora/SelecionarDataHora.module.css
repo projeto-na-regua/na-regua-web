@@ -1,0 +1,116 @@
+.header {
+    background-color: #082031;
+    padding: 1% 0;
+}
+
+.selecionarServicoDataHora{
+    display: flex;
+    background-color: #F4F3EE;
+}
+
+.containerSelecionarServicoDataHora{
+    width: 90%;
+    margin: auto;
+}
+
+.conteudoSelecionarServicoDataHora{
+    display: flex;
+    flex-direction: column;
+    padding: 2.5% 0;
+}
+
+.breadCrumbs{
+    display: flex;
+    gap: 10px;
+    color: #E3A74F;
+    font-size: 20px;
+}
+
+.servicos{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 3%;
+}
+
+.tituloServico{
+    font-size: 20px;
+    color: #082031;
+    font-weight: 800;
+}
+
+.servicosDisponiveis{
+    margin-top: 1.5%;
+    gap: 50px;
+    display: flex;
+    flex-direction: column;
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+.selecionarBarbeiro{
+    margin-top: 3.5%;
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+}
+
+.tituloSelecionarBarbeiro{
+    font-size: 25px;
+    font-weight: 800;
+    color: #082031;
+}
+
+.subTituloSelecionarBarbeiro{
+    font-size: 15px;
+    font-weight: 500;
+    color: #082031;
+    font-style: italic;
+}
+
+.barbeirosDisponiveis{
+    gap: 25px;
+    display: flex;
+    margin-top: 4%;
+    max-width: 100%;
+    overflow-x: auto;
+    padding: 0 0 4% 0;
+}
+
+.selecionarDataHora{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    margin-top: 3.5%;
+}
+
+.selecionarDataHoraEsquerda{
+    display: flex;
+    flex-direction: column;
+    color: #082031;
+    width: 40%;
+}
+
+.tituloSubTituloSelecionarHorario{
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    color: #082031;
+}
+
+.tituloSelecionarHorario{
+    font-size: 25px;
+    font-weight: 800;
+}
+
+.subTituloSelecionarHorario{
+    font-size: 15px;
+    font-weight: 500;
+    color: #082031;
+    font-style: italic;
+}
+
+.agenda{
+    background-color: #082031;
+}
+
