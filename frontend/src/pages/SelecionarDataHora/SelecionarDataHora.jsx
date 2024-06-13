@@ -4,6 +4,7 @@ import { Footer } from "../../components/Footer/Footer";
 import logo from '../../utils/assets/logo-scale0.svg';
 import Header from "../../components/Header/Header";
 import LinhaServicos from "../../components/LinhaServicos/LinhaServicos.jsx";
+import Calendar from "../../components/AgendaFullCalendar/AgendaFullCalendar.jsx";
 import { theme } from '../../theme';
 import { ThemeProvider } from '@emotion/react';
 import { useNavigate } from 'react-router-dom';
@@ -114,13 +115,15 @@ export function SelecionarDataHora() {
                                 <div className={styles.subTituloSelecionarHorario}>
                                     <span>Todos os horários abaixo são de acordo com suas opções escolhidas, tente trocar os filtros se quiser um outro dia ou outro horário {":)"}</span>
                                 </div>
-                            </div>
 
-                            <div className={styles.selecionarDataHoraEsquerda}>
-                                <div className={styles.agenda}>
-
+                                <div className={styles.selecionarDataHoraEsquerda}>
+                                    <div className={styles.agenda}>
+                                        <Calendar />
+                                    </div>
                                 </div>
                             </div>
+
+
 
                             <div className={styles.selecionarDataHoraDireita}>
 
