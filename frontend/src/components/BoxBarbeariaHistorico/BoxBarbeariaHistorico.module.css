@@ -1,9 +1,10 @@
 .divTodo {
-  margin-top: 2%;
+  padding-top: 2%;
   display: flex;
   width: 100%;
   justify-content: center;
   align-items: center;
+  background-color: #F4F3EE;
 }
 
 .container {
