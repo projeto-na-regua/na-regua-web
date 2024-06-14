@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import styles from "./BoxServicos.module.css";
 import Checkbox from '@mui/material/Checkbox';
-import { Menu, MenuItem as MenuItemMUI, IconButton, Dialog, DialogActions, DialogContent, DialogTitle, Button } from '@mui/material';
+import { Menu, MenuItem as MenuItemMUI, IconButton, Dialog, DialogActions, DialogContent, DialogTitle, Button, Select, FormControl, InputLabel, ListItemText, MenuItem } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
-function BoxServicos({ services, onEdit, onDelete }) {
+function BoxServicos({ services, onEdit, onDelete, funcionarios }) {
     const [anchorEl, setAnchorEl] = useState(null);
     const [selectedService, setSelectedService] = useState(null);
     const [confirmOpen, setConfirmOpen] = useState(false);
@@ -54,6 +54,15 @@ function BoxServicos({ services, onEdit, onDelete }) {
         }
     };
 
+    const formatDuration = (minutes) => {
+        const hours = Math.floor(minutes / 60);
+        const mins = minutes % 60;
+        if (hours > 0) {
+            return `${hours} h ${mins > 0 ? `${mins} m` : ''}`;
+        }
+        return `${mins} m`;
+    };
+
     return (
         <div className={`${styles.gridContainer} ${styles.widerBox}`}>
             <div className={styles.boxTodoServico}>
@@ -81,10 +90,10 @@ function BoxServicos({ services, onEdit, onDelete }) {
                                         onChange={() => handleSelectService(service)}
                                     />
                                 </div>
-                                <div className={styles.divServicoGrid}>{service.name}</div>
-                                <div className={styles.divDescricao}>{service.description}</div>
-                                <div className={styles.divDuracao}>{service.duration}</div>
-                                <div className={styles.divValorGrid}>{service.value}</div>
+                                <div className={styles.divServicoGrid}>{service.tipoServico}</div>
+                                <div className={styles.divDescricao}>{service.descricao}</div>
+                                <div className={styles.divDuracao}>{formatDuration(service.tempoEstimado)}</div>
+                                <div className={styles.divValorGrid}>{service.preco}</div>
                             </div>
                             <div className={styles.divVaziaGrid}>
                                 <IconButton aria-controls="simple-menu" aria-haspopup="true" onClick={(e) => handleClick(e, service)}>
@@ -105,6 +114,7 @@ function BoxServicos({ services, onEdit, onDelete }) {
                     ))}
                 </div>
             </div>
+            
             <Dialog open={confirmOpen} onClose={handleDeleteCancel}>
                 <DialogTitle>Confirmar Exclusão</DialogTitle>
                 <DialogContent>
