@@ -1,32 +1,44 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from "./Perfil.module.css";
-import { AgendamentoContent, CortesContent, HistoricoContent } from './ContentComponents';
 import HeaderUsuario from '../../components/HeaderUsuario/HeaderUsuario';
 import NavbarCliente from '../../components/NavbarCliente/NavbarCliente';
-
-function NavBar({ setActiveTab }) {
-  return (
-    <div className="nav-bar">
-      <button className={styles["botao-nav"]} onClick={() => setActiveTab('agendamentos')}>Meus agendamentos</button>
-      <button className={styles["botao-nav"]} onClick={() => setActiveTab('cortes')}>Meus cortes</button>
-      <button className={styles["botao-nav"]} onClick={() => setActiveTab('historico')}>Histórico</button>
-    </div>
-  );
-}
+import Agendamento from '../../components/CardAgendamento/CardAgendamento';
+import api from '../../api.js';
+import dayjs from 'dayjs';
 
 function Perfil() {
   const [activeTab, setActiveTab] = useState('agendamentos');
+  const [agendamentos, setAgendamentos] = useState([]);
 
-  const getActiveTabContent = () => {
-    switch (activeTab) {
-      case 'historico':
-        return <HistoricoContent />;
-      case 'cortes':
-        return <CortesContent />;
-      default:
-        return <AgendamentoContent />;
+  const token = JSON.parse(sessionStorage.getItem('user'));
+
+  const fetchMeusAgendamentos = async () => {
+    try {
+      console.log('Fetching meus agendamentos (cliente):');
+
+      const response = await api.get('agendamentos/list-all-by-status/none', {
+        headers: {
+          Authorization: token,
+        }
+      });
+
+      console.log('Response:', response.data);
+      setAgendamentos(response.data);  // Armazena os dados no estado
+
+    } catch (error) {
+      if (error.response) {
+        console.error('Erro ao buscar os agendamentos!');
+        console.error('Error response:', error.response.data);
+      } else {
+        console.error('Erro ao tentar se conectar ao servidor!');
+        console.error('Error:', error.message);
+      }
     }
   };
+
+  useEffect(() => {
+    fetchMeusAgendamentos();
+  }, []);
 
   return (
     <div>
@@ -35,9 +47,18 @@ function Perfil() {
       </div>
       <div>
         <NavbarCliente setActiveTab={setActiveTab} />
-        <div className="content-area">
-          <div className={styles["content-animation"]} style={{transform: activeTab === 'cortes' ? 'translateX(-100%)' : 'none'}}>
-            {getActiveTabContent()}
+        <div className={styles.cardsAgendamento}>
+          <div className={styles.conteudoCardsAgendamento}>
+            {agendamentos.map((agendamento, index) => (
+              <Agendamento
+              key={index}
+              dataHora={dayjs(agendamento.dataHora).format('DD/MM/YYYY')} // Formata a data
+              barbearia={agendamento.nomeNegocio}
+              concluido={agendamento.status}
+              endereco={`${agendamento.enderecoBarbearia.logradouro}, ${agendamento.enderecoBarbearia.numero} - ${agendamento.enderecoBarbearia.cidade}`}
+              preco={`R$ ${parseFloat(agendamento.valorServico).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+            />
+            ))}
           </div>
         </div>
       </div>

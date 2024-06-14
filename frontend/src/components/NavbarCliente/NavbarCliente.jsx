@@ -11,7 +11,7 @@ function NavbarCliente(){
         setActiveButton(n);
         switch(n) {
             case 1:
-              navigate('/meus-agendamentos');
+              navigate('/minha-agenda-cliente');
               break;
             case 2:
               navigate('/meus-cortes');
@@ -20,7 +20,7 @@ function NavbarCliente(){
               navigate('/historico');
               break;
             default:
-              navigate('/meus-agendamentos');
+              navigate('/minha-agenda-cliente');
         }
     }
 
