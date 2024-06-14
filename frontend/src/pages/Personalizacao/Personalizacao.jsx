@@ -5,7 +5,7 @@ import HeaderUsuario from '../../components/HeaderUsuario/HeaderUsuario';
 import imagemPerfilDefault from '../../utils/assets/imagem-perfil.svg';
 import imagemCapaDefault from '../../utils/assets/capa-barbearia.svg';
 import editIcon from '../../utils/assets/IconsHeaderUsuario/IconEditar.svg';
-import { Button, TextField, ThemeProvider } from '@mui/material';
+import { Button, TextField, ThemeProvider, CircularProgress } from '@mui/material';
 import { useFormik } from 'formik';
 import { theme } from '../../theme';
 import { toast } from 'react-toastify';
@@ -22,6 +22,8 @@ export function Personalizacao() {
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const [imgCapa, setImgCapa] = useState(null);
   const [imgPerfil, setImgPerfil] = useState(null);
+  const [loadingPerfil, setLoadingPerfil] = useState(true);
+  const [loadingCapa, setLoadingCapa] = useState(true);
 
   const handleDiaChange = (e) => {
     setDiaSelecionado(parseInt(e.target.value));
@@ -123,6 +125,7 @@ export function Personalizacao() {
   useEffect(() => {
     const fetchImage = async () => {
       try {
+        setLoadingPerfil(true);
         const response = await api.get('/barbearias/get-image-perfil', {
           headers: {
             Authorization: token
@@ -135,6 +138,8 @@ export function Personalizacao() {
         setImgPerfil(imageUrl);
       } catch (error) {
         console.log('Erro ao buscar a imagem de perfil: ' + error);
+      } finally {
+        setLoadingPerfil(false);
       }
     };
 
@@ -144,6 +149,7 @@ export function Personalizacao() {
   useEffect(() => {
     const fetchImageCapa = async () => {
       try {
+        setLoadingCapa(true);
         const response = await api.get('/barbearias/get-image-banner', {
           headers: {
             Authorization: token
@@ -156,6 +162,8 @@ export function Personalizacao() {
         setImgCapa(imageUrl);
       } catch (error) {
         console.log('Erro ao buscar a imagem de capa: ' + error);
+      } finally {
+        setLoadingCapa(false);
       }
     };
 
@@ -240,13 +248,31 @@ export function Personalizacao() {
             <NavbarBarbeiro />
             <div className={styles.conteudoFotos}>
               <div className={styles.containerFotoCapa} onClick={handleCapaClick}>
-                <img src={imgCapa || imagemCapaDefault} style={{ height: '100%', width: '100%', objectFit: 'cover', borderRadius: 24 }} />
+              {loadingCapa ? (
+                  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', width: '100%' }}>
+                    <CircularProgress color="secondary" style={{
+                      alignSelf: 'center',
+                      justifySelf: 'center',
+                    }}/>
+                  </div>
+                ) : (
+                  <img src={imgCapa || imagemCapaDefault} style={{ height: '100%', width: '100%', objectFit: 'cover', borderRadius: 24 }} />
+                )}
                 <div className={styles.overlay}>
                   <img src={editIcon} alt="Editar Capa" className={styles.editIcon} />
                 </div>
               </div>
               <div className={styles.containerFotoPerfil} onClick={handlePerfilClick}>
-                <img src={imgPerfil || imagemPerfilDefault} style={{ height: '100%', width: '100%', objectFit: 'cover', borderRadius: 24 }} />
+              {loadingPerfil ? (
+                  <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', width: '100%' }}>
+                    <CircularProgress color="secondary" style={{
+                      alignSelf: 'center',
+                      justifySelf: 'center',
+                    }}/>
+                  </div>
+                ) : (
+                  <img src={imgPerfil || imagemPerfilDefault} style={{ height: '100%', width: '100%', objectFit: 'cover', borderRadius: 24 }} />
+                )}
                 <div className={styles.overlay}>
                   <img src={editIcon} alt="Editar Perfil" className={styles.editIcon} />
                 </div>
@@ -387,6 +413,7 @@ export function Personalizacao() {
                 />
               </div>
 
+              {/* -- TO DO -> (Atualizar dias semana conforme layout no figma) 
               <h2 style={{ fontSize: 26, fontWeight: 600, color: '#082031' }}>Informações adicionais</h2>
               <div className={styles.formularioInformacoesAdicionais}>
                 <div>
@@ -423,6 +450,8 @@ export function Personalizacao() {
                   <pre>{JSON.stringify(horarios, null, 2)}</pre>
                 </div>
               </div>
+              */}
+
               <div className={styles.botoesFormulario}>
                 <Button
                   className={styles.botaoDescartar}
