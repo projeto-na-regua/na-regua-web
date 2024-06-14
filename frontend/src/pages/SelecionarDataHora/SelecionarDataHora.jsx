@@ -1,16 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import styles from './SelecionarDataHora.module.css';
-import { Footer } from "../../components/Footer/Footer";
+import { Footer } from '../../components/Footer/Footer';
 import logo from '../../utils/assets/logo-scale0.svg';
-import Header from "../../components/Header/Header";
-import LinhaServicos from "../../components/LinhaServicos/LinhaServicos.jsx";
-import Calendar from "../../components/AgendaFullCalendar/AgendaFullCalendar.jsx";
+import Header from '../../components/Header/Header';
+import LinhaServicos from '../../components/LinhaServicos/LinhaServicos.jsx';
+import CardHorarioDisponivel from '../../components/CardHorarioDisponivel/CardHorarioDisponivel.jsx';
 import { theme } from '../../theme';
 import { ThemeProvider } from '@emotion/react';
 import { useNavigate } from 'react-router-dom';
 import MenuLateralUsuario from '../../components/MenuLateralUsuario/MenuLateralUsuario.jsx';
-import { Button, Card } from '@mui/material';
-import FotoPerfilEquipe from "../../components/FotoPerfilEquipe/FotoPerfilEquipe.jsx";
+import { Button } from '@mui/material';
+import FotoPerfilEquipe from '../../components/FotoPerfilEquipe/FotoPerfilEquipe.jsx';
+import api from '../../api.js';
+import { toast } from 'react-toastify';
+import AgendaFullCalendar from '../../components/AgendaFullCalendar/AgendaFullCalendar.jsx';
 
 export function SelecionarDataHora() {
     const navigate = useNavigate();
@@ -18,6 +21,14 @@ export function SelecionarDataHora() {
     const [isAuth, setIsAuth] = useState(false);
     const token = JSON.parse(sessionStorage.getItem('user'));
     const [open, setOpen] = useState(false);
+    const [selectedDate, setSelectedDate] = useState(null);
+    const [showHorariosDisponiveis, setShowHorariosDisponiveis] = useState(false);
+    const [horariosDisponiveis, setHorariosDisponiveis] = useState([]);
+    const [selectedIndex, setSelectedIndex] = useState(-1);
+
+    const handleSelect = (index) => {
+        setSelectedIndex(index);
+    };
 
     useEffect(() => {
         if (!token) {
@@ -26,6 +37,94 @@ export function SelecionarDataHora() {
             setIsAuth(true);
         }
     }, [token]);
+
+    const handleDateChange = (date) => {
+        setSelectedDate(date);
+        fetchHorariosDisponiveis(date.format('YYYY-MM-DD'));
+    };
+
+    const barbeiroServicoId = {
+        barbeiro: 28,
+        servico: 10,
+        barbearia: 12
+    };
+
+    const fetchHorariosDisponiveis = async (dataAgendamento) => {
+        try {
+            console.log('Fetching horários disponíveis para:', dataAgendamento);
+
+            // Simulação da chamada API com token
+            const response = await api.get('agendamentos/list-horarios-disponiveis', {
+                headers: {
+                    Authorization: token,
+                },
+                params: {
+                    barbeiro: barbeiroServicoId.barbeiro,
+                    servico: barbeiroServicoId.servico,
+                    barbearia: barbeiroServicoId.barbearia,
+                    date: dataAgendamento,
+                },
+            });
+
+            console.log('Response:', response.data[0].hora);
+
+            if (response.data && response.data.length > 0) {
+
+                var horarios = [];
+
+                for (var i = 0; i < response.data.length; i++) {
+                    horarios[i] = response.data[i].hora
+                }
+                console.log(horarios)
+                setHorariosDisponiveis(horarios)
+                setShowHorariosDisponiveis(true);
+            } else {
+                setHorariosDisponiveis([]);
+                setShowHorariosDisponiveis(false);
+                toast.info('Não há horários disponíveis para a data selecionada.');
+            }
+        } catch (error) {
+            if (error.response) {
+                toast.error('Erro ao buscar horários disponíveis!');
+                console.error('Error response:', error.response.data);
+            } else {
+                toast.error('Erro ao tentar se conectar ao servidor!');
+                console.error('Error:', error.message);
+            }
+        }
+    };
+
+    const handleSelecionarHorario = (horarioSelecionado) => {
+        console.log('Horário selecionado:', horarioSelecionado);
+    };
+
+    /* const fetchServicos = async () => {
+        try {
+            console.log('Fetching serviços');
+
+            // Simulação da chamada API com token
+            const response = await api.get('servicos', {
+                headers: {
+                    Authorization: token,
+                }
+            });
+
+            console.log('Response:', response.data);
+        } catch (error) {
+            if (error.response) {
+                toast.error('Erro ao buscar os serviços disponíveis!');
+                console.error('Error response:', error.response.data);
+            } else {
+                toast.error('Erro ao tentar se conectar ao servidor!');
+                console.error('Error:', error.message);
+            }
+        }
+    };
+
+    useEffect(() => {
+        fetchServicos();
+    }, []); */
+    
 
     return (
         <ThemeProvider theme={theme}>
@@ -63,7 +162,6 @@ export function SelecionarDataHora() {
             <div className={styles.selecionarServicoDataHora}>
                 <div className={styles.containerSelecionarServicoDataHora}>
                     <div className={styles.conteudoSelecionarServicoDataHora}>
-
                         <div className={styles.breadCrumbs}>
                             <span>Buscar</span>
                             <span>{">"}</span>
@@ -78,10 +176,10 @@ export function SelecionarDataHora() {
                             </div>
 
                             <div className={styles.servicosDisponiveis}>
-                                <LinhaServicos />
-                                <LinhaServicos />
-                                <LinhaServicos />
-                                <LinhaServicos />
+                                <LinhaServicos index={0} selectedIndex={selectedIndex} onSelect={handleSelect} />
+                                <LinhaServicos index={1} selectedIndex={selectedIndex} onSelect={handleSelect} />
+                                <LinhaServicos index={2} selectedIndex={selectedIndex} onSelect={handleSelect} />
+                                <LinhaServicos index={3} selectedIndex={selectedIndex} onSelect={handleSelect} />
                             </div>
                         </div>
 
@@ -101,33 +199,37 @@ export function SelecionarDataHora() {
                                 <FotoPerfilEquipe />
                             </div>
 
-
                         </div>
 
                         <div className={styles.selecionarDataHora}>
-
                             <div className={styles.tituloSubTituloSelecionarHorario}>
-
                                 <div className={styles.tituloSelecionarHorario}>
                                     <span>Selecionar horário</span>
                                 </div>
-
                                 <div className={styles.subTituloSelecionarHorario}>
                                     <span>Todos os horários abaixo são de acordo com suas opções escolhidas, tente trocar os filtros se quiser um outro dia ou outro horário {":)"}</span>
                                 </div>
+                            </div>
 
+                            <div className={styles.calendarioHorario}>
                                 <div className={styles.selecionarDataHoraEsquerda}>
                                     <div className={styles.agenda}>
-                                        <Calendar />
+                                        {/* Componente Calendar com handleDateChange */}
+                                        <AgendaFullCalendar handleDateChange={handleDateChange} />
                                     </div>
                                 </div>
+
+                                {/* Renderiza horários disponíveis apenas se data e horários estiverem disponíveis */}
+                                {selectedDate && showHorariosDisponiveis && horariosDisponiveis.length > 0 && (
+                                    <div className={styles.selecionarDataHoraDireita}>
+                                        {horariosDisponiveis.map((horario, index) => (
+                                            <CardHorarioDisponivel key={index} horario={horario} onSelect={() => handleSelecionarHorario(horario)} />
+                                        ))}
+                                    </div>
+                                )}
+
                             </div>
 
-
-
-                            <div className={styles.selecionarDataHoraDireita}>
-
-                            </div>
                         </div>
 
                     </div>

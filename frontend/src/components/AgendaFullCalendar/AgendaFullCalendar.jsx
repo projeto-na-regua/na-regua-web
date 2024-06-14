@@ -1,16 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import dayjs from 'dayjs';
 import 'dayjs/locale/pt-br';
 import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
-import TextField from '@mui/material/TextField';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { toast } from "react-toastify";
+import api from '../../api.js';
 
 dayjs.locale('pt-br');
-
-
 
 const newTheme = createTheme({
     components: {
@@ -60,28 +59,26 @@ const newTheme = createTheme({
     }
 });
 
-export default function AgendaFullCalendar() {
+export default function AgendaFullCalendar({handleDateChange}) {
     const [selectedDate, setSelectedDate] = useState(dayjs());
 
-    const handleDateChange = (date) => {
-        setSelectedDate(date);
-        var data = date.format('YYYY-MM-DD')
-        alert(`Dia escolhido: ${data}`);
-    };
+
+    const handleChange = (date) => {
+      setSelectedDate(date);
+      handleDateChange(date); // Chama a função recebida por propriedade para atualizar a data no componente pai
+  };
 
     return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
             <ThemeProvider theme={newTheme}>
-                <DemoContainer
-                    components={[
-                        'StaticDatePicker',
-                    ]}
-                >
+                <DemoContainer components={['StaticDatePicker']}>
                     <DemoItem>
                         <StaticDatePicker
                             value={selectedDate}
                             onChange={handleDateChange}
-                            renderInput={(params) => <TextField {...params} variant="standard" />}
+                            componentsProps={{
+                                textField: { variant: "standard" }
+                            }}
                             displayStaticWrapperAs="desktop"
                             showToolbar={false}
                             disablePast
