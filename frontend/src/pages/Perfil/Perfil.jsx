@@ -4,7 +4,6 @@ import HeaderUsuario from '../../components/HeaderUsuario/HeaderUsuario';
 import NavbarCliente from '../../components/NavbarCliente/NavbarCliente';
 import Agendamento from '../../components/CardAgendamento/CardAgendamento';
 import api from '../../api.js';
-import dayjs from 'dayjs';
 
 function Perfil() {
   const [activeTab, setActiveTab] = useState('agendamentos');
@@ -23,8 +22,7 @@ function Perfil() {
       });
 
       console.log('Response:', response.data);
-      setAgendamentos(response.data);  // Armazena os dados no estado
-
+      setAgendamentos(response.data); // Salva os agendamentos no estado
     } catch (error) {
       if (error.response) {
         console.error('Erro ao buscar os agendamentos!');
@@ -41,25 +39,21 @@ function Perfil() {
   }, []);
 
   return (
-    <div>
-      <div>
-        <HeaderUsuario />
-      </div>
-      <div>
-        <NavbarCliente setActiveTab={setActiveTab} />
-        <div className={styles.cardsAgendamento}>
-          <div className={styles.conteudoCardsAgendamento}>
-            {agendamentos.map((agendamento, index) => (
-              <Agendamento
+    <div className={`${styles.fullHeightBg} ${styles.perfilContainer}`}>
+      <HeaderUsuario />
+      <NavbarCliente setActiveTab={setActiveTab} />
+      <div className={styles.cardsAgendamento}>
+        <div className={styles.conteudoCardsAgendamento}>
+          {agendamentos.map((agendamento, index) => (
+            <Agendamento
               key={index}
-              dataHora={dayjs(agendamento.dataHora).format('DD/MM/YYYY')} // Formata a data
+              dataHora={new Date(agendamento.dataHora).toLocaleDateString('pt-BR')}
               barbearia={agendamento.nomeNegocio}
               concluido={agendamento.status}
               endereco={`${agendamento.enderecoBarbearia.logradouro}, ${agendamento.enderecoBarbearia.numero} - ${agendamento.enderecoBarbearia.cidade}`}
-              preco={`R$ ${parseFloat(agendamento.valorServico).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+              preco={`R$${agendamento.valorServico.toFixed(2).replace('.', ',')}`}
             />
-            ))}
-          </div>
+          ))}
         </div>
       </div>
     </div>
