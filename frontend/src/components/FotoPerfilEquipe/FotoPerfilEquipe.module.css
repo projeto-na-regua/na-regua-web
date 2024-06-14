@@ -1,0 +1,21 @@
+.conteudoFotoPerfilEquipe{
+    background-color: #E3A74F;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.foto{
+    display: flex;
+    width: 160px;
+    height: 160px;
+    justify-content: center;
+    align-items: center;
+}
+
+.foto img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+}
