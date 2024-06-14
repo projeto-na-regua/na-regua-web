@@ -88,7 +88,7 @@
     display: flex;
     flex-direction: column;
     color: #082031;
-    width: 40%;
+    width: 100%;
 }
 
 .tituloSubTituloSelecionarHorario{
@@ -111,6 +111,18 @@
 }
 
 .agenda{
+    margin-top: 5%;
     background-color: #082031;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 8px;
+    border-radius: 15px;
+}
+
+.selecionarDataHoraDireita{
+    display: flex;
+    width: 60%;
 }
 
