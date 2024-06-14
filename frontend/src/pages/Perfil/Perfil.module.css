@@ -1,16 +1,15 @@
-.content-area {
+.cardsAgendamento{
+  width: 100%;
   display: flex;
+  justify-content: center;
+  background-color: #F4F3EE;
+  padding-top: 1%;
+}
+
+.conteudoCardsAgendamento{
+  display: flex;
+  justify-content: center;
   flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.content {
-  width: calc(50% - 20px);
-  margin-bottom: 20px;
-}
-  
-
-.botao-nav {
-    font-family: "Plus Jakarta Sans";
+  width: 80%;
+  justify-content: space-evenly;
 }

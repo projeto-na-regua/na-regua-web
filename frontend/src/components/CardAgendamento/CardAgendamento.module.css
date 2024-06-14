@@ -1,91 +1,91 @@
 .card-agendamento {
-  margin: 36px 5px; /* Reduzindo a margem para manter o espaçamento */
+  margin: 36px 5px;
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 16px; /* Reduzindo o raio do border-radius proporcionalmente */
+  border-radius: 16px;
   flex-direction: column;
-  height: calc(210px - 19.5px); /* Diminuindo 10% da altura atual */
-  width: calc(510px - 51px); /* Diminuindo 10% da largura atual */
+  height: calc(210px - 19.5px);
+  width: calc(510px - 51px);
   background-color: #E8E8E8;
   color: #082031;
   font-family: "Plus Jakarta Sans";
   z-index: 1;
   padding: 15px 20px 15px 20px;
 }
-  
-  .container-data-barbearia {
-    position: absolute;
-    top: 10px;
-    left: 20px;
-    display: flex;
-    align-items: flex-start;
-    justify-content: left;
-    text-align: center;
-    flex-direction: row;
-    top: -35px; 
-    z-index: 2;
-  }
-  
-  .data-hora,
-  .nome-barbearia {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 10px;
-    color: white;
-    background-color: #082031;
-    height: 48px;
-    width: 150px;
-    margin: 10px;
-  }
-  
-  .info-agendamento {
-    display: flex;
-    justify-content: center;
-    align-items: center; 
-    text-align: center;
-    flex-direction: column;
-    width: 90%; /* Diminuindo 10% da largura atual */
-    height: 90%; /* Diminuindo 10% da altura atual */
-    margin-top: 32px; /* Reduzindo a margem para manter o espaçamento proporcional */
-  }
-  
-  .info-agendamento p {
-    margin: 7px;
-    font-weight: 500;
-    font-size: medium;
-    display: flex;
-    align-items: center;
-    text-align: center;
-    flex-direction: row;
-  }
-  
-  .line {
-    height: 1px;
-    width: 330px;
-    background-color: #082031;
-    margin: 0px 10px;
-  }
-  
-  .container-botao {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    bottom: 8px; /* Ajustando a posição vertical do container de botão */
-    z-index: 2;
-  }
-  
-  .botao {
-    all: unset;
-    display: inline-block;
-    cursor: pointer;
-    border-radius: 10px;
-    font-family: "Plus Jakarta Sans";
-    color: white;
-    background-color: #082031;
-    height: 58px;
-    width: 210px;
-  }
+
+.container-data-barbearia {
+  position: absolute;
+  top: 10px;
+  left: 20px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: left;
+  text-align: center;
+  flex-direction: row;
+  top: -35px; 
+  z-index: 2;
+}
+
+.data-hora,
+.nome-barbearia {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  color: white;
+  background-color: #082031;
+  height: 48px;
+  width: 150px;
+  margin: 10px;
+}
+
+.info-agendamento {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  flex-direction: column;
+  width: 90%;
+  height: 90%;
+  margin-top: 32px;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%; /* Garante que a linha ocupe toda a largura disponível */
+  margin: 7px 0;
+  font-weight: 500;
+  font-size: medium;
+}
+
+.line {
+  flex-grow: 1;
+  height: 1px;
+  background-color: #082031;
+  margin: 0 10px;
+}
+
+.container-botao {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  bottom: 8px;
+  z-index: 2;
+}
+
+.botao {
+  all: unset;
+  display: inline-block;
+  cursor: pointer;
+  border-radius: 10px;
+  font-family: "Plus Jakarta Sans";
+  color: white;
+  background-color: #082031;
+  height: 58px;
+  width: 210px;
+}
