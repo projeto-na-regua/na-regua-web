@@ -30,7 +30,7 @@ const ImagePerfil = () => {
     };
 
     fetchImage();
-  }, []);
+  }, []); 
 
   if (loading) {
     return <div>Carregando...</div>;
