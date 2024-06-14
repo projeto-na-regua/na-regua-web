@@ -1,15 +1,25 @@
-.cardsAgendamento{
+.fullHeightBg {
+  background-color: #F4F3EE;
+  min-height: 100vh;
+}
+
+.perfilContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cardsAgendamento {
   width: 100%;
   display: flex;
   justify-content: center;
-  background-color: #F4F3EE;
   padding-top: 1%;
 }
 
-.conteudoCardsAgendamento{
+.conteudoCardsAgendamento {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  width: 80%;
+  width: 90%;
   justify-content: space-evenly;
 }
