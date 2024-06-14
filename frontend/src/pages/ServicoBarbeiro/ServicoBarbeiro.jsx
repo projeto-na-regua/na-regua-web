@@ -85,45 +85,33 @@ export function ServicoBarbeiro() {
 
   const mandarDados = async () => {
     try {
-      let response;
+      const barbeirosEmails = responsaveis.map((nome) =>
+        funcionarios.find((funcionario) => funcionario.nome === nome)?.email
+      ).filter(email => email); // Filtra emails válidos
 
-      // Cadastro de novo serviço
-      response = await api.post(
-        '/servicos',
-        {
-          preco: parseFloat(serviceValue), // Converte para float
-          descricao: serviceDescription,
-          tipoServico: serviceName,
-          tempoEstimado: parseInt(serviceDuration), // Converte para integer
-          status: true,
-          barbeiros: responsaveis.map((nome) => ({
-            nome,
-            email: funcionarios.find((funcionario) => funcionario.nome === nome)?.email,
-          })),
+      let response = await api.post('/servicos', {
+        preco: parseFloat(serviceValue), // Converte para float
+        descricao: serviceDescription,
+        tipoServico: serviceName,
+        tempoEstimado: parseInt(serviceDuration), // Converte para integer
+        barbeirosEmails: barbeirosEmails, // Inclui a lista de emails dos barbeiros selecionados
+        status: true, // Definindo o status como true por padrão ao cadastrar
+      }, {
+        headers: {
+          Authorization: token,
         },
-        {
-          headers: {
-            Authorization: token,
-          },
-        }
-      );
+      });
 
-      // Verifica se a resposta da API foi bem-sucedida
       if (response.status === 201) {
-        // Adiciona o novo serviço na lista local
         setListaServicos([...listaServicos, response.data]);
 
-        // Limpa os campos do formulário
         setServiceName('');
         setServiceDescription('');
         setServiceValue('');
         setServiceDuration('');
         setResponsaveis([]);
-
-        // Fecha o modal de cadastro
         handleClose();
 
-        // Exibe mensagem de sucesso
         toast.success('Serviço cadastrado com sucesso!', { autoClose: 2000 });
       } else {
         console.error('Erro ao cadastrar serviço:', response);
@@ -143,7 +131,10 @@ export function ServicoBarbeiro() {
             Authorization: token,
           },
         });
-        setListaServicos(response.data);
+
+        // Filtra apenas os serviços com status true
+        const servicosAtivos = response.data.filter(servico => servico.status === true);
+        setListaServicos(servicosAtivos);
       } catch (error) {
         console.error('Erro ao buscar servicos:', error);
       } finally {
@@ -206,6 +197,7 @@ export function ServicoBarbeiro() {
             </Button>
           </div>
           <div className={styles.container}>
+            {/* Passa apenas os serviços ativos para o componente BoxServicos */}
             <BoxServicos services={listaServicos} funcionarios={funcionarios} />
           </div>
         </div>
@@ -276,7 +268,11 @@ export function ServicoBarbeiro() {
       <Dialog open={durationOpen} onClose={handleDurationClose}>
         <DialogTitle>Selecionar Duração</DialogTitle>
         <DialogContent>
-          <Select value={serviceDuration} onChange={handleDurationSelect} fullWidth>
+          <Select
+            value={serviceDuration}
+            onChange={handleDurationSelect}
+            fullWidth
+          >
             {durations.map((duration, index) => (
               <MenuItem key={index} value={duration}>
                 {formatDuration(duration)}
