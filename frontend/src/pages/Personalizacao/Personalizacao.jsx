@@ -71,7 +71,7 @@ export function Personalizacao() {
           }
         });
 
-        toast.success("Informações principais atualizadas com sucesso!");
+        toast.success("Informações atualizadas com sucesso!");
         setModalEditarOpen(false);
         
         await handleCapaChange();
@@ -120,6 +120,48 @@ export function Personalizacao() {
     }
   }, [token, formik, isInitialLoad]);
 
+  useEffect(() => {
+    const fetchImage = async () => {
+      try {
+        const response = await api.get('/barbearias/get-image-perfil', {
+          headers: {
+            Authorization: token
+          },
+          responseType: 'arraybuffer'
+        });
+
+        const blob = new Blob([response.data], { type: 'image/png' });
+        const imageUrl = URL.createObjectURL(blob);
+        setImgPerfil(imageUrl);
+      } catch (error) {
+        console.log('Erro ao buscar a imagem de perfil: ' + error);
+      }
+    };
+
+    fetchImage();
+  }, []);
+
+  useEffect(() => {
+    const fetchImageCapa = async () => {
+      try {
+        const response = await api.get('/barbearias/get-image-banner', {
+          headers: {
+            Authorization: token
+          },
+          responseType: 'arraybuffer'
+        });
+
+        const blob = new Blob([response.data], { type: 'image/png' });
+        const imageUrl = URL.createObjectURL(blob);
+        setImgCapa(imageUrl);
+      } catch (error) {
+        console.log('Erro ao buscar a imagem de capa: ' + error);
+      }
+    };
+
+    fetchImageCapa();
+  }, []);
+
   const diaAtual = horarios.find((dia) => dia.id === diaSelecionado) || { horaAbertura: '', horaFechamento: '' };
 
   const handleDescartarConfirm = () => {
@@ -143,7 +185,7 @@ export function Personalizacao() {
       try {
         const blobCapa = await fetch(imgCapa).then(res => res.blob());
         const formData = new FormData();
-        formData.append('file', blobCapa, 'image.png');
+        formData.append('file', blobCapa, 'imagem.png');
   
         const response = await api.put('/barbearias/image-banner', formData, {
           headers: {
@@ -164,7 +206,7 @@ export function Personalizacao() {
       try {
         const blobPerfil = await fetch(imgPerfil).then(res => res.blob());
         const formData = new FormData();
-        formData.append('file', blobPerfil, 'image.png');
+        formData.append('file', blobPerfil, 'imagem.png');
   
         const response = await api.put('/barbearias/image-perfil', formData, {
           headers: {
@@ -179,6 +221,7 @@ export function Personalizacao() {
       }
     }
   };
+  
 
   const handleCapaClick = () => {
     document.getElementById('fileInputCapa').click();
@@ -197,13 +240,13 @@ export function Personalizacao() {
             <NavbarBarbeiro />
             <div className={styles.conteudoFotos}>
               <div className={styles.containerFotoCapa} onClick={handleCapaClick}>
-                <img src={imgCapa || imagemCapaDefault} style={{ height: '100%', width: '100%' }} />
+                <img src={imgCapa || imagemCapaDefault} style={{ height: '100%', width: '100%', objectFit: 'cover', borderRadius: 24 }} />
                 <div className={styles.overlay}>
                   <img src={editIcon} alt="Editar Capa" className={styles.editIcon} />
                 </div>
               </div>
               <div className={styles.containerFotoPerfil} onClick={handlePerfilClick}>
-                <img src={imgPerfil || imagemPerfilDefault} style={{ height: '100%', width: '100%' }} />
+                <img src={imgPerfil || imagemPerfilDefault} style={{ height: '100%', width: '100%', objectFit: 'cover', borderRadius: 24 }} />
                 <div className={styles.overlay}>
                   <img src={editIcon} alt="Editar Perfil" className={styles.editIcon} />
                 </div>
@@ -214,13 +257,13 @@ export function Personalizacao() {
               type="file"
               id="fileInputCapa"
               style={{ display: 'none' }}
-              onChange={(e) => setImgCapa(e.target.files[0])}
+              onChange={(e) => setImgCapa(URL.createObjectURL(e.target.files[0]))}
             />
             <input
               type="file"
               id="fileInputPerfil"
               style={{ display: 'none' }}
-              onChange={(e) => setImgPerfil(e.target.files[0])}
+              onChange={(e) => setImgPerfil(URL.createObjectURL(e.target.files[0]))}
             />
 
             <div className={styles.formularioEditarBarbearia}>

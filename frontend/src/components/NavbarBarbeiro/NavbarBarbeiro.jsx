@@ -14,13 +14,13 @@ function NavbarBarbeiro(){
               navigate("/minha-agenda")
               break;
             case 2:
-              //navigate("/dashboard")
+              navigate("/dashboard")
               break;
             case 3:
               navigate("/servicos")
               break;
             case 4:
-              //navigate("/fluxo-de-caixa")
+              navigate("/fluxo-de-caixa")
               break;
             case 5:
               navigate("/funcionarios")

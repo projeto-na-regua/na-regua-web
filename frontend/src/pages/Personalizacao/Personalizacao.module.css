@@ -17,14 +17,20 @@ body {
     margin: 4%;
     background-color: #082031;
     border-radius: 24px;
+    width: 796.27px;
+    height: 324.38px;
+    overflow: hidden;
 }
 
 .containerFotoPerfil{
     position: relative;
-    padding: 1.5%;
+    padding: 1.2%;
     margin: 4%;
     background-color: #082031;
     border-radius: 24px;
+    width: 397px;
+    height: 324.38px;
+    overflow: hidden;
 }
 .containerFotoCapa img,
 .containerFotoPerfil img {
