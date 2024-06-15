@@ -27,7 +27,7 @@ function Login() {
         sessionStorage.setItem('user', JSON.stringify(data));
 
         toast.success("Login realizado com sucesso!", {
-          autoClose: 2000 // 2 segundos
+          autoClose: 2000
         });
 
         const user = JSON.parse(sessionStorage.getItem('user'));
@@ -41,10 +41,7 @@ function Login() {
           }
         }
        }, 4000);
-
-        console.log(data);
       } catch (error) {
-
         if (error.response) {
           toast.error("Email ou senha inválidos!")
         }
