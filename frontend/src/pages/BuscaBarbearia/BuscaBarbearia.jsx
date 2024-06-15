@@ -58,11 +58,9 @@ export function BuscaBarbearia() {
                     Authorization: token
                 }
             });
-    
+            console.log(response.data)
             // Ensure response.data contains the actual data
             const imageBytesList = response.data;
-    
-    
             // Atualizar o estado para exibir as imagens
             setImgPerfil(imageBytesList);
     
