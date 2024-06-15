@@ -1,6 +1,5 @@
-import React from "react";
-import styles from "./HistoricoUsuario.module.css";
-import { Button, TextField, ThemeProvider } from '@mui/material'
+import React from "react"
+import { ThemeProvider } from '@mui/material'
 import NavbarCliente from "../../components/NavbarCliente/NavbarCliente";
 import HeaderUsuario from "../../components/HeaderUsuario/HeaderUsuario";
 import BoxBarbeariaHistorico from "../../components/BoxBarbeariaHistorico/BoxBarbeariaHistorico"

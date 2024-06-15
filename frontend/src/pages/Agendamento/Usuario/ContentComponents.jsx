@@ -1,6 +1,6 @@
 import React from 'react';
-import CardAgendamento from '../../components/CardAgendamento/CardAgendamento';
-import CardMeusCortes from '../../components/CardMeusCortes/CardMeusCortes';
+import CardAgendamento from '../../../components/CardAgendamento/CardAgendamento';
+import CardMeusCortes from '../../../components/CardMeusCortes/CardMeusCortes';
 import styles from './ContentComponents.module.css';
 
 const agendamentos = [
@@ -36,11 +36,11 @@ const agendamentos = [
 
 const cortes = [
   {
-    title: "Teste 1", 
+    title: "Teste 1",
     description: "Description 1"
   },
   {
-    title: "Teste 2", 
+    title: "Teste 2",
     description: "Description 2"
   },
 ]

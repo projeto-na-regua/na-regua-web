@@ -341,7 +341,7 @@
 .validacaoAmbiente{
     display: flex;
     justify-content: flex-end;
-    gap: 50px;
+    gap: 24px;
 }
 
 #perfil{

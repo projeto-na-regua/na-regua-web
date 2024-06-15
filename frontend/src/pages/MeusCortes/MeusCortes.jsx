@@ -46,7 +46,6 @@ export function MeusCortes() {
     const file = event.target.files[0]
     if (file) {
       console.log('Arquivo selecionado:', file)
-      // Aqui você pode adicionar a lógica para enviar o arquivo para o servidor ou manipulá-lo conforme necessário
       setModalAdicionar(true)
     }
   }
@@ -94,7 +93,7 @@ export function MeusCortes() {
                   display: 'flex',
                   width: '100%',
                   alignItems: 'center',
-                  justifyContent: 'flex-start',
+                  justifyContent: listaImagens.length > 0 ? 'flex-start' : 'center',
                   marginLeft: 64,
                   gap: 32
                 }}>

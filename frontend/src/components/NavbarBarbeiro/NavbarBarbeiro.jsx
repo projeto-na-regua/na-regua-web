@@ -9,7 +9,7 @@ function NavbarBarbeiro() {
 
   useEffect(() => {
     switch (location.pathname) {
-      case '/minha-agenda':
+      case '/agenda':
         setActiveButton(1);
         break;
       case '/dashboard':
@@ -43,7 +43,7 @@ function NavbarBarbeiro() {
       <div className={styles.utilHoverTrocaTelas}>
         <div
           className={`${styles.opcoesTelas} ${activeButton === 1 ? styles.active : ''}`}
-          onClick={() => handleNavigation(1, '/minha-agenda')}
+          onClick={() => handleNavigation(1, '/agenda')}
         >
           <span>Agenda</span>
         </div>
@@ -69,7 +69,7 @@ function NavbarBarbeiro() {
           className={`${styles.opcoesTelas} ${activeButton === 5 ? styles.active : ''}`}
           onClick={() => handleNavigation(5, '/funcionarios')}
         >
-          <span>Funcionarios</span>
+          <span>Funcionários</span>
         </div>
         <div
           className={`${styles.opcoesTelas} ${activeButton === 6 ? styles.active : ''}`}

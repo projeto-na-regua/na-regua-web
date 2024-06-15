@@ -9,13 +9,13 @@ function NavbarCliente() {
 
   useEffect(() => {
     switch (location.pathname) {
-      case '/minha-agenda-cliente':
+      case '/perfil/meus-agendamentos':
         setActiveButton(1);
         break;
-      case '/meus-cortes':
+      case '/perfil/meus-cortes':
         setActiveButton(2);
         break;
-      case '/historico':
+      case '/perfil/historico':
         setActiveButton(3);
         break;
       default:
@@ -34,19 +34,19 @@ function NavbarCliente() {
       <div className={styles.utilHoverTrocaTelas}>
         <div
           className={`${styles.opcoesTelas} ${activeButton === 1 ? styles.active : ''}`}
-          onClick={() => handleNavigation(1, '/minha-agenda-cliente')}
+          onClick={() => handleNavigation(1, '/perfil/meus-agendamentos')}
         >
           <span>Meus agendamentos</span>
         </div>
         <div
           className={`${styles.opcoesTelas} ${activeButton === 2 ? styles.active : ''}`}
-          onClick={() => handleNavigation(2, '/meus-cortes')}
+          onClick={() => handleNavigation(2, '/perfil/meus-cortes')}
         >
           <span>Meus cortes</span>
         </div>
         <div
           className={`${styles.opcoesTelas} ${activeButton === 3 ? styles.active : ''}`}
-          onClick={() => handleNavigation(3, '/historico')}
+          onClick={() => handleNavigation(3, '/perfil/historico')}
         >
           <span>Histórico</span>
         </div>

@@ -20,27 +20,57 @@ function Login() {
         const response = await api.post('/usuarios', {
           email: values.email,
           senha: values.password
-        });
+        })
 
-        const data = response.data;
+        const data = response.data
 
-        sessionStorage.setItem('user', JSON.stringify(data));
-
+        sessionStorage.setItem('user', JSON.stringify(data))
         toast.success("Login realizado com sucesso!", {
           autoClose: 2000
-        });
+        })
 
-        const user = JSON.parse(sessionStorage.getItem('user'));
+        const user = JSON.parse(sessionStorage.getItem('user'))
 
-       setTimeout(() => {
-        if(user){
-          if(data.tipo === "Barbeiro" && data.idBarbearia !== null){
-            navigate("/meus-cortes")
-          }else{
-            navigate("/meus-cortes")
+        const fetchUser = async () => {
+          try {
+            const response = await api.get('/usuarios/perfil', {
+              headers: {
+                Authorization: user
+              }
+            })
+
+            const data = response.data
+            sessionStorage.setItem('userInfo', JSON.stringify(data))
+
+          } catch (error) {
+            console.error(error)
           }
         }
-       }, 4000);
+
+        const fetchBarbearia = async () => {
+          try {
+            const response = await api.get('/barbearias/perfil', {
+              headers: {
+                Authorization: user
+              }
+            })
+
+            const data = response.data
+            sessionStorage.setItem('barbearia', JSON.stringify(data))
+
+          } catch (error) {
+            console.error(error)
+          }
+        }
+
+        fetchUser()
+        fetchBarbearia()
+
+        setTimeout(() => {
+          if (user) {
+            navigate('/perfil/meus-agendamentos')
+          }
+        }, 4000)
       } catch (error) {
         if (error.response) {
           toast.error("Email ou senha inválidos!")
