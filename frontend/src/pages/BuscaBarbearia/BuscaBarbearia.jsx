@@ -19,6 +19,7 @@ export function BuscaBarbearia() {
     const token = JSON.parse(sessionStorage.getItem('user'));
     const [open, setOpen] = useState(false);
     const [barbearias, setBarbearias] = useState([]);
+    const [imgPerfil, setImgPerfil] = useState([]);
 
     useEffect(() => {
         if (!token) {
@@ -28,33 +29,50 @@ export function BuscaBarbearia() {
         }
     }, [token]);
 
+    useEffect(() => {
+        fetchBarbearias();
+        fetchImage();
+    }, []);
 
     const fetchBarbearias = async () => {
         try {
-          console.log('Fetching barbearias (cliente):');
-    
-          const response = await api.get('barbearias/client-side/pesquisa', {
-            headers: {
-              Authorization: token,
-            }
-          });
-    
-          console.log('Response:', response.data);
-          setBarbearias(response.data)
+            console.log('Fetching barbearias (cliente):');
+
+            const response = await api.get('barbearias/client-side/pesquisa', {
+                headers: {
+                    Authorization: token,
+                }
+            });
+            console.log('Response:', response.data);
+            setBarbearias(response.data);
         } catch (error) {
-          if (error.response) {
-            console.error('Erro ao buscar as barbearias!');
-            console.error('Error response:', error.response.data);
-          } else {
-            console.error('Erro ao tentar se conectar ao servidor!');
-            console.error('Error:', error.message);
-          }
+            console.error('Erro ao buscar as barbearias:', error);
         }
-      };
+    };
+
+    const fetchImage = async () => {
+        try {
+            console.log('Fetching imagens de perfil das barbearias (cliente)');
+            const response = await api.get('barbearias/client-side/get-image-perfil', {
+                headers: {
+                    Authorization: token
+                }
+            });
     
-      useEffect(() => {
-        fetchBarbearias();
-      }, []);
+            // Ensure response.data contains the actual data
+            const imageBytesList = response.data;
+    
+    
+            // Atualizar o estado para exibir as imagens
+            setImgPerfil(imageBytesList);
+    
+        } catch (error) {
+            console.log('Erro ao buscar a imagem de capa: ' + error);
+        }
+    };
+    
+
+
 
     return (
         <ThemeProvider theme={theme}>
@@ -98,13 +116,13 @@ export function BuscaBarbearia() {
 
                         <div className={styles.CardsBarbeariaEncontrada}>
                             {barbearias.map((barbearia, index) => (
-            <CardBarbeariaEncontrada
-              key={index}
-              nomeBarbearia={barbearia.nomeNegocio}
-              endereco={`${barbearia.logradouro}, ${barbearia.numero}`}
-              foto={barbearia.imgPerfil}
-            />
-          ))}
+                                <CardBarbeariaEncontrada
+                                    key={index}
+                                    nomeBarbearia={barbearia.nomeNegocio}
+                                    endereco={`${barbearia.logradouro}, ${barbearia.numero}`}
+                                    foto={imgPerfil[index]}
+                                />
+                            ))}
                         </div>
                     </div>
                 </div>
