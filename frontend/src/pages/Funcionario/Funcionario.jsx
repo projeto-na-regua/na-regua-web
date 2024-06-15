@@ -68,8 +68,6 @@ export function Funcionarios() {
     }
   };
 
-  console.log(listaFuncionarios);
-
   return (
     <ThemeProvider theme={theme}>
       <div className="Header">
@@ -126,7 +124,7 @@ export function Funcionarios() {
                   display: 'flex',
                   width: '100%',
                   alignItems: 'center',
-                  justifyContent: 'flex-start',
+                  justifyContent: listaFuncionarios.length > 0 ? 'flex-start' : 'center',
                   marginLeft: 64,
                   gap: 32
                 }}>
