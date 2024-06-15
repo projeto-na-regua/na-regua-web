@@ -75,11 +75,11 @@ export function Funcionarios() {
       <div className="Header">
 
         <HeaderBarbeiro />
+          <NavbarBarbeiro />
 
         <div className={styles.conteudo}>
           <div className={styles.container}>
             <div className={styles.conteudoFuncionarios}>
-              <NavbarBarbeiro />
 
               <div style={{
                 display: 'flex',
