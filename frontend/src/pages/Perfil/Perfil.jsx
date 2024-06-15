@@ -4,10 +4,13 @@ import HeaderUsuario from '../../components/HeaderUsuario/HeaderUsuario';
 import NavbarCliente from '../../components/NavbarCliente/NavbarCliente';
 import Agendamento from '../../components/CardAgendamento/CardAgendamento';
 import api from '../../api.js';
+import CircularProgress from '@mui/material/CircularProgress';
+import { ThemeProvider } from '@mui/material/styles';
+import { theme } from '../../theme';
 
 function Perfil() {
-  const [activeTab, setActiveTab] = useState('agendamentos');
   const [agendamentos, setAgendamentos] = useState([]);
+  const [carregado, setCarregado] = useState(false);
 
   const token = JSON.parse(sessionStorage.getItem('user'));
 
@@ -22,7 +25,7 @@ function Perfil() {
       });
 
       console.log('Response:', response.data);
-      setAgendamentos(response.data); // Salva os agendamentos no estado
+      setAgendamentos(response.data); 
     } catch (error) {
       if (error.response) {
         console.error('Erro ao buscar os agendamentos!');
@@ -31,6 +34,8 @@ function Perfil() {
         console.error('Erro ao tentar se conectar ao servidor!');
         console.error('Error:', error.message);
       }
+    } finally {
+      setCarregado(true);
     }
   };
 
@@ -39,24 +44,36 @@ function Perfil() {
   }, []);
 
   return (
-    <div className={`${styles.fullHeightBg} ${styles.perfilContainer}`}>
-      <HeaderUsuario />
-      <NavbarCliente setActiveTab={setActiveTab} />
-      <div className={styles.cardsAgendamento}>
-        <div className={styles.conteudoCardsAgendamento}>
-          {agendamentos.map((agendamento, index) => (
-            <Agendamento
-              key={index}
-              dataHora={new Date(agendamento.dataHora).toLocaleDateString('pt-BR')}
-              barbearia={agendamento.nomeNegocio}
-              concluido={agendamento.status}
-              endereco={`${agendamento.enderecoBarbearia.logradouro}, ${agendamento.enderecoBarbearia.numero} - ${agendamento.enderecoBarbearia.cidade}`}
-              preco={`R$${agendamento.valorServico.toFixed(2).replace('.', ',')}`}
-            />
-          ))}
+    <ThemeProvider theme={theme}>
+      <div className={`${styles.fullHeightBg} ${styles.perfilContainer}`}>
+        <HeaderUsuario />
+        <NavbarCliente />
+        <div className={styles.cardsAgendamento }>
+          {!carregado ? (
+            <div className={styles.loadingContainer}>
+              <CircularProgress color="primary" />
+            </div>
+          ) : (
+            <div className={styles.conteudoCardsAgendamento}>
+              {agendamentos.length > 0 ? (
+                agendamentos.map((agendamento, index) => (
+                  <Agendamento
+                    key={index}
+                    dataHora={new Date(agendamento.dataHora).toLocaleDateString('pt-BR')}
+                    barbearia={agendamento.nomeNegocio}
+                    concluido={agendamento.status}
+                    endereco={`${agendamento.enderecoBarbearia.logradouro}, ${agendamento.enderecoBarbearia.numero} - ${agendamento.enderecoBarbearia.cidade}`}
+                    preco={`R$${agendamento.valorServico.toFixed(2).replace('.', ',')}`}
+                  />
+                ))
+              ) : (
+                <div className={styles.noAgendamentos}>Nenhum agendamento encontrado.</div>
+              )}
+            </div>
+          )}
         </div>
       </div>
-    </div>
+    </ThemeProvider>
   );
 }
 
