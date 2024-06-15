@@ -4,6 +4,7 @@
   height: 7vh;
   justify-content: center;
   align-items: flex-end;
+  background-color: #F4F3EE;
 }
 
 .utilHoverTrocaTelas {
@@ -28,7 +29,6 @@
   z-index: 1;
   transition: transform 0.3s ease;
   display: inline-block;
-  /* Coloca o texto acima da linha */
 }
 
 .opcoesTelas::after {

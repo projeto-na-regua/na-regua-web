@@ -1,0 +1,126 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.conteudoFotos {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+}
+
+.containerFotoCapa{
+    position: relative;
+    padding: 1.2%;
+    margin: 4%;
+    background-color: #082031;
+    border-radius: 24px;
+    width: 796.27px;
+    height: 324.38px;
+    overflow: hidden;
+}
+
+.containerFotoPerfil{
+    position: relative;
+    padding: 1.2%;
+    margin: 4%;
+    background-color: #082031;
+    border-radius: 24px;
+    width: 397px;
+    height: 324.38px;
+    overflow: hidden;
+}
+.containerFotoCapa img,
+.containerFotoPerfil img {
+    display: block;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 24px;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    cursor: pointer;
+}
+
+.containerFotoCapa:hover .overlay,
+.containerFotoPerfil:hover .overlay {
+    opacity: 1;
+}
+  
+.editIcon {
+    width: 50px; /* Defina o tamanho desejado */
+    height: 50px; /* Defina o tamanho desejado */
+}
+
+.formularioEditarBarbearia{
+    margin: 0% 4%;
+}
+
+.input {
+    width: 260px;
+    border-color: #082031 !important; 
+    outline: #082031 !important;
+}
+
+.formularioInformacoes{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr; 
+    gap: 30px;
+    width: 55%;
+}
+
+.formularioEndereco{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr; 
+    gap: 30px;
+    width: 55%;
+}
+
+.formularioInformacoesAdicionais{
+    display: grid;
+    gap: 20px;
+    width: 20%;
+}
+
+.botoesFormulario{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+    margin: 4%;
+}
+
+.botaoDescartar{
+    width: 20% !important;           
+    background-color: white;
+    line-height: 4.2 !important;
+    border: 2px solid #082031 !important;
+    color: #082031 !important;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.botaoEditar{
+    width: 20% !important;
+    line-height: 3.5 !important;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+}
+

@@ -41,11 +41,15 @@
 
 .servicosDisponiveis{
     margin-top: 1.5%;
-    gap: 50px;
+    gap: 15px;
     display: flex;
     flex-direction: column;
     max-height: 250px;
     overflow-y: auto;
+}
+
+.servicosDisponiveis > *{
+    width: 98%;
 }
 
 .selecionarBarbeiro{
@@ -79,16 +83,32 @@
 
 .selecionarDataHora{
     display: flex;
+    flex-direction: column;
     width: 100%;
     justify-content: space-between;
     margin-top: 3.5%;
 }
 
+.calendarioHorario{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2.5%;
+}
+
 .selecionarDataHoraEsquerda{
     display: flex;
-    flex-direction: column;
     color: #082031;
     width: 40%;
+}
+
+.selecionarDataHoraDireita {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap; /* Permite que os itens quebrem para nova linha */
+    gap: 35px;
+    align-items: center; /* Alinha os itens ao topo */
+    width: 55%; /* Largura do container ajustada para 100% */
+    max-height: 350px;
 }
 
 .tituloSubTituloSelecionarHorario{
@@ -112,5 +132,11 @@
 
 .agenda{
     background-color: #082031;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 8px;
+    border-radius: 15px;
 }
 

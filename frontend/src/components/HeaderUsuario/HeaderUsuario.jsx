@@ -37,6 +37,7 @@ function HeaderUsuario() {
                 })
 
                 console.log(response.data)
+
                 if (response.data.adm == null) {
                     setIsAuth(false)
                 } else {
