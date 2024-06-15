@@ -43,7 +43,8 @@ export function ServicoBarbeiro() {
   const [serviceValue, setServiceValue] = useState('');
   const [responsaveis, setResponsaveis] = useState([]);
   const [editingService, setEditingService] = useState(null);
-  const [listaServicos, setListaServicos] = useState([]);
+  const [listaServicosAtivos, setListaServicosAtivos] = useState([]);
+  const [listaServicosInativos, setListaServicosInativos] = useState([]);
   const [carregando, setCarregando] = useState(true);
   const [funcionarios, setFuncionarios] = useState([]);
   const [carregandoFuncionarios, setCarregandoFuncionarios] = useState(true);
@@ -103,7 +104,7 @@ export function ServicoBarbeiro() {
       });
 
       if (response.status === 201) {
-        setListaServicos([...listaServicos, response.data]);
+        setListaServicosAtivos([...listaServicosAtivos, response.data]);
 
         setServiceName('');
         setServiceDescription('');
@@ -124,25 +125,47 @@ export function ServicoBarbeiro() {
   };
 
   useEffect(() => {
-    const fetchServicos = async () => {
+    const fetchServicosAtivos = async () => {
       try {
-        const response = await api.get('/servicos', {
+        const response = await api.get('/servicos/list-by-status/active', {
           headers: {
             Authorization: token,
           },
         });
 
-        // Filtra apenas os serviços com status true
-        const servicosAtivos = response.data.filter(servico => servico.status === true);
-        setListaServicos(servicosAtivos);
+        // Definindo apenas os serviços ativos com status 1
+        setListaServicosAtivos(response.data);
       } catch (error) {
-        console.error('Erro ao buscar servicos:', error);
+        console.error('Erro ao buscar serviços ativos:', error);
+        toast.error('Erro ao buscar serviços ativos. Por favor, tente novamente.');
       } finally {
         setCarregando(false);
       }
     };
 
-    fetchServicos();
+    fetchServicosAtivos();
+  }, [token]);
+
+  useEffect(() => {
+    const fetchServicosInativos = async () => {
+      try {
+        const response = await api.get('/servicos/list-by-status/deactive', {
+          headers: {
+            Authorization: token,
+          },
+        });
+
+        // Definindo apenas os serviços inativos com status 0
+        setListaServicosInativos(response.data);
+      } catch (error) {
+        console.error('Erro ao buscar serviços inativos:', error);
+        toast.error('Erro ao buscar serviços inativos. Por favor, tente novamente.');
+      } finally {
+        setCarregando(false);
+      }
+    };
+
+    fetchServicosInativos();
   }, [token]);
 
   const handleOpen = () => {
@@ -197,8 +220,16 @@ export function ServicoBarbeiro() {
             </Button>
           </div>
           <div className={styles.container}>
-            {/* Passa apenas os serviços ativos para o componente BoxServicos */}
-            <BoxServicos services={listaServicos} funcionarios={funcionarios} />
+            {/* Passa apenas os serviços ativos para o BoxServicos */}
+            <BoxServicos 
+              services={listaServicosAtivos} 
+              funcionarios={funcionarios} 
+            />
+            <div className={styles.inativos}> SERVIÇOS INATIVOS</div>
+            <BoxServicos 
+              services={listaServicosInativos} 
+              funcionarios={funcionarios} 
+            />
           </div>
         </div>
       </div>
@@ -289,3 +320,4 @@ export function ServicoBarbeiro() {
 }
 
 export default ServicoBarbeiro;
+

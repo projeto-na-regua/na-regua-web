@@ -10,3 +10,8 @@
     justify-content: center;;
     width: 80%;
 }
+
+.inativos {
+    font-weight: bold;
+    color: #666666;
+}

@@ -15,7 +15,7 @@ import api from "../../api";
 import { toast } from "react-toastify";
 import styles from "./BoxServicos.module.css";
 
-function BoxServicos({ services, onEdit, onDelete }) {
+function BoxServicos({ services, onEdit, onDelete, onToggleServiceStatus }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedService, setSelectedService] = useState(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
@@ -75,31 +75,30 @@ function BoxServicos({ services, onEdit, onDelete }) {
     return `${mins} m`;
   };
 
-  const handleDisableService = async () => {
+  const handleToggleServiceStatus = async () => {
+    const newStatus = !selectedService.status;
     try {
-      let response = await api.post(`servicos/update-status/${selectedService.id}`, {
-        status: false,
+      const response = await api.put(`/servicos/update-status/${selectedService.id}`, {
+        status: newStatus,
       }, {
         headers: {
           Authorization: token,
         },
       });
-
+  
       if (response.status === 200) {
-        toast.success("Serviço desabilitado com sucesso!", { autoClose: 2000 });
-      } else {
-        console.error("Erro ao desabilitar serviço:", response);
-        toast.error("Erro ao desabilitar serviço. Por favor, tente novamente.");
+        toast.success(`Serviço ${newStatus ? 'habilitado' : 'desabilitado'} com sucesso!`, { autoClose: 1000 });
+        onToggleServiceStatus(selectedService.id, newStatus);
       }
-      console.log(response.data)
     } catch (error) {
-    
-      console.error("Erro ao desabilitar serviço:", error);
-      toast.error("Erro ao desabilitar serviço. Por favor, tente novamente.");
+      console.error(`Erro ao ${newStatus ? 'habilitar' : 'desabilitar'} serviço:`, error);
+      toast.error(`Erro ao ${newStatus ? 'habilitar' : 'desabilitar'} serviço. Por favor, tente novamente.`, { autoClose: 1000 });
     } finally {
       handleClose();
     }
   };
+  
+
 
   return (
     <div className={`${styles.gridContainer} ${styles.widerBox}`}>
@@ -118,7 +117,7 @@ function BoxServicos({ services, onEdit, onDelete }) {
           <div className={styles.divVazia}> </div>
         </div>
         <div className={styles.gridServico}>
-          {services.map((service, index) => (
+          {Array.isArray(services) && services.map((service, index) => (
             <div className={styles.servico} key={index}>
               <div className={styles.borda}>
                 <div className={styles.divCheckbox}>
@@ -150,7 +149,9 @@ function BoxServicos({ services, onEdit, onDelete }) {
                   onClose={handleClose}
                 >
                   <MenuItemMUI onClick={handleEdit}>Editar</MenuItemMUI>
-                  <MenuItemMUI onClick={handleDisableService}>Desabilitar</MenuItemMUI>
+                  <MenuItemMUI onClick={handleToggleServiceStatus}>
+                    {service.status ? 'Desabilitar' : 'Habilitar'}
+                  </MenuItemMUI>
                   <MenuItemMUI onClick={handleDeleteOpen}>Excluir</MenuItemMUI>
                 </Menu>
               </div>
