@@ -13,7 +13,8 @@ import { ThemeProvider } from '@emotion/react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import MenuLateralUsuario from '../../components/MenuLateralUsuario/MenuLateralUsuario.jsx';
 import { Button } from '@mui/material';
-import bannerBarbearia from '../../utils/assets/bannerBarbearia.jpg';
+import imgBarbeariaPadrao from '../../utils/assets/imagem-login.png'
+import bannerBarbeariaPadrao from '../../utils/assets/bannerBarbearia.jpg';
 import mapaBarbearia from '../../utils/assets/mapaBarbearia.png';
 import api from "../../api.js";
 import Mapa from "../../components/Mapa/mapa.jsx";
@@ -34,6 +35,7 @@ export function VisualizarBarbearia() {
     const [contatos, setContatos] = useState([])
     const [latitude, setLatitude] = useState();
     const [longititude, setLongitude] = useState();
+    const [funcionarios, setFuncionarios] = useState([])
 
     useEffect(() => {
         if (!token) {
@@ -45,6 +47,7 @@ export function VisualizarBarbearia() {
 
     const handleSelect = (index) => {
         setSelectedIndex(index);
+        navigate(`/selecionar-data-hora?valor=${valor}`);
     };
 
     const fetchMapaGoogle = async (endereco) => {
@@ -93,7 +96,7 @@ export function VisualizarBarbearia() {
     const fetchServicosBarbearia = async () => {
         try {
             console.log('Fetching servicos da barbearia (cliente):');
-            const response = await api.get(`servicos/client-side/12`, {
+            const response = await api.get(`servicos/client-side/${valor}`, {
                 headers: {
                     Authorization: token,
                 }
@@ -107,16 +110,16 @@ export function VisualizarBarbearia() {
 
     const fetchFuncionariosBarbearia = async () => {
         try {
-            console.log('Fetching servicos da barbearia (cliente):');
-            const response = await api.get(`servicos/client-side/12`, {
+            console.log('Fetching funcionarios da barbearia (cliente):');
+            const response = await api.get(`funcionarios/client-side/${valor}`, {
                 headers: {
                     Authorization: token,
                 }
             });
-            console.log('Response servicos barbearia:', response.data);
-            setServicos(response.data);
+            console.log('Response funcionarios barbearia:', response.data);
+            setFuncionarios(response.data);
         } catch (error) {
-            console.error('Erro ao buscar os serviços da barbearia:', error);
+            console.error('Erro ao buscar os funcionarios da barbearia:', error);
         }
     };
 
@@ -131,6 +134,7 @@ export function VisualizarBarbearia() {
     useEffect(() => {
         fetchPerfilBarbearia();
         fetchServicosBarbearia();
+        fetchFuncionariosBarbearia();
     }, []);
 
     useEffect(() => {
@@ -189,11 +193,11 @@ export function VisualizarBarbearia() {
 
                                 <div className={styles.bannerFotoPerfilBarbearia}>
                                     <div className={styles.bannerBarbearia}>
-                                        <img src={barbearia.imgBanner || bannerBarbearia} alt="" />
+                                        <img src={(barbearia.imgBanner == null || undefined) ? barbearia.imgBanner : bannerBarbeariaPadrao} alt="" />
                                     </div>
 
                                     <div className={styles.circuloPerfilBarbearia}>
-                                        <CirculoPerfilBarbearia fotoPerfil={barbearia.imgPerfil} />
+                                        <CirculoPerfilBarbearia fotoPerfil={(barbearia.imgPerfil == null || undefined) ? barbearia.imgPerfil : imgBarbeariaPadrao} />
                                     </div>
                                 </div>
 
@@ -204,16 +208,17 @@ export function VisualizarBarbearia() {
                                         </div>
 
                                         <div className={styles.servicosBarbearia}>
-                                            {servicos.map((servico, index) => (
+                                            {Array.isArray(servicos) && servicos.map((servico, index) => (
                                                 <LinhaServicos
-                                                    key={index}
-                                                    index={index}
-                                                    selectedIndex={selectedIndex}
-                                                    onSelect={handleSelect}
-                                                    nomeServico={servico.tipoServico}
-                                                    descricaoServico={servico.descricao}
-                                                    valorServico={servico.preco}
-                                                />
+                                                key={index}
+                                                index={index}
+                                                valor={barbearia.id}
+                                                selectedIndex={selectedIndex}
+                                                onSelect={handleSelect}
+                                                nomeServico={servico.tipoServico}
+                                                descricaoServico={servico.descricao}
+                                                valorServico={servico.preco}
+                                            />
                                             ))}
                                         </div>
                                     </div>
@@ -265,13 +270,9 @@ export function VisualizarBarbearia() {
                                             <span>Nossa equipe</span>
                                         </div>
                                         <div className={styles.fotosEquipe}>
-                                            <FotoPerfilEquipe />
-                                            <FotoPerfilEquipe />
-                                            <FotoPerfilEquipe />
-                                            <FotoPerfilEquipe />
-                                            <FotoPerfilEquipe />
-                                            <FotoPerfilEquipe />
-                                            <FotoPerfilEquipe />
+                                        {Array.isArray(funcionarios) && funcionarios.map((funcionarios, index) => (
+                                                        <FotoPerfilEquipe nome={funcionarios.nome} foto={funcionarios.imgPerfil}/>
+                                                    ))}
                                         </div>
                                     </div>
 

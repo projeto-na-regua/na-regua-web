@@ -1,11 +1,11 @@
-.conteudoFotoPerfilEquipe{
+.conteudoFotoPerfilEquipe {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
 }
 
-.foto{
+.foto {
     display: flex;
     width: 160px;
     height: 160px;
@@ -21,8 +21,16 @@
     border-radius: 50%;
 }
 
-.nomeBarbeiro{
+.nomeBarbeiro {
     margin-top: 5%;
     font-weight: 600;
     font-size: 15px;
+}
+
+.foto.clicado {
+    background-color: #082031;
+}
+
+.cursorPointer{
+    cursor: pointer;
 }

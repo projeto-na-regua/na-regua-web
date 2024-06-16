@@ -7,7 +7,7 @@ import LinhaServicos from '../../components/LinhaServicos/LinhaServicos.jsx';
 import CardHorarioDisponivel from '../../components/CardHorarioDisponivel/CardHorarioDisponivel.jsx';
 import { theme } from '../../theme';
 import { ThemeProvider } from '@emotion/react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import MenuLateralUsuario from '../../components/MenuLateralUsuario/MenuLateralUsuario.jsx';
 import { Button } from '@mui/material';
 import FotoPerfilEquipe from '../../components/FotoPerfilEquipe/FotoPerfilEquipe.jsx';
@@ -17,6 +17,9 @@ import AgendaFullCalendar from '../../components/AgendaFullCalendar/AgendaFullCa
 
 export function SelecionarDataHora() {
     const navigate = useNavigate();
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const valor = queryParams.get('valor');
 
     const [isAuth, setIsAuth] = useState(false);
     const token = JSON.parse(sessionStorage.getItem('user'));
@@ -25,12 +28,38 @@ export function SelecionarDataHora() {
     const [showHorariosDisponiveis, setShowHorariosDisponiveis] = useState(false);
     const [horariosDisponiveis, setHorariosDisponiveis] = useState([]);
     const [selectedIndex, setSelectedIndex] = useState(-1);
+    const [funcionarios, setFuncionarios] = useState([])
+    const [servicos, setServicos] = useState([])
+    const [selectedService, setSelectedService] = useState(null);
+    const [selectedFuncionario, setSelectedFuncionario] = useState(null);
+    const [selectedHorario, setSelectedHorario] = useState(null);
+    const [funcionarioSelecionado, setFuncionarioSelecionado] = useState(null);
+    
+
+
+    const handleSelectService = (serviceId) => {
+        setSelectedService(serviceId);
+        console.log('IdServico selecionado: ' + serviceId)
+        fetchFuncionariosBarbearia(serviceId);
+    };
+
+    const handleSelectFuncionario = (funcionarioId) => {
+        setSelectedFuncionario(funcionarioId);
+        setFuncionarioSelecionado(funcionarioId);
+    };
+    
+
+    const handleSelecionarHorario = (horario) => {
+        setSelectedHorario(horario);
+    };
+
 
     const handleSelect = (index) => {
         setSelectedIndex(index);
     };
 
     useEffect(() => {
+        fetchServicosBarbearia();
         if (!token) {
             setIsAuth(false);
         } else {
@@ -43,17 +72,76 @@ export function SelecionarDataHora() {
         fetchHorariosDisponiveis(date.format('YYYY-MM-DD'));
     };
 
+    const handleAgendar = () => {
+        console.log(selectedService, selectedFuncionario, selectedDate, selectedHorario)
+        if (selectedService && selectedFuncionario && selectedDate && selectedHorario) {
+            const agendamento = {
+                idBarbearia: valor,
+                idServico: selectedService,
+                idBarbeiro: selectedFuncionario,
+                dataHora: `${selectedDate.format('YYYY-MM-DD')} ${selectedHorario}:00`
+            };
+            console.log(agendamento)
+            fetchAgendar(agendamento);
+        } else {
+            toast.error('Por favor, selecione todos os campos necessários para agendar.');
+        }
+    };
+
+    const fetchAgendar = async (agendamento) => {
+        try {
+            console.log('Fetching agendamento:' + agendamento);
+            const response = await api.post(`/agendamentos`, agendamento, {
+                headers: {
+                    Authorization: token,
+                }
+            });
+            console.log('Agendado com sucesso:', response.data);
+        } catch (error) {
+            console.error('Erro ao agendar:', error);
+        }
+    };
+
+
     const barbeiroServicoId = {
         barbeiro: 28,
         servico: 10,
         barbearia: 12
     };
 
+    const fetchServicosBarbearia = async () => {
+        try {
+            console.log('Fetching servicos da barbearia (cliente):');
+            const response = await api.get(`servicos/client-side/${valor}`, {
+                headers: {
+                    Authorization: token,
+                }
+            });
+            console.log('Response servicos barbearia:', response.data);
+            setServicos(response.data);
+        } catch (error) {
+            console.error('Erro ao buscar os serviços da barbearia:', error);
+        }
+    };
+
+    const fetchFuncionariosBarbearia = async (service) => {
+        try {
+            console.log('Fetching funcionarios da barbearia (cliente):');
+            const response = await api.get(`funcionarios/client-side/list-by-servico/${service}`, {
+                headers: {
+                    Authorization: token,
+                }
+            });
+            console.log('Response funcionarios barbearia:', response.data);
+            setFuncionarios(response.data);
+        } catch (error) {
+            console.error('Erro ao buscar os funcionarios da barbearia:', error);
+        }
+    };
+
     const fetchHorariosDisponiveis = async (dataAgendamento) => {
         try {
             console.log('Fetching horários disponíveis para:', dataAgendamento);
-
-            // Simulação da chamada API com token
             const response = await api.get('agendamentos/list-horarios-disponiveis', {
                 headers: {
                     Authorization: token,
@@ -93,38 +181,6 @@ export function SelecionarDataHora() {
             }
         }
     };
-
-    const handleSelecionarHorario = (horarioSelecionado) => {
-        console.log('Horário selecionado:', horarioSelecionado);
-    };
-
-    /* const fetchServicos = async () => {
-        try {
-            console.log('Fetching serviços');
-
-            // Simulação da chamada API com token
-            const response = await api.get('servicos', {
-                headers: {
-                    Authorization: token,
-                }
-            });
-
-            console.log('Response:', response.data);
-        } catch (error) {
-            if (error.response) {
-                toast.error('Erro ao buscar os serviços disponíveis!');
-                console.error('Error response:', error.response.data);
-            } else {
-                toast.error('Erro ao tentar se conectar ao servidor!');
-                console.error('Error:', error.message);
-            }
-        }
-    };
-
-    useEffect(() => {
-        fetchServicos();
-    }, []); */
-    
 
     return (
         <ThemeProvider theme={theme}>
@@ -176,10 +232,21 @@ export function SelecionarDataHora() {
                             </div>
 
                             <div className={styles.servicosDisponiveis}>
-                                <LinhaServicos index={0} selectedIndex={selectedIndex} onSelect={handleSelect} />
-                                <LinhaServicos index={1} selectedIndex={selectedIndex} onSelect={handleSelect} />
-                                <LinhaServicos index={2} selectedIndex={selectedIndex} onSelect={handleSelect} />
-                                <LinhaServicos index={3} selectedIndex={selectedIndex} onSelect={handleSelect} />
+                                {Array.isArray(servicos) &&
+                                    servicos.map((servico, index) => (
+                                        <LinhaServicos
+                                        key={index}
+                                        index={index}
+                                        selectedIndex={selectedIndex}
+                                        onSelect={() => {
+                                            handleSelect(index);
+                                            handleSelectService(servico.id);
+                                        }}
+                                        nomeServico={servico.tipoServico}
+                                        descricaoServico={servico.descricao}
+                                        valorServico={servico.preco}
+                                    />
+                                    ))}
                             </div>
                         </div>
 
@@ -193,10 +260,17 @@ export function SelecionarDataHora() {
                             </div>
 
                             <div className={styles.barbeirosDisponiveis}>
-                                <FotoPerfilEquipe />
-                                <FotoPerfilEquipe />
-                                <FotoPerfilEquipe />
-                                <FotoPerfilEquipe />
+                                {Array.isArray(funcionarios) && funcionarios.map((funcionario) => (
+                                    <FotoPerfilEquipe
+                                    key={funcionario.id}
+                                    valor={funcionario.id}
+                                    nome={funcionario.nome}
+                                    foto={funcionario.imgPerfil}
+                                    onSelect={() => handleSelectFuncionario(funcionario.id)}
+                                    selecionado={funcionario.id === funcionarioSelecionado}
+                                    cursorPointer={true}
+                                />
+                                ))}
                             </div>
 
                         </div>
@@ -221,7 +295,11 @@ export function SelecionarDataHora() {
                                 {selectedDate && showHorariosDisponiveis && horariosDisponiveis.length > 0 && (
                                     <div className={styles.selecionarDataHoraDireita}>
                                         {horariosDisponiveis.map((horario, index) => (
-                                            <CardHorarioDisponivel key={index} horario={horario} onSelect={() => handleSelecionarHorario(horario)} />
+                                            <CardHorarioDisponivel
+                                                key={index}
+                                                horario={horario}
+                                                onSelect={() => handleSelecionarHorario(horario)}
+                                            />
                                         ))}
                                     </div>
                                 )}
@@ -233,7 +311,8 @@ export function SelecionarDataHora() {
                             <Button variant='contained' style={{
                                 width: '20%',
                                 fontWeight: '600'
-                            }}> Agendar </Button>
+                            }}
+                                onClick={handleAgendar}> Agendar </Button>
                         </div>
 
                     </div>
