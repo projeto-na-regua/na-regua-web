@@ -199,6 +199,16 @@ function HeaderUsuario() {
                             </div>
                         </div>
                         <div className={styles.divEndereco}>
+                            {!userInfo.logradouro && !userInfo.numero && (
+                                <>
+                                    <div className={styles.divTextEndereco}>Endereço</div>
+                                    <div className={styles.divConteudoEndereco}>
+                                        <div className={styles.divConteudoEnderecoTexto}>
+                                            Nenhum endereço cadastrado
+                                        </div>
+                                    </div>
+                                </>
+                            )}
                             {userInfo.logradouro && userInfo.numero && (
                                 <>
                                     <div className={styles.divTextEndereco}>Endereço</div>
