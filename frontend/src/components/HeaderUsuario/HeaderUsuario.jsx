@@ -4,7 +4,6 @@ import editFoto from '../../utils/assets/IconsHeaderUsuario/photo-edit_svgrepo.c
 import { Button, TextField, ThemeProvider } from '@mui/material'
 import React, { useState, useEffect } from 'react'
 import api from '../../api'
-import utils from "../../utils/globals"
 import styles from './HeaderUsuario.module.css'
 import { useNavigate } from 'react-router-dom'
 import { theme } from '../../theme'
