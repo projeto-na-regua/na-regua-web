@@ -163,9 +163,9 @@ export function SelecionarDataHora() {
                 <div className={styles.containerSelecionarServicoDataHora}>
                     <div className={styles.conteudoSelecionarServicoDataHora}>
                         <div className={styles.breadCrumbs}>
-                            <span>Buscar</span>
+                            <span onClick={() => navigate('/busca-barbearias')}>Buscar</span>
                             <span>{">"}</span>
-                            <span>Perfil Dom Bigode</span>
+                            <span onClick={() => navigate(-1)}>Perfil Dom Bigode</span>
                             <span>{">"}</span>
                             <span>Selecionar Horário</span>
                         </div>
@@ -214,12 +214,10 @@ export function SelecionarDataHora() {
                             <div className={styles.calendarioHorario}>
                                 <div className={styles.selecionarDataHoraEsquerda}>
                                     <div className={styles.agenda}>
-                                        {/* Componente Calendar com handleDateChange */}
                                         <AgendaFullCalendar handleDateChange={handleDateChange} />
                                     </div>
                                 </div>
 
-                                {/* Renderiza horários disponíveis apenas se data e horários estiverem disponíveis */}
                                 {selectedDate && showHorariosDisponiveis && horariosDisponiveis.length > 0 && (
                                     <div className={styles.selecionarDataHoraDireita}>
                                         {horariosDisponiveis.map((horario, index) => (
@@ -229,7 +227,13 @@ export function SelecionarDataHora() {
                                 )}
 
                             </div>
+                        </div>
 
+                        <div className={styles.botaoAgendar}>
+                            <Button variant='contained' style={{
+                                width: '20%',
+                                fontWeight: '600'
+                            }}> Agendar </Button>
                         </div>
 
                     </div>

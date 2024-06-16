@@ -1,6 +1,5 @@
-.conteudoLinhaServicos{
+.conteudoLinhaServicos {
     display: flex;
-    width: 100%;
     align-items: center;
     padding: 1%;
     border-radius: 15px;
@@ -12,55 +11,55 @@
     color: #F4F3EE;
 }
 
-
-.nomeDescricaoServico{
+.nomeDescricaoServico {
     display: flex;
     flex-direction: column;
     gap: 25px;
-    width: 20%;
+    padding-right: 5%;
 }
 
-.nomeServico{
+.nomeServico {
     font-size: 20px;
     color: #082031;
     font-weight: 800;
 }
 
-.nomeServico.selected{
+.nomeServico.selected {
     color: #F4F3EE;
 }
 
-.descricaoServico{
+.descricaoServico {
     font-size: 15px;
     color: #E3A74F;
     font-weight: 500;
 }
 
-.descricaoServico.selected{
+.descricaoServico.selected {
     color: #F4F3EE;
 }
 
-.linha{
+.linha {
+    display: flex;
+    justify-content: center;
+    flex-grow: 1;
     height: 2px;
     background-color: #082031;
-    width: 60%;
-    display: flex;
 }
 
-.linha.selected{
+.linha.selected {
     background-color: #F4F3EE;
 }
 
-.valorServico{
-    width: 20%;
+.valorServico {
     display: flex;
     justify-content: center;
+    align-items: center;
     font-size: 20px;
     font-weight: 600;
     color: #082031;
+    width: 20%;
 }
 
-.valorServico.selected{
+.valorServico.selected {
     color: #F4F3EE;
 }
-

@@ -1,14 +1,22 @@
 import React from "react";
 import styles from "./CardBarbeariaEncontrada.module.css"
+import { useNavigate } from "react-router-dom";
 
 const CardBarbeariaEncontrada = ({
-    nomeBarbearia, endereco, foto}) => {
+    nomeBarbearia, endereco, foto, valor }) => {
+
+    const navigate = useNavigate();
+
+    const handleClick = () => {
+        navigate(`/visualizar-barbearia?valor=${valor}`);
+    };
+
     return (
         <>
             <div className={styles.conteudoCardBarbeariaEncontrada}>
 
                 <div className={styles.fotoBarbearia}>
-            
+
                     <img src={foto} alt="" />
 
                 </div>
@@ -24,7 +32,7 @@ const CardBarbeariaEncontrada = ({
                     </div>
 
                     <div className={styles.botaoVisualizarPerfil}>
-                        <button>Visualizar perfil</button>
+                        <button onClick={handleClick}>Visualizar perfil</button>
                     </div>
                 </div>
 

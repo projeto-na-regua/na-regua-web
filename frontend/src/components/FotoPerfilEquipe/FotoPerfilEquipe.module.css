@@ -1,15 +1,16 @@
 .conteudoFotoPerfilEquipe{
-    background-color: #E3A74F;
-    border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
 }
 
 .foto{
     display: flex;
     width: 160px;
     height: 160px;
+    border-radius: 50%;
+    background-color: #e3a74f;
     justify-content: center;
     align-items: center;
 }
@@ -18,4 +19,10 @@
     width: 150px;
     height: 150px;
     border-radius: 50%;
+}
+
+.nomeBarbeiro{
+    margin-top: 5%;
+    font-weight: 600;
+    font-size: 15px;
 }
