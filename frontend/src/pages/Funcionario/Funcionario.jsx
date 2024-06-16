@@ -1,25 +1,24 @@
-import { useEffect, useState } from 'react';
-import React from 'react';
-import styles from './Funcionario.module.css';
-import NavbarBarbeiro from '../../components/NavbarBarbeiro/NavbarBarbeiro';
-import HeaderBarbeiro from '../../components/HeaderUsuario/HeaderUsuario';
-import { Button, TextField, ThemeProvider } from '@mui/material';
-import CardPequenoFuncionario from '../../components/CardPequenoFuncionario/CardPequenoFuncionario';
-import CardFuncionario from '../../components/CardFuncionario/CardFuncionario';
-import api from '../../api';
-import CircularProgress from '@mui/material/CircularProgress';
-import ModalAdicionar from '../../components/ModalAdicionar/ModalAdicionar';
-import { theme } from '../../theme';
-import { toast } from "react-toastify";
-import axios from 'axios';
+import { useEffect, useState } from 'react'
+import React from 'react'
+import styles from './Funcionario.module.css'
+import NavbarBarbeiro from '../../components/NavbarBarbeiro/NavbarBarbeiro'
+import HeaderBarbeiro from '../../components/HeaderUsuario/HeaderUsuario'
+import { Button, TextField, ThemeProvider } from '@mui/material'
+import CardPequenoFuncionario from '../../components/CardPequenoFuncionario/CardPequenoFuncionario'
+import CardFuncionario from '../../components/CardFuncionario/CardFuncionario'
+import api from '../../api'
+import CircularProgress from '@mui/material/CircularProgress'
+import ModalAdicionar from '../../components/ModalAdicionar/ModalAdicionar'
+import { theme } from '../../theme'
+import { toast } from "react-toastify"
 
 export function Funcionarios() {
-  const [modalAdicionar, setModalAdicionar] = useState(false);
-  const [verMais, setVerMais] = useState(false);
-  const [listaFuncionarios, setListaFuncionarios] = useState([]);
-  const token = JSON.parse(sessionStorage.getItem('user'));
-  const [carregando, setCarregando] = useState(true);
-  const totalFuncionarios = listaFuncionarios.length;
+  const [modalAdicionar, setModalAdicionar] = useState(false)
+  const [verMais, setVerMais] = useState(false)
+  const [listaFuncionarios, setListaFuncionarios] = useState([])
+  const token = JSON.parse(sessionStorage.getItem('user'))
+  const [carregando, setCarregando] = useState(true)
+  const totalFuncionarios = listaFuncionarios.length
 
   useEffect(() => {
     const fetchFuncionarios = async () => {
@@ -28,21 +27,21 @@ export function Funcionarios() {
           headers: {
             Authorization: token
           }
-        });
+        })
 
-        setListaFuncionarios(response.data);
-        setCarregando(false);
+        setListaFuncionarios(response.data)
+        setCarregando(false)
       } catch (error) {
-        console.error('Erro ao buscar funcionários:', error);
+        console.error('Erro ao buscar funcionários:', error)
       }
-    };
+    }
 
-    fetchFuncionarios();
-  }, [token, listaFuncionarios]);
+    fetchFuncionarios()
+  }, [token, listaFuncionarios])
 
   const handleAdicionar = () => {
-    setModalAdicionar(true);
-  };
+    setModalAdicionar(true)
+  }
 
   const handleExtrairRelatorio = async () => {
     try {
@@ -51,29 +50,29 @@ export function Funcionarios() {
           Authorization: token
         },
         responseType: 'blob'
-      });
-  
-      const url = window.URL.createObjectURL(new Blob([response.data], { type: 'text/csv' }));
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', 'relatorio.csv');
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-  
-      toast.success('Relatório extraído com sucesso!', { autoClose: 2000 });
+      })
+
+      const url = window.URL.createObjectURL(new Blob([response.data], { type: 'text/csv' }))
+      const link = document.createElement('a')
+      link.href = url
+      link.setAttribute('download', 'relatorio.csv')
+      document.body.appendChild(link)
+      link.click()
+      link.remove()
+
+      toast.success('Relatório extraído com sucesso!', { autoClose: 2000 })
     } catch (error) {
-      console.error('Erro ao extrair relatório:', error.response ? error.response.data : error.message);
-      toast.error('Erro ao extrair relatório.');
+      console.error('Erro ao extrair relatório:', error.response ? error.response.data : error.message)
+      toast.error('Erro ao extrair relatório.')
     }
-  };
+  }
 
   return (
     <ThemeProvider theme={theme}>
       <div className="Header">
 
         <HeaderBarbeiro />
-          <NavbarBarbeiro />
+        <NavbarBarbeiro />
 
         <div className={styles.conteudo}>
           <div className={styles.container}>
@@ -166,7 +165,7 @@ export function Funcionarios() {
         )}
       </div>
     </ThemeProvider>
-  );
+  )
 }
 
-export default Funcionarios;
+export default Funcionarios

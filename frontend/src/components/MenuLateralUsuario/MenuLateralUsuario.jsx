@@ -33,13 +33,7 @@ function MenuLateralUsuario(props) {
                 padding: '15px 0',
                 borderRadius: '0 0 12px 12px'
             }}>
-                <div onClick={() => handleNavigate('/meus-cortes')}>Meus cortes</div>
-                <div style={{
-                    width: '80%',
-                    backgroundColor: '#082031',
-                    height: '1px'
-                }}></div>
-                <div onClick={() => handleNavigate('/meus-agendamentos')}>Meus agendamentos</div>
+                <div onClick={() => handleNavigate('/perfil/meus-agendamentos')}>Meu perfil</div>
                 <div style={{
                     width: '80%',
                     backgroundColor: '#082031',
