@@ -63,12 +63,12 @@ export function BuscaBarbearia() {
             const imageBytesList = response.data;
             // Atualizar o estado para exibir as imagens
             setImgPerfil(imageBytesList);
-    
+
         } catch (error) {
             console.log('Erro ao buscar a imagem de capa: ' + error);
         }
     };
-    
+
 
 
 
@@ -105,7 +105,7 @@ export function BuscaBarbearia() {
                 />
             </div>
 
-            <div className={styles.buscarBarbearias}>
+            <div className={`${styles.fullHeightBg} ${styles.perfilContainer}`}>
                 <div className={styles.containerBuscarBarbearias}>
                     <div className={styles.conteudoBuscarBarbearias}>
                         <div className={styles.linhaFiltroBuscarBarbearia}>
@@ -115,6 +115,7 @@ export function BuscaBarbearia() {
                         <div className={styles.CardsBarbeariaEncontrada}>
                             {barbearias.map((barbearia, index) => (
                                 <CardBarbeariaEncontrada
+                                    valor={barbearia.id}
                                     key={index}
                                     nomeBarbearia={barbearia.nomeNegocio}
                                     endereco={`${barbearia.logradouro}, ${barbearia.numero}`}

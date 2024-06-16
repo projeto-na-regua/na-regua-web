@@ -10,18 +10,30 @@ import LinhaServicos from "../../components/LinhaServicos/LinhaServicos.jsx";
 import FotoPerfilEquipe from "../../components/FotoPerfilEquipe/FotoPerfilEquipe.jsx";
 import { theme } from '../../theme';
 import { ThemeProvider } from '@emotion/react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import MenuLateralUsuario from '../../components/MenuLateralUsuario/MenuLateralUsuario.jsx';
-import { Button, Card } from '@mui/material';
+import { Button } from '@mui/material';
 import bannerBarbearia from '../../utils/assets/bannerBarbearia.jpg';
 import mapaBarbearia from '../../utils/assets/mapaBarbearia.png';
+import api from "../../api.js";
+import Mapa from "../../components/Mapa/mapa.jsx";
 
 export function VisualizarBarbearia() {
     const navigate = useNavigate();
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const valor = queryParams.get('valor');
 
     const [isAuth, setIsAuth] = useState(false);
     const token = JSON.parse(sessionStorage.getItem('user'));
     const [open, setOpen] = useState(false);
+    const [selectedIndex, setSelectedIndex] = useState(-1);
+    const [barbearia, setBarbearia] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [servicos, setServicos] = useState([])
+    const [contatos, setContatos] = useState([])
+    const [latitude, setLatitude] = useState();
+    const [longititude, setLongitude] = useState();
 
     useEffect(() => {
         if (!token) {
@@ -30,6 +42,106 @@ export function VisualizarBarbearia() {
             setIsAuth(true);
         }
     }, [token]);
+
+    const handleSelect = (index) => {
+        setSelectedIndex(index);
+    };
+
+    const fetchMapaGoogle = async (endereco) => {
+        try {
+            const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${endereco}&key=AIzaSyAxvzxTNJOHpy1zXGqjfcq2pAncM4EwNfU`);
+            const data = await response.json();
+
+            // Verifica se a resposta retornou um status OK
+            if (data.status === "OK") {
+                // Extrai as coordenadas (latitude e longitude) do resultado
+                const location = data.results[0].geometry.location;
+                console.log("Coordenadas:", location);
+                setLatitude(location.lat)
+                setLongitude(location.lng)
+            } else {
+                console.error("Erro ao buscar coordenadas:", data.status);
+            }
+        } catch (error) {
+            console.error('Erro ao buscar coordenadas:', error);
+        }
+    };
+
+    const fetchPerfilBarbearia = async () => {
+        try {
+            console.log('Fetching barbearias (cliente):');
+            const response = await api.get(`barbearias/client-side/perfil/${valor}`, {
+                headers: {
+                    Authorization: token,
+                }
+            });
+            console.log('Response dados barbearia:', response.data);
+            setBarbearia(response.data);
+            // Verifica se existe celularNegocio e se é um array
+            if (response.data.celularNegocio && Array.isArray(response.data.celularNegocio)) {
+                setContatos(response.data.celularNegocio);
+            } else {
+                setContatos([{ telefone: '(11) 98080-8080' }]);
+            }
+            setLoading(false);
+        } catch (error) {
+            console.error('Erro ao buscar o perfil da barbearia:', error);
+            setLoading(false);
+        }
+    };
+
+    const fetchServicosBarbearia = async () => {
+        try {
+            console.log('Fetching servicos da barbearia (cliente):');
+            const response = await api.get(`servicos/client-side/12`, {
+                headers: {
+                    Authorization: token,
+                }
+            });
+            console.log('Response servicos barbearia:', response.data);
+            setServicos(response.data);
+        } catch (error) {
+            console.error('Erro ao buscar os serviços da barbearia:', error);
+        }
+    };
+
+    const fetchFuncionariosBarbearia = async () => {
+        try {
+            console.log('Fetching servicos da barbearia (cliente):');
+            const response = await api.get(`servicos/client-side/12`, {
+                headers: {
+                    Authorization: token,
+                }
+            });
+            console.log('Response servicos barbearia:', response.data);
+            setServicos(response.data);
+        } catch (error) {
+            console.error('Erro ao buscar os serviços da barbearia:', error);
+        }
+    };
+
+    useEffect(() => {
+        if (!token) {
+            setIsAuth(false);
+        } else {
+            setIsAuth(true);
+        }
+    }, [token]);
+    
+    useEffect(() => {
+        fetchPerfilBarbearia();
+        fetchServicosBarbearia();
+    }, []);
+
+    useEffect(() => {
+        if (barbearia) {
+            fetchMapaGoogle(`${barbearia.logradouro}, ${barbearia.numero}, ${barbearia.cep}, ${barbearia.cidade}`);
+        }
+    }, [barbearia]);
+
+    if (loading) {
+        return <div>Carregando...</div>;
+    }
 
     return (
         <ThemeProvider theme={theme}>
@@ -67,118 +179,114 @@ export function VisualizarBarbearia() {
             <div className={styles.visualizarBarbearia}>
                 <div className={styles.containerVisualizarBarbearia}>
                     <div className={styles.conteudoVisualizarBarbearia}>
-
-                        <div className={styles.nomeAvaliacaoBarbearia}>
-                            <NomeAvaliacaoBarbearia />
-                        </div>
-
-                        <div className={styles.bannerFotoPerfilBarbearia}>
-
-                            <div className={styles.bannerBarbearia}>
-                                <img src={bannerBarbearia} alt="" />
-                            </div>
-
-                            <div className={styles.circuloPerfilBarbearia}>
-                                <CirculoPerfilBarbearia />
-                            </div>
-                        </div>
-
-                        <div className={styles.servicosMapaEnderecoBarbearia}>
-                            <div className={styles.esquerdaServicos}>
-                                <div className={styles.tituloServicos}>
-                                    <span>Serviços</span>
+                        {barbearia && (
+                            <>
+                                <div className={styles.nomeAvaliacaoBarbearia}>
+                                    <NomeAvaliacaoBarbearia
+                                        nome={barbearia.nomeNegocio}
+                                        horario={barbearia.diaSemanas} />
                                 </div>
 
-                                <div className={styles.servicosBarbearia}>
-                                    <LinhaServicos />
-                                    <LinhaServicos />
-                                    <LinhaServicos />
-                                    <LinhaServicos />
-                                </div>
-
-                                <div className={styles.botaoVerMais}>
-                                    <span>Ver mais</span>
-                                </div>
-                            </div>
-
-                            <div className={styles.direitaMapaEnderecoContatoBarbearia}>
-
-                                <div className={styles.mapaBarbearia}>
-                                    <img src={mapaBarbearia} alt="" />
-                                </div>
-
-                                <div className={styles.enderecoBarbearia}>
-                                    <div className={styles.linhaLateral}>
+                                <div className={styles.bannerFotoPerfilBarbearia}>
+                                    <div className={styles.bannerBarbearia}>
+                                        <img src={barbearia.imgBanner || bannerBarbearia} alt="" />
                                     </div>
 
-                                    <div className={styles.spansEnderecoBarbearia}>
-                                        <div className={styles.spanRua}>
-                                            <span>Rua Flores de Cinzas, 341</span>
-                                        </div>
-
-                                        <div className={styles.spanBairroCep}>
-                                            <span>Vila Madalena - 09234-410</span>
-
-                                        </div>
+                                    <div className={styles.circuloPerfilBarbearia}>
+                                        <CirculoPerfilBarbearia fotoPerfil={barbearia.imgPerfil} />
                                     </div>
                                 </div>
 
-                                <div className={styles.contatoBarbearia}>
-                                    <div className={styles.linhaLateral}>
-                                    </div>
-
-                                    <div className={styles.tituloSpansContatoBarbearia}>
-                                        <div className={styles.tituloContatos}>
-                                            <span>Contato</span>
+                                <div className={styles.servicosMapaEnderecoBarbearia}>
+                                    <div className={styles.esquerdaServicos}>
+                                        <div className={styles.tituloServicos}>
+                                            <span>Serviços</span>
                                         </div>
 
-                                        <div className={styles.spansContatoBarbearia}>
-                                            <span>{"(11) 4234-9090"}</span>
-                                            <span>{"+55 (11) 98989-8989"}</span>
-                                        </div>
-
-                                        <div className={styles.botaoEntrarEmContato}>
-                                            <button>
-                                                <svg width="32" height="27" viewBox="0 0 32 27" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M23.3254 2.67228C21.2289 1.60871 18.7948 1 16.1987 1C8.32677 1 1.94531 6.59644 1.94531 13.5C1.94531 15.4996 2.4807 17.3895 3.4326 19.0656C3.68557 19.511 3.76976 20.0201 3.62311 20.5007L2.77416 23.2834C2.40563 24.4913 3.66571 25.5963 5.04307 25.2731L8.21594 24.5286C8.76404 24.4 9.34455 24.4739 9.85243 24.6956C11.7636 25.5305 13.9186 26 16.1987 26C24.0706 26 30.4521 20.4035 30.4521 13.5C30.4521 11.2232 29.758 9.08859 28.5453 7.25" stroke="#F4F3EE" stroke-width="2" stroke-linecap="round" />
-                                                </svg>
-                                                Entre em contato</button>
+                                        <div className={styles.servicosBarbearia}>
+                                            {servicos.map((servico, index) => (
+                                                <LinhaServicos
+                                                    key={index}
+                                                    index={index}
+                                                    selectedIndex={selectedIndex}
+                                                    onSelect={handleSelect}
+                                                    nomeServico={servico.tipoServico}
+                                                    descricaoServico={servico.descricao}
+                                                    valorServico={servico.preco}
+                                                />
+                                            ))}
                                         </div>
                                     </div>
+
+                                    <div className={styles.direitaMapaEnderecoContatoBarbearia}>
+                                        <div className={styles.mapaBarbearia}>
+                                            <Mapa latitude={latitude} longitude={longititude}/>
+                                        </div>
+
+                                        <div className={styles.enderecoBarbearia}>
+                                            <div className={styles.linhaLateral}></div>
+                                            <div className={styles.spansEnderecoBarbearia}>
+                                                <div className={styles.spanRua}>
+                                                    <span>{barbearia.logradouro}, {barbearia.numero}</span>
+                                                </div>
+                                                <div className={styles.spanBairroCep}>
+                                                    <span>{barbearia.cep} - {barbearia.cidade}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className={styles.contatoBarbearia}>
+                                            <div className={styles.linhaLateral}></div>
+                                            <div className={styles.tituloSpansContatoBarbearia}>
+                                                <div className={styles.tituloContatos}>
+                                                    <span>Contato</span>
+                                                </div>
+                                                <div className={styles.spansContatoBarbearia}>
+                                                    {contatos.map((contato, index) => (
+                                                        <span key={index}>{contato.telefone}</span>
+                                                    ))}
+                                                </div>
+                                                <div className={styles.botaoEntrarEmContato}>
+                                                    <button>
+                                                        <svg width="32" height="27" viewBox="0 0 32 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M23.3254 2.67228C21.2289 1.60871 18.7948 1 16.1987 1C8.32677 1 1.94531 6.59644 1.94531 13.5C1.94531 15.4996 2.4807 17.3895 3.4326 19.0656C3.68557 19.511 3.76976 20.0201 3.62311 20.5007L2.77416 23.2834C2.40563 24.4913 3.66571 25.5963 5.04307 25.2731L8.21594 24.5286C8.76404 24.4 9.34455 24.4739 9.85243 24.6956C11.7636 25.5305 13.9186 26 16.1987 26C24.0706 26 30.4521 20.4035 30.4521 13.5C30.4521 11.2232 29.758 9.08859 28.5453 7.25" stroke="#F4F3EE" stroke-width="2" stroke-linecap="round" />
+                                                        </svg>
+                                                        Entre em contato
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
 
+                                <div className={styles.conteudoNossaEquipeAvaliacoes}>
+                                    <div className={styles.nossaEquipe}>
+                                        <div className={styles.tituloNossaEquipe}>
+                                            <span>Nossa equipe</span>
+                                        </div>
+                                        <div className={styles.fotosEquipe}>
+                                            <FotoPerfilEquipe />
+                                            <FotoPerfilEquipe />
+                                            <FotoPerfilEquipe />
+                                            <FotoPerfilEquipe />
+                                            <FotoPerfilEquipe />
+                                            <FotoPerfilEquipe />
+                                            <FotoPerfilEquipe />
+                                        </div>
+                                    </div>
 
-                        <div className={styles.conteudoNossaEquipeAvaliacoes}>
-                            <div className={styles.nossaEquipe}>
-                                <div className={styles.tituloNossaEquipe}>
-                                    <span>Nossa equipe</span>
+                                    <div className={styles.avaliacoes}>
+                                        <div className={styles.tituloAvaliacoes}>
+                                            <span>Avaliações</span>
+                                        </div>
+                                        <div className={styles.cardAvaliacoes}>
+                                            <CardAvaliacoesVisualizarBarbearia />
+                                            <CardAvaliacoesVisualizarBarbearia />
+                                        </div>
+                                    </div>
                                 </div>
-
-                                <div className={styles.fotosEquipe}>
-                                    <FotoPerfilEquipe />
-                                    <FotoPerfilEquipe />
-                                    <FotoPerfilEquipe />
-                                    <FotoPerfilEquipe />
-                                    <FotoPerfilEquipe />
-                                    <FotoPerfilEquipe />
-                                    <FotoPerfilEquipe />
-                                </div>
-                            </div>
-
-                            <div className={styles.avaliacoes}>
-                                <div className={styles.tituloAvaliacoes}>
-                                    <span>Avaliações</span>
-                                </div>
-
-                                <div className={styles.cardAvaliacoes}>
-                                    <CardAvaliacoesVisualizarBarbearia />
-                                    <CardAvaliacoesVisualizarBarbearia />
-                                </div>
-                            </div>
-                        </div>
-
+                            </>
+                        )}
                     </div>
                 </div>
             </div>

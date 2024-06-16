@@ -9,6 +9,10 @@ export function FotoPerfilEquipe() {
                 <div className={styles.foto}>
                     <img src={foto} alt="" />
                 </div>
+
+                <div className={styles.nomeBarbeiro}>
+                    <span>viadinho</span>
+                </div>
             </div>
         </>
     )
