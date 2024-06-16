@@ -35,7 +35,7 @@ function HeaderUsuario() {
     }, [barbeariaInfo])
 
     const handleLogout = () => {
-        utils.logout()
+        navigate('/')
     }
 
     const cadastroBarbearia = () => {
@@ -169,7 +169,7 @@ function HeaderUsuario() {
                         }}>
                             <div className={styles.divConteudoDentroBotao}>
                                 <img src={iconeSair} style={{ height: '24px' }} alt="" />
-                                <div className={styles.textoSair} onClick={handleLogout}>Sair</div>
+                                <div className={styles.textoSair} onClick={handleLogout}>Página Inicial</div>
                             </div>
                         </button>
                     </div>

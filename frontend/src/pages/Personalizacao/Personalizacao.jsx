@@ -1,44 +1,44 @@
-import React, { useEffect, useState } from 'react';
-import styles from './Personalizacao.module.css';
-import NavbarBarbeiro from '../../components/NavbarBarbeiro/NavbarBarbeiro';
-import HeaderUsuario from '../../components/HeaderUsuario/HeaderUsuario';
-import imagemPerfilDefault from '../../utils/assets/imagem-perfil.svg';
-import imagemCapaDefault from '../../utils/assets/capa-barbearia.svg';
-import editIcon from '../../utils/assets/IconsHeaderUsuario/IconEditar.svg';
-import { Button, TextField, ThemeProvider, CircularProgress } from '@mui/material';
-import { useFormik } from 'formik';
-import { theme } from '../../theme';
-import { toast } from 'react-toastify';
-import api from '../../api';
-import { ModalEditar } from '../../components/ModalEditarBarbearia/ModalEditarBarbearia';
-import { ModalDescartar } from '../../components/ModalDescartarInformacoes/ModalDescartarInformacoes';
+import React, { useEffect, useState } from 'react'
+import styles from './Personalizacao.module.css'
+import NavbarBarbeiro from '../../components/NavbarBarbeiro/NavbarBarbeiro'
+import HeaderUsuario from '../../components/HeaderUsuario/HeaderUsuario'
+import imagemPerfilDefault from '../../utils/assets/imagem-perfil.svg'
+import imagemCapaDefault from '../../utils/assets/capa-barbearia.svg'
+import editIcon from '../../utils/assets/IconsHeaderUsuario/IconEditar.svg'
+import { Button, TextField, ThemeProvider, CircularProgress } from '@mui/material'
+import { useFormik } from 'formik'
+import { theme } from '../../theme'
+import { toast } from 'react-toastify'
+import api from '../../api'
+import { ModalEditar } from '../../components/ModalEditarBarbearia/ModalEditarBarbearia'
+import { ModalDescartar } from '../../components/ModalDescartarInformacoes/ModalDescartarInformacoes'
 
 export function Personalizacao() {
-  const token = JSON.parse(sessionStorage.getItem('user'));
-  const [diaSelecionado, setDiaSelecionado] = useState(null);
-  const [horarios, setHorarios] = useState([]);
-  const [modalEditarOpen, setModalEditarOpen] = useState(false);
-  const [modalDescartarOpen, setModalDescartarOpen] = useState(false);
-  const [isInitialLoad, setIsInitialLoad] = useState(true);
-  const [imgCapa, setImgCapa] = useState(null);
-  const [imgPerfil, setImgPerfil] = useState(null);
-  const [loadingPerfil, setLoadingPerfil] = useState(true);
-  const [loadingCapa, setLoadingCapa] = useState(true);
+  const token = JSON.parse(sessionStorage.getItem('user'))
+  const [diaSelecionado, setDiaSelecionado] = useState(null)
+  const [horarios, setHorarios] = useState([])
+  const [modalEditarOpen, setModalEditarOpen] = useState(false)
+  const [modalDescartarOpen, setModalDescartarOpen] = useState(false)
+  const [isInitialLoad, setIsInitialLoad] = useState(true)
+  const [imgCapa, setImgCapa] = useState(null)
+  const [imgPerfil, setImgPerfil] = useState(null)
+  const [loadingPerfil, setLoadingPerfil] = useState(true)
+  const [loadingCapa, setLoadingCapa] = useState(true)
 
   const handleDiaChange = (e) => {
-    setDiaSelecionado(parseInt(e.target.value));
-  };
+    setDiaSelecionado(parseInt(e.target.value))
+  }
 
   const handleHorarioChange = (e, tipo) => {
-    const { value } = e.target;
+    const { value } = e.target
     setHorarios((prevHorarios) =>
       prevHorarios.map((dia) =>
         dia.id === diaSelecionado
           ? { ...dia, [tipo]: value }
           : dia
       )
-    );
-  };
+    )
+  }
 
   const formik = useFormik({
     initialValues: {
@@ -65,25 +65,25 @@ export function Personalizacao() {
           numero: values.numero,
           complemento: values.complemento,
           diaSemanas: horarios
-        };
+        }
 
         await api.put('/barbearias/perfil', formData, {
           headers: {
             Authorization: token
           }
-        });
+        })
 
-        toast.success("Informações atualizadas com sucesso!");
-        setModalEditarOpen(false);
-        
-        await handleCapaChange();
-        await handlePerfilChange();
+        toast.success("Informações atualizadas com sucesso!")
+        setModalEditarOpen(false)
+
+        await handleCapaChange()
+        await handlePerfilChange()
       } catch (error) {
-        console.error("Erro ao atualizar as informações principais:", error);
-        toast.error("Erro ao atualizar as informações principais!");
+        console.error("Erro ao atualizar as informações principais:", error)
+        toast.error("Erro ao atualizar as informações principais!")
       }
     }
-  });
+  })
 
   useEffect(() => {
     const fetchBarbeariaData = async () => {
@@ -92,11 +92,11 @@ export function Personalizacao() {
           headers: {
             Authorization: token
           }
-        });
-        const barbeariaData = response.data;
+        })
+        const barbeariaData = response.data
 
         console.log(barbeariaData)
-    
+
         formik.setValues({
           nomeNegocio: barbeariaData.nomeNegocio || '',
           descricao: barbeariaData.descricao || '',
@@ -107,137 +107,137 @@ export function Personalizacao() {
           logradouro: barbeariaData.logradouro || '',
           numero: barbeariaData.numero || '',
           complemento: barbeariaData.complemento || ''
-        });
-        setHorarios(barbeariaData.diaSemanas);
-        setDiaSelecionado(barbeariaData.diaSemanas[0]?.id || null);
-        setIsInitialLoad(false);
-    
+        })
+        setHorarios(barbeariaData.diaSemanas)
+        setDiaSelecionado(barbeariaData.diaSemanas[0]?.id || null)
+        setIsInitialLoad(false)
+
       } catch (error) {
-        console.error('Erro ao obter dados da barbearia', error);
+        console.error('Erro ao obter dados da barbearia', error)
       }
-    };
+    }
 
     if (isInitialLoad) {
-      fetchBarbeariaData();
+      fetchBarbeariaData()
     }
-  }, [token, formik, isInitialLoad]);
+  }, [token, formik, isInitialLoad])
 
   useEffect(() => {
     const fetchImage = async () => {
       try {
-        setLoadingPerfil(true);
+        setLoadingPerfil(true)
         const response = await api.get('/barbearias/get-image-perfil', {
           headers: {
             Authorization: token
           },
           responseType: 'arraybuffer'
-        });
+        })
 
-        const blob = new Blob([response.data], { type: 'image/png' });
-        const imageUrl = URL.createObjectURL(blob);
-        setImgPerfil(imageUrl);
+        const blob = new Blob([response.data], { type: 'image/png' })
+        const imageUrl = URL.createObjectURL(blob)
+        setImgPerfil(imageUrl)
       } catch (error) {
-        console.log('Erro ao buscar a imagem de perfil: ' + error);
+        console.log('Erro ao buscar a imagem de perfil: ' + error)
       } finally {
-        setLoadingPerfil(false);
+        setLoadingPerfil(false)
       }
-    };
+    }
 
-    fetchImage();
-  }, []);
+    fetchImage()
+  }, [])
 
   useEffect(() => {
     const fetchImageCapa = async () => {
       try {
-        setLoadingCapa(true);
+        setLoadingCapa(true)
         const response = await api.get('/barbearias/get-image-banner', {
           headers: {
             Authorization: token
           },
           responseType: 'arraybuffer'
-        });
+        })
 
-        const blob = new Blob([response.data], { type: 'image/png' });
-        const imageUrl = URL.createObjectURL(blob);
-        setImgCapa(imageUrl);
+        const blob = new Blob([response.data], { type: 'image/png' })
+        const imageUrl = URL.createObjectURL(blob)
+        setImgCapa(imageUrl)
       } catch (error) {
-        console.log('Erro ao buscar a imagem de capa: ' + error);
+        console.log('Erro ao buscar a imagem de capa: ' + error)
       } finally {
-        setLoadingCapa(false);
+        setLoadingCapa(false)
       }
-    };
+    }
 
-    fetchImageCapa();
-  }, []);
+    fetchImageCapa()
+  }, [])
 
-  const diaAtual = horarios.find((dia) => dia.id === diaSelecionado) || { horaAbertura: '', horaFechamento: '' };
+  const diaAtual = horarios.find((dia) => dia.id === diaSelecionado) || { horaAbertura: '', horaFechamento: '' }
 
   const handleDescartarConfirm = () => {
-    formik.resetForm();
-    setModalDescartarOpen(false);
-    toast.info("Alterações descartadas");
-  };
+    formik.resetForm()
+    setModalDescartarOpen(false)
+    toast.info("Alterações descartadas")
+  }
 
   const handleEditarConfirm = async () => {
     try {
-      await formik.handleSubmit();
-      await handleCapaChange();
-      await handlePerfilChange();
+      await formik.handleSubmit()
+      await handleCapaChange()
+      await handlePerfilChange()
     } catch (error) {
-      toast.error("Erro ao atualizar as informações!");
+      toast.error("Erro ao atualizar as informações!")
     }
-  };
+  }
 
   const handleCapaChange = async () => {
     if (imgCapa && imgCapa !== imagemCapaDefault) {
       try {
-        const blobCapa = await fetch(imgCapa).then(res => res.blob());
-        const formData = new FormData();
-        formData.append('file', blobCapa, 'imagem.png');
-  
+        const blobCapa = await fetch(imgCapa).then(res => res.blob())
+        const formData = new FormData()
+        formData.append('file', blobCapa, 'imagem.png')
+
         const response = await api.put('/barbearias/image-banner', formData, {
           headers: {
             Authorization: token,
             'Content-Type': 'multipart/form-data'
           }
-        });
-  
-        console.log("Imagem de capa atualizada:", response.data);
+        })
+
+        console.log("Imagem de capa atualizada:", response.data)
       } catch (error) {
-        console.error("Erro ao atualizar imagem de capa:", error);
+        console.error("Erro ao atualizar imagem de capa:", error)
       }
     }
-  };
-  
+  }
+
   const handlePerfilChange = async () => {
     if (imgPerfil && imgPerfil !== imagemPerfilDefault) {
       try {
-        const blobPerfil = await fetch(imgPerfil).then(res => res.blob());
-        const formData = new FormData();
-        formData.append('file', blobPerfil, 'imagem.png');
-  
+        const blobPerfil = await fetch(imgPerfil).then(res => res.blob())
+        const formData = new FormData()
+        formData.append('file', blobPerfil, 'imagem.png')
+
         const response = await api.put('/barbearias/image-perfil', formData, {
           headers: {
             Authorization: token,
             'Content-Type': 'multipart/form-data'
           }
-        });
-  
-        console.log("Imagem de perfil atualizada:", response.data);
+        })
+
+        console.log("Imagem de perfil atualizada:", response.data)
       } catch (error) {
-        console.error("Erro ao atualizar imagem de perfil:", error);
+        console.error("Erro ao atualizar imagem de perfil:", error)
       }
     }
-  };
-  
+  }
+
 
   const handleCapaClick = () => {
-    document.getElementById('fileInputCapa').click();
-  };
+    document.getElementById('fileInputCapa').click()
+  }
 
   const handlePerfilClick = () => {
-    document.getElementById('fileInputPerfil').click();
-  };
+    document.getElementById('fileInputPerfil').click()
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -248,30 +248,30 @@ export function Personalizacao() {
             <NavbarBarbeiro />
             <div className={styles.conteudoFotos}>
               <div className={styles.containerFotoCapa} onClick={handleCapaClick}>
-              {loadingCapa ? (
+                {loadingCapa ? (
                   <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', width: '100%' }}>
                     <CircularProgress color="secondary" style={{
                       alignSelf: 'center',
                       justifySelf: 'center',
-                    }}/>
+                    }} />
                   </div>
                 ) : (
-                  <img src={imgCapa || imagemCapaDefault} style={{ height: '100%', width: '100%', objectFit: 'cover', borderRadius: 24 }} />
+                  <img src={imgCapa || imagemCapaDefault} alt='imagem-de-capa-da-barbearia' style={{ height: '100%', width: '100%', objectFit: 'cover', borderRadius: 24 }} />
                 )}
                 <div className={styles.overlay}>
                   <img src={editIcon} alt="Editar Capa" className={styles.editIcon} />
                 </div>
               </div>
               <div className={styles.containerFotoPerfil} onClick={handlePerfilClick}>
-              {loadingPerfil ? (
+                {loadingPerfil ? (
                   <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', width: '100%' }}>
                     <CircularProgress color="secondary" style={{
                       alignSelf: 'center',
                       justifySelf: 'center',
-                    }}/>
+                    }} />
                   </div>
                 ) : (
-                  <img src={imgPerfil || imagemPerfilDefault} style={{ height: '100%', width: '100%', objectFit: 'cover', borderRadius: 24 }} />
+                  <img src={imgPerfil || imagemPerfilDefault} alt='imagem-de-perfil-da-barbearia' style={{ height: '100%', width: '100%', objectFit: 'cover', borderRadius: 24 }} />
                 )}
                 <div className={styles.overlay}>
                   <img src={editIcon} alt="Editar Perfil" className={styles.editIcon} />
@@ -413,7 +413,7 @@ export function Personalizacao() {
                 />
               </div>
 
-              {/* -- TO DO -> (Atualizar dias semana conforme layout no figma) 
+              {/* -- TO DO -> (Atualizar dias semana conforme layout no figma)
               <h2 style={{ fontSize: 26, fontWeight: 600, color: '#082031' }}>Informações adicionais</h2>
               <div className={styles.formularioInformacoesAdicionais}>
                 <div>
@@ -476,19 +476,19 @@ export function Personalizacao() {
         </div>
       </div>
 
-      <ModalEditar 
-        open={modalEditarOpen} 
-        handleClose={() => setModalEditarOpen(false)} 
-        handleConfirm={handleEditarConfirm} 
+      <ModalEditar
+        open={modalEditarOpen}
+        handleClose={() => setModalEditarOpen(false)}
+        handleConfirm={handleEditarConfirm}
       />
 
-      <ModalDescartar 
-        open={modalDescartarOpen} 
-        handleClose={() => setModalDescartarOpen(false)} 
-        handleConfirm={handleDescartarConfirm} 
+      <ModalDescartar
+        open={modalDescartarOpen}
+        handleClose={() => setModalDescartarOpen(false)}
+        handleConfirm={handleDescartarConfirm}
       />
     </ThemeProvider>
-  );
+  )
 }
 
-export default Personalizacao;
+export default Personalizacao
