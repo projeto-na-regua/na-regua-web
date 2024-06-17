@@ -35,7 +35,10 @@ export function VisualizarBarbearia() {
     const [contatos, setContatos] = useState([])
     const [latitude, setLatitude] = useState();
     const [longititude, setLongitude] = useState();
-    const [funcionarios, setFuncionarios] = useState([])
+    const [funcionarios, setFuncionarios] = useState([]);
+    const [imgPerfil, setImgPerfil] = useState();
+    const [imgBanner, setImgBanner] = useState();
+    const [imgPerfilFuncionarios, setImgPerfilFuncionarios] = useState([])
 
     useEffect(() => {
         if (!token) {
@@ -48,6 +51,57 @@ export function VisualizarBarbearia() {
     const handleSelect = (index) => {
         setSelectedIndex(index);
         navigate(`/selecionar-data-hora?valor=${valor}`);
+    };
+
+    const fetchImagePerfil = async () => {
+        try {
+            console.log('Fetching imagens de perfil da barbearia (cliente)');
+            const response = await api.get(`barbearias/client-side/get-one-image-perfil/${valor}`, {
+                headers: {
+                    Authorization: token
+                }
+            });
+            console.log(response.data)
+            const imageBytesList = response.data;
+            setImgPerfil(imageBytesList);
+
+        } catch (error) {
+            console.log('Erro ao buscar a imagem de perfil: ' + error);
+        }
+    };
+
+    const fetchImagePerfilFuncionarios = async () => {
+        try {
+            console.log('Fetching imagens de perfil da barbearia (cliente)');
+            const response = await api.get(`funcionarios/client-side/get-image-perfil/${valor}`, {
+                headers: {
+                    Authorization: token
+                }
+            });
+            console.log(response.data)
+            const imageBytesList = response.data;
+            setImgPerfilFuncionarios(imageBytesList);
+
+        } catch (error) {
+            console.log('Erro ao buscar a imagem de perfil: ' + error);
+        }
+    };
+
+    const fetchImageBanner = async () => {
+        try {
+            console.log('Fetching imagens banner da barbearia (cliente)');
+            const response = await api.get(`barbearias/client-side/get-image-banner/${valor}`, {
+                headers: {
+                    Authorization: token
+                }
+            });
+            console.log(response.data)
+            const imageBytesList = response.data;
+            setImgBanner(imageBytesList);
+
+        } catch (error) {
+            console.log('Erro ao buscar a imagem de capa: ' + error);
+        }
     };
 
     const fetchMapaGoogle = async (endereco) => {
@@ -130,11 +184,14 @@ export function VisualizarBarbearia() {
             setIsAuth(true);
         }
     }, [token]);
-    
+
     useEffect(() => {
         fetchPerfilBarbearia();
         fetchServicosBarbearia();
         fetchFuncionariosBarbearia();
+        fetchImagePerfil();
+        fetchImageBanner();
+        fetchImagePerfilFuncionarios();
     }, []);
 
     useEffect(() => {
@@ -193,11 +250,12 @@ export function VisualizarBarbearia() {
 
                                 <div className={styles.bannerFotoPerfilBarbearia}>
                                     <div className={styles.bannerBarbearia}>
-                                        <img src={(barbearia.imgBanner == null || undefined) ? barbearia.imgBanner : bannerBarbeariaPadrao} alt="" />
+                                        <img src={imgBanner ?? bannerBarbeariaPadrao} alt="" />
                                     </div>
 
                                     <div className={styles.circuloPerfilBarbearia}>
-                                        <CirculoPerfilBarbearia fotoPerfil={(barbearia.imgPerfil == null || undefined) ? barbearia.imgPerfil : imgBarbeariaPadrao} />
+                                        <CirculoPerfilBarbearia fotoPerfil={imgPerfil ?? imgBarbeariaPadrao} />
+
                                     </div>
                                 </div>
 
@@ -210,22 +268,22 @@ export function VisualizarBarbearia() {
                                         <div className={styles.servicosBarbearia}>
                                             {Array.isArray(servicos) && servicos.map((servico, index) => (
                                                 <LinhaServicos
-                                                key={index}
-                                                index={index}
-                                                valor={barbearia.id}
-                                                selectedIndex={selectedIndex}
-                                                onSelect={handleSelect}
-                                                nomeServico={servico.tipoServico}
-                                                descricaoServico={servico.descricao}
-                                                valorServico={servico.preco}
-                                            />
+                                                    key={index}
+                                                    index={index}
+                                                    valor={barbearia.id}
+                                                    selectedIndex={selectedIndex}
+                                                    onSelect={handleSelect}
+                                                    nomeServico={servico.tipoServico}
+                                                    descricaoServico={servico.descricao}
+                                                    valorServico={servico.preco}
+                                                />
                                             ))}
                                         </div>
                                     </div>
 
                                     <div className={styles.direitaMapaEnderecoContatoBarbearia}>
                                         <div className={styles.mapaBarbearia}>
-                                            <Mapa latitude={latitude} longitude={longititude}/>
+                                            <Mapa latitude={latitude} longitude={longititude} />
                                         </div>
 
                                         <div className={styles.enderecoBarbearia}>
@@ -270,9 +328,9 @@ export function VisualizarBarbearia() {
                                             <span>Nossa equipe</span>
                                         </div>
                                         <div className={styles.fotosEquipe}>
-                                        {Array.isArray(funcionarios) && funcionarios.map((funcionarios, index) => (
-                                                        <FotoPerfilEquipe nome={funcionarios.nome} foto={funcionarios.imgPerfil}/>
-                                                    ))}
+                                            {Array.isArray(funcionarios) && funcionarios.map((funcionarios, index) => (
+                                                <FotoPerfilEquipe nome={funcionarios.nome} foto={imgPerfilFuncionarios[index] == 'https://upload0naregua.blob.core.windows.net/upload/' ? 'https://i.pinimg.com/736x/b1/aa/73/b1aa73786a14bf19fb208dfbf90488e5.jpg' : imgPerfilFuncionarios[index]} />
+                                            ))}
                                         </div>
                                     </div>
 

@@ -14,6 +14,7 @@ import FotoPerfilEquipe from '../../components/FotoPerfilEquipe/FotoPerfilEquipe
 import api from '../../api.js';
 import { toast } from 'react-toastify';
 import AgendaFullCalendar from '../../components/AgendaFullCalendar/AgendaFullCalendar.jsx';
+import 'react-toastify/dist/ReactToastify.css';
 
 export function SelecionarDataHora() {
     const navigate = useNavigate();
@@ -34,8 +35,8 @@ export function SelecionarDataHora() {
     const [selectedFuncionario, setSelectedFuncionario] = useState(null);
     const [selectedHorario, setSelectedHorario] = useState(null);
     const [funcionarioSelecionado, setFuncionarioSelecionado] = useState(null);
-    
-
+    const [imgPerfilFuncionarios, setImgPerfilFuncionarios] = useState([])
+    const [horarioSelecionado, setHorarioSelecionado] = useState(null);
 
     const handleSelectService = (serviceId) => {
         setSelectedService(serviceId);
@@ -47,10 +48,19 @@ export function SelecionarDataHora() {
         setSelectedFuncionario(funcionarioId);
         setFuncionarioSelecionado(funcionarioId);
     };
-    
+
 
     const handleSelecionarHorario = (horario) => {
         setSelectedHorario(horario);
+        setHorarioSelecionado(horario)
+    };
+
+    const handleNavigate = () => {
+        navigate('/perfil/meus-agendamentos')
+    };
+
+    const handleClick = () => {
+        handleAgendar();
     };
 
 
@@ -73,7 +83,7 @@ export function SelecionarDataHora() {
     };
 
     const handleAgendar = () => {
-        console.log(selectedService, selectedFuncionario, selectedDate, selectedHorario)
+        console.log(selectedService, selectedFuncionario, selectedDate, selectedHorario);
         if (selectedService && selectedFuncionario && selectedDate && selectedHorario) {
             const agendamento = {
                 idBarbearia: valor,
@@ -81,10 +91,37 @@ export function SelecionarDataHora() {
                 idBarbeiro: selectedFuncionario,
                 dataHora: `${selectedDate.format('YYYY-MM-DD')} ${selectedHorario}:00`
             };
-            console.log(agendamento)
-            fetchAgendar(agendamento);
+            console.log(agendamento);
+    
+            const loadingToastId = toast.loading("Finalizando seu agendamento...");
+    
+            fetchAgendar(agendamento)
+                .then(() => {
+                    toast.dismiss(loadingToastId); // Remove o toast de carregamento
+                    handleNavigate();
+                })
+                .catch((error) => {
+                    toast.dismiss(loadingToastId); // Remove o toast de carregamento em caso de erro
+                    console.error('Erro ao agendar:', error);
+                });
         } else {
             toast.error('Por favor, selecione todos os campos necessários para agendar.');
+        }
+    };
+
+    const fetchImagePerfilFuncionarios = async () => {
+        try {
+            console.log('Fetching imagens de perfil da barbearia (cliente)');
+            const response = await api.get(`funcionarios/client-side/get-image-perfil/${valor}`, {
+                headers: {
+                    Authorization: token
+                }
+            });
+            console.log(response.data)
+            const imageBytesList = response.data;
+            setImgPerfilFuncionarios(imageBytesList);
+        } catch (error) {
+            console.log('Erro ao buscar a imagem de perfil: ' + error);
         }
     };
 
@@ -96,6 +133,7 @@ export function SelecionarDataHora() {
                     Authorization: token,
                 }
             });
+            toast.success("Agendamento feito com sucesso!")
             console.log('Agendado com sucesso:', response.data);
         } catch (error) {
             console.error('Erro ao agendar:', error);
@@ -104,9 +142,9 @@ export function SelecionarDataHora() {
 
 
     const barbeiroServicoId = {
-        barbeiro: 28,
-        servico: 10,
-        barbearia: 12
+        barbeiro: selectedFuncionario,
+        servico: selectedService,
+        barbearia: valor
     };
 
     const fetchServicosBarbearia = async () => {
@@ -125,6 +163,7 @@ export function SelecionarDataHora() {
     };
 
     const fetchFuncionariosBarbearia = async (service) => {
+        fetchImagePerfilFuncionarios();
         try {
             console.log('Fetching funcionarios da barbearia (cliente):');
             const response = await api.get(`funcionarios/client-side/list-by-servico/${service}`, {
@@ -147,12 +186,15 @@ export function SelecionarDataHora() {
                     Authorization: token,
                 },
                 params: {
-                    barbeiro: barbeiroServicoId.barbeiro,
-                    servico: barbeiroServicoId.servico,
-                    barbearia: barbeiroServicoId.barbearia,
+                    barbeiro: selectedFuncionario,
+                    servico: selectedService,
+                    barbearia: valor,
                     date: dataAgendamento,
                 },
             });
+            console.log(
+                selectedFuncionario, selectedService, valor, dataAgendamento
+            );
 
             console.log('Response:', response.data[0].hora);
 
@@ -235,17 +277,17 @@ export function SelecionarDataHora() {
                                 {Array.isArray(servicos) &&
                                     servicos.map((servico, index) => (
                                         <LinhaServicos
-                                        key={index}
-                                        index={index}
-                                        selectedIndex={selectedIndex}
-                                        onSelect={() => {
-                                            handleSelect(index);
-                                            handleSelectService(servico.id);
-                                        }}
-                                        nomeServico={servico.tipoServico}
-                                        descricaoServico={servico.descricao}
-                                        valorServico={servico.preco}
-                                    />
+                                            key={index}
+                                            index={index}
+                                            selectedIndex={selectedIndex}
+                                            onSelect={() => {
+                                                handleSelect(index);
+                                                handleSelectService(servico.id);
+                                            }}
+                                            nomeServico={servico.tipoServico}
+                                            descricaoServico={servico.descricao}
+                                            valorServico={servico.preco}
+                                        />
                                     ))}
                             </div>
                         </div>
@@ -260,16 +302,16 @@ export function SelecionarDataHora() {
                             </div>
 
                             <div className={styles.barbeirosDisponiveis}>
-                                {Array.isArray(funcionarios) && funcionarios.map((funcionario) => (
+                                {Array.isArray(funcionarios) && funcionarios.map((funcionario, index) => (
                                     <FotoPerfilEquipe
-                                    key={funcionario.id}
-                                    valor={funcionario.id}
-                                    nome={funcionario.nome}
-                                    foto={funcionario.imgPerfil}
-                                    onSelect={() => handleSelectFuncionario(funcionario.id)}
-                                    selecionado={funcionario.id === funcionarioSelecionado}
-                                    cursorPointer={true}
-                                />
+                                        key={funcionario.id}
+                                        valor={funcionario.id}
+                                        nome={funcionario.nome}
+                                        foto={imgPerfilFuncionarios[index] == 'https://upload0naregua.blob.core.windows.net/upload/' ? 'https://i.pinimg.com/736x/b1/aa/73/b1aa73786a14bf19fb208dfbf90488e5.jpg' : imgPerfilFuncionarios[index]}
+                                        onSelect={() => handleSelectFuncionario(funcionario.id)}
+                                        selecionado={funcionario.id === funcionarioSelecionado}
+                                        cursorPointer={true}
+                                    />
                                 ))}
                             </div>
 
@@ -299,6 +341,7 @@ export function SelecionarDataHora() {
                                                 key={index}
                                                 horario={horario}
                                                 onSelect={() => handleSelecionarHorario(horario)}
+                                                isSelected={horario === horarioSelecionado}
                                             />
                                         ))}
                                     </div>
@@ -308,11 +351,15 @@ export function SelecionarDataHora() {
                         </div>
 
                         <div className={styles.botaoAgendar}>
-                            <Button variant='contained' style={{
-                                width: '20%',
-                                fontWeight: '600'
-                            }}
-                                onClick={handleAgendar}> Agendar </Button>
+                            <Button
+                                variant='contained'
+                                style={{
+                                    width: '20%',
+                                    fontWeight: '600'
+                                }}
+                                onClick={handleClick}>
+                                Agendar
+                            </Button>
                         </div>
 
                     </div>
