@@ -1,0 +1,65 @@
+.conteudoLinhaServicos {
+    display: flex;
+    align-items: center;
+    padding: 1%;
+    border-radius: 15px;
+    cursor: pointer;
+}
+
+.conteudoLinhaServicos.selected {
+    background-color: #082031;
+    color: #F4F3EE;
+}
+
+.nomeDescricaoServico {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    padding-right: 5%;
+}
+
+.nomeServico {
+    font-size: 20px;
+    color: #082031;
+    font-weight: 800;
+}
+
+.nomeServico.selected {
+    color: #F4F3EE;
+}
+
+.descricaoServico {
+    font-size: 15px;
+    color: #E3A74F;
+    font-weight: 500;
+}
+
+.descricaoServico.selected {
+    color: #F4F3EE;
+}
+
+.linha {
+    display: flex;
+    justify-content: center;
+    flex-grow: 1;
+    height: 2px;
+    background-color: #082031;
+}
+
+.linha.selected {
+    background-color: #F4F3EE;
+}
+
+.valorServico {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    font-weight: 600;
+    color: #082031;
+    width: 20%;
+}
+
+.valorServico.selected {
+    color: #F4F3EE;
+}

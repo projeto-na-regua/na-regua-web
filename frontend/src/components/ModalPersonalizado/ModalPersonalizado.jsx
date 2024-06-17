@@ -23,7 +23,8 @@ export function ModalPersonalizado(props) {
           justifyContent: 'center',
           flexDirection: 'column',
           paddingLeft: 0,
-          paddingRight: 0
+          paddingRight: 0,
+          ...props.style
         }}>
           {props.children}
         </Box>

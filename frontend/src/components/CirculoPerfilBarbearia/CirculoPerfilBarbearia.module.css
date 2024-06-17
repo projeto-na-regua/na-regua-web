@@ -1,0 +1,19 @@
+.conteudoCirculoPerfilBarbearia{
+    background-color: #F4F3EE;
+    width: 265px;
+    height: 265px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.foto{
+    display: flex;
+}
+
+.foto img {
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+}

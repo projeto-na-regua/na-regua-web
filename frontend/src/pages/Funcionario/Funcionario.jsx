@@ -1,9 +1,8 @@
-
 import { useEffect, useState } from 'react'
 import React from 'react'
 import styles from './Funcionario.module.css'
 import NavbarBarbeiro from '../../components/NavbarBarbeiro/NavbarBarbeiro'
-import HeaderUsuario from '../../components/HeaderUsuario/HeaderUsuario'
+import HeaderBarbeiro from '../../components/HeaderUsuario/HeaderUsuario'
 import { Button, TextField, ThemeProvider } from '@mui/material'
 import CardPequenoFuncionario from '../../components/CardPequenoFuncionario/CardPequenoFuncionario'
 import CardFuncionario from '../../components/CardFuncionario/CardFuncionario'
@@ -11,7 +10,7 @@ import api from '../../api'
 import CircularProgress from '@mui/material/CircularProgress'
 import ModalAdicionar from '../../components/ModalAdicionar/ModalAdicionar'
 import { theme } from '../../theme'
-
+import { toast } from "react-toastify"
 
 export function Funcionarios() {
   const [modalAdicionar, setModalAdicionar] = useState(false)
@@ -44,18 +43,40 @@ export function Funcionarios() {
     setModalAdicionar(true)
   }
 
-  console.log(listaFuncionarios)
+  const handleExtrairRelatorio = async () => {
+    try {
+      const response = await api.get('/funcionarios/relatorio', {
+        headers: {
+          Authorization: token
+        },
+        responseType: 'blob'
+      })
+
+      const url = window.URL.createObjectURL(new Blob([response.data], { type: 'text/csv' }))
+      const link = document.createElement('a')
+      link.href = url
+      link.setAttribute('download', 'relatorio.csv')
+      document.body.appendChild(link)
+      link.click()
+      link.remove()
+
+      toast.success('Relatório extraído com sucesso!', { autoClose: 2000 })
+    } catch (error) {
+      console.error('Erro ao extrair relatório:', error.response ? error.response.data : error.message)
+      toast.error('Erro ao extrair relatório.')
+    }
+  }
 
   return (
     <ThemeProvider theme={theme}>
       <div className="Header">
 
-        <HeaderUsuario />
+        <HeaderBarbeiro />
+        <NavbarBarbeiro />
 
         <div className={styles.conteudo}>
           <div className={styles.container}>
             <div className={styles.conteudoFuncionarios}>
-              <NavbarBarbeiro />
 
               <div style={{
                 display: 'flex',
@@ -73,7 +94,7 @@ export function Funcionarios() {
 
                 <Button
                   variant='contained'
-                  onClick={() => setModalAdicionar(true)}
+                  onClick={handleExtrairRelatorio}
                 >
                   Extrair relatório
                 </Button>
@@ -102,7 +123,7 @@ export function Funcionarios() {
                   display: 'flex',
                   width: '100%',
                   alignItems: 'center',
-                  justifyContent: 'flex-start',
+                  justifyContent: listaFuncionarios.length > 0 ? 'flex-start' : 'center',
                   marginLeft: 64,
                   gap: 32
                 }}>
@@ -146,4 +167,5 @@ export function Funcionarios() {
     </ThemeProvider>
   )
 }
+
 export default Funcionarios

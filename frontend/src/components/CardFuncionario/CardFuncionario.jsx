@@ -3,7 +3,7 @@ import styles from './CardFuncionario.module.css'
 import { Button, Typography } from '@mui/material'
 import api from '../../api'
 import { toast } from 'react-toastify'
-import CircularProgress from '@mui/material/CircularProgress'
+import LoadingButton from '@mui/lab/LoadingButton';
 import { ModalPersonalizado } from '../ModalPersonalizado/ModalPersonalizado'
 
 function CardFuncionario(props) {
@@ -59,7 +59,6 @@ function CardFuncionario(props) {
             alignItems: 'center',
             width: 400,
           }}>
-            {carregando && <CircularProgress />}
             <Typography variant='h5'>{props.name}</Typography>
 
             <div style={{
@@ -94,12 +93,24 @@ function CardFuncionario(props) {
                 Fechar
               </Button>
 
-              <Button
-                variant='contained'
-                onClick={deletarFuncionario}
-              >
-                Deletar funcionário
-              </Button>
+              {carregando ? (
+                <LoadingButton
+                  loading
+                  variant='contained'
+                  color='error'
+                >
+                  Deletar
+                </LoadingButton>
+              ) : (
+                <Button
+                  variant='contained'
+                  color='error'
+                  onClick={deletarFuncionario}
+                >
+                  Deletar
+                </Button>
+              )
+              }
             </div>
           </div>
         }

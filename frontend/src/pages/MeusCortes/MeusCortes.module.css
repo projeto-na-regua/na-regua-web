@@ -5,6 +5,10 @@ body {
     padding: 0;
 }
 
+.conteudo{
+    background-color: #F4F3EE;
+}
+
 .container {
     display: flex;
     width: 90%;

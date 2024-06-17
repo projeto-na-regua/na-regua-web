@@ -1,0 +1,60 @@
+.conteudoCardAvaliacoesVisualizarBarbearia {
+    display: flex;
+    align-items: center;
+    background-color: #082031;
+    border-radius: 15px;
+    padding: 20px 15px;
+    color: #F4F3EE;
+    position: relative;
+}
+
+.foto {
+    position: absolute;
+    left: -15px; 
+    top: -15px; 
+    border-radius: 50%; 
+    border: 4px solid #F4F3EE; 
+}
+
+.foto img {
+    width: 80px;
+    height: 70px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.informacoesCard {
+    display: flex;
+    flex-direction: column;
+    margin-left: 80px;
+    width: 100%;
+}
+
+.nome span {
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.linhaConteudo {
+    display: flex;
+    align-items: center;
+    margin-top: 5px;
+    width: 100%;
+}
+
+.linha {
+    width: 2px;
+    height: 40px;
+    background-color: #F4F3EE;
+    margin-right: 10px;
+}
+
+.conteudoAvaliacao{
+    width: 100%;
+}
+
+.conteudoAvaliacao span {
+    margin-left: 5%;
+    font-size: 16px;
+    word-break: break-word; 
+}

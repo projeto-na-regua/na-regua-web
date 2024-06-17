@@ -10,6 +10,7 @@ import { ThemeProvider } from '@emotion/react';
 import { useNavigate } from 'react-router-dom';
 import MenuLateralUsuario from '../../components/MenuLateralUsuario/MenuLateralUsuario.jsx';
 import { Button } from '@mui/material';
+import api from '../../api.js';
 
 export function BuscaBarbearia() {
     const navigate = useNavigate();
@@ -17,6 +18,8 @@ export function BuscaBarbearia() {
     const [isAuth, setIsAuth] = useState(false);
     const token = JSON.parse(sessionStorage.getItem('user'));
     const [open, setOpen] = useState(false);
+    const [barbearias, setBarbearias] = useState([]);
+    const [imgPerfil, setImgPerfil] = useState([]);
 
     useEffect(() => {
         if (!token) {
@@ -25,6 +28,49 @@ export function BuscaBarbearia() {
             setIsAuth(true);
         }
     }, [token]);
+
+    useEffect(() => {
+        fetchBarbearias();
+        fetchImage();
+    }, []);
+
+    const fetchBarbearias = async () => {
+        try {
+            console.log('Fetching barbearias (cliente):');
+
+            const response = await api.get('barbearias/client-side/pesquisa', {
+                headers: {
+                    Authorization: token,
+                }
+            });
+            console.log('Response:', response.data);
+            setBarbearias(response.data);
+        } catch (error) {
+            console.error('Erro ao buscar as barbearias:', error);
+        }
+    };
+
+    const fetchImage = async () => {
+        try {
+            console.log('Fetching imagens de perfil das barbearias (cliente)');
+            const response = await api.get('barbearias/client-side/get-image-perfil', {
+                headers: {
+                    Authorization: token
+                }
+            });
+            console.log(response.data)
+            // Ensure response.data contains the actual data
+            const imageBytesList = response.data;
+            // Atualizar o estado para exibir as imagens
+            setImgPerfil(imageBytesList);
+
+        } catch (error) {
+            console.log('Erro ao buscar a imagem de capa: ' + error);
+        }
+    };
+
+
+
 
     return (
         <ThemeProvider theme={theme}>
@@ -59,7 +105,7 @@ export function BuscaBarbearia() {
                 />
             </div>
 
-            <div className={styles.buscarBarbearias}>
+            <div className={`${styles.fullHeightBg} ${styles.perfilContainer}`}>
                 <div className={styles.containerBuscarBarbearias}>
                     <div className={styles.conteudoBuscarBarbearias}>
                         <div className={styles.linhaFiltroBuscarBarbearia}>
@@ -67,11 +113,15 @@ export function BuscaBarbearia() {
                         </div>
 
                         <div className={styles.CardsBarbeariaEncontrada}>
-                            <CardBarbeariaEncontrada />
-                            <CardBarbeariaEncontrada />
-                            <CardBarbeariaEncontrada />
-                            <CardBarbeariaEncontrada />
-                            <CardBarbeariaEncontrada />
+                            {barbearias.map((barbearia, index) => (
+                                <CardBarbeariaEncontrada
+                                    valor={barbearia.id}
+                                    key={index}
+                                    nomeBarbearia={barbearia.nomeNegocio}
+                                    endereco={`${barbearia.logradouro}, ${barbearia.numero}`}
+                                    foto={imgPerfil[index]}
+                                />
+                            ))}
                         </div>
                     </div>
                 </div>

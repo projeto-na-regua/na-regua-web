@@ -6,47 +6,72 @@ import * as yup from 'yup'
 import { ThemeProvider } from '@emotion/react'
 import { theme } from '../../theme.js'
 import { Button, Link } from '@mui/material'
-import image from '../../utils/assets/cuate.svg'
+import image from '../../utils/assets/Imagem Login.png'
 import logo from '../../utils/assets/logo-scale1.svg'
-import { toast } from "react-toastify";
-import { validarEmail } from '../../utils/globals.js'
+import { toast } from "react-toastify"
 
 function Login() {
   const navigate = useNavigate()
 
   const formik = useFormik({
     initialValues: { email: '', password: '' },
-
     onSubmit: async (values) => {
       try {
         const response = await api.post('/usuarios', {
           email: values.email,
           senha: values.password
-        });
+        })
 
-        const data = response.data;
+        const data = response.data
 
-        sessionStorage.setItem('user', JSON.stringify(data));
-
+        sessionStorage.setItem('user', JSON.stringify(data))
         toast.success("Login realizado com sucesso!", {
-          autoClose: 2000 // 2 segundos
-        });
+          autoClose: 2000
+        })
 
-        const user = JSON.parse(sessionStorage.getItem('user'));
+        const user = JSON.parse(sessionStorage.getItem('user'))
 
-       setTimeout(() => {
-        if(user){
-          if(data.tipo === "Barbeiro" && data.idBarbearia !== null){
-            navigate("/meus-cortes")
-          }else{
-            navigate("/meus-cortes")
+        const fetchUser = async () => {
+          try {
+            const response = await api.get('/usuarios/perfil', {
+              headers: {
+                Authorization: user
+              }
+            })
+
+            const data = response.data
+            sessionStorage.setItem('userInfo', JSON.stringify(data))
+
+          } catch (error) {
+            console.error(error)
           }
         }
-       }, 4000);
 
-        console.log(data);
+        const fetchBarbearia = async () => {
+          try {
+            const response = await api.get('/barbearias/perfil', {
+              headers: {
+                Authorization: user
+              }
+            })
+
+            const data = response.data
+            sessionStorage.setItem('barbearia', JSON.stringify(data))
+
+          } catch (error) {
+            console.error(error)
+          }
+        }
+
+        fetchUser()
+        fetchBarbearia()
+
+        setTimeout(() => {
+          if (user) {
+            navigate('/perfil/meus-agendamentos')
+          }
+        }, 4000)
       } catch (error) {
-
         if (error.response) {
           toast.error("Email ou senha inválidos!")
         }
@@ -69,7 +94,7 @@ function Login() {
         <Button variant='contained' onClick={() => navigate('/')} style={{ position: 'absolute', top: 16, left: 16, height: 40, width: 100 }}>Voltar</Button>
 
         <div style={{
-          width: '50vw',
+          width: '60vw',
           height: '100vh',
           display: 'flex',
           justifyContent: 'center',
@@ -136,8 +161,8 @@ function Login() {
           </div>
         </div>
 
-        <div style={{ width: '50vw', display: 'flex', justifyContent: 'center', backgroundColor: '#082031', height: '100vh' }}>
-          <img src={image} alt='barber' style={{ padding: 64 }} />
+        <div style={{ display: 'flex', justifyContent: 'flex-end', backgroundColor: '#F4F3EE', height: '100vh' }}>
+          <img src={image} alt='barber' />
         </div>
       </div>
     </ThemeProvider>
