@@ -13,3 +13,11 @@
 .horario{
     color: #082031;
 }
+
+.conteudoCardHorariosDisponiveis:hover{
+    background-color: #d8b684;
+}
+
+.selecionado {
+    background-color: #e3a74f;
+}
