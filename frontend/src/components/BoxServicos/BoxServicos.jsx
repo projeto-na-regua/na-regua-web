@@ -21,7 +21,7 @@ import api from "../../api";
 import { toast } from "react-toastify";
 import styles from "./BoxServicos.module.css";
 
-function BoxServicos({ services, onEdit, onDelete, onToggleServiceStatus, onUpdate }) {
+function BoxServicos({ services }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedService, setSelectedService] = useState(null);
   const [selectedServices, setSelectedServices] = useState([]);
@@ -36,6 +36,25 @@ function BoxServicos({ services, onEdit, onDelete, onToggleServiceStatus, onUpda
   const [carregandoFuncionarios, setCarregandoFuncionarios] = useState(true);
   const token = JSON.parse(sessionStorage.getItem('user'));
 
+  const pegarFuncionario = async () => {
+    try {
+      const response = await api.get('/funcionarios', {
+        headers: {
+          Authorization: token,
+        },
+      });
+  
+      // Mapeia a resposta para retornar apenas nome e email
+      return response.data.map((funcionario) => ({
+        nome: funcionario.nome,
+        email: funcionario.email,
+      }));
+    } catch (error) {
+      console.error('Erro ao buscar funcionários:', error);
+      return []; // Retorna um array vazio em caso de erro
+    }
+  };
+
   useEffect(() => {
     const fetchFuncionarios = async () => {
       try {
@@ -47,28 +66,22 @@ function BoxServicos({ services, onEdit, onDelete, onToggleServiceStatus, onUpda
         setCarregandoFuncionarios(false);
       }
     };
-
+  
     fetchFuncionarios();
   }, []);
 
-  const pegarFuncionario = async () => {
-    try {
-      const response = await api.get('/funcionarios', {
-        headers: {
-          Authorization: token,
-        },
-      });
-
-      return response.data.map((funcionario) => ({
-        nome: funcionario.nome,
-        email: funcionario.email,
-      }));
-    } catch (error) {
-      console.error('Erro ao buscar funcionários:', error);
-      toast.error('Erro ao buscar funcionários. Por favor, tente novamente.');
-      return [];
+  const formatarValor = (serviceValue) => {
+    if (typeof serviceValue !== 'number') {
+      return 'N/A'; // ou algum valor padrão
     }
+
+    return serviceValue.toLocaleString('pt-BR', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
   };
+
+  const durations = Array.from({ length: 11 }, (_, i) => 30 + i * 15);
 
   const handleOpen = () => {
     setOpen(true);
@@ -79,31 +92,50 @@ function BoxServicos({ services, onEdit, onDelete, onToggleServiceStatus, onUpda
     setAnchorEl(null);
   };
 
+  const handleDurationOpen = () => {
+    setDurationOpen(true);
+  };
+
+  const handleDurationClose = () => {
+    setDurationOpen(false);
+  };
+
+  const handleDurationSelect = (event) => {
+    setServiceDuration(event.target.value);
+    handleDurationClose();
+  };
+
+
   const atualizarDados = async () => {
     try {
       if (!selectedService) {
         return;
       }
-
+  
       const barbeirosEmails = responsaveis
         .map((nome) => funcionarios.find((funcionario) => funcionario.nome === nome)?.email)
-        .filter((email) => email);
-
-      const response = await api.put(`/servicos/${selectedService.id}`, {
+        .filter((email) => email); // Filtra emails válidos
+  
+      const servicoAtualizado = {
         preco: parseFloat(serviceValue || 0),
         descricao: serviceDescription || '',
         tipoServico: serviceName || '',
         tempoEstimado: parseInt(serviceDuration || 0),
         barbeirosEmails: barbeirosEmails,
-        status: true,
-      }, {
+        status: true, // Mantém o status como true
+      };
+  
+      // Log dos dados do serviço atualizado e emails dos barbeiros
+      console.log('Serviço Atualizado:', servicoAtualizado);
+      console.log('Barbeiros relacionados:', barbeirosEmails);
+  
+      const response = await api.put(`/servicos/${selectedService.id}`, servicoAtualizado, {
         headers: {
           Authorization: token,
         },
       });
-
+  
       if (response.status === 200) {
-        onUpdate(response.data);
         setServiceName('');
         setServiceDescription('');
         setServiceValue('');
@@ -119,11 +151,10 @@ function BoxServicos({ services, onEdit, onDelete, onToggleServiceStatus, onUpda
       console.error('Erro ao salvar serviço:', error);
       toast.error('Erro ao salvar serviço. Por favor, tente novamente.');
     }
+    handleClose();
   };
+  
 
-  const handleDurationOpen = () => {
-    setDurationOpen(true);
-  };
 
   const handleClick = (event, service) => {
     setAnchorEl(event.currentTarget);
@@ -188,10 +219,8 @@ function BoxServicos({ services, onEdit, onDelete, onToggleServiceStatus, onUpda
         },
       });
 
-      if (response.status === 200) {
-        toast.success(`Serviço ${newStatus ? 'habilitado' : 'desabilitado'} com sucesso!`, { autoClose: 1000 });
-        onToggleServiceStatus(selectedService.id, newStatus);
-      }
+      toast.success(`Serviço ${newStatus ? 'habilitado' : 'desabilitado'} com sucesso!`, { autoClose: 1000 });
+
     } catch (error) {
       console.error(`Erro ao ${newStatus ? 'habilitar' : 'desabilitar'} serviço:`, error);
       toast.error(`Erro ao ${newStatus ? 'habilitar' : 'desabilitar'} serviço. Por favor, tente novamente.`, { autoClose: 1000 });
@@ -231,7 +260,7 @@ function BoxServicos({ services, onEdit, onDelete, onToggleServiceStatus, onUpda
                 <div className={styles.divDuracao}>
                   {formatDuration(service.tempoEstimado)}
                 </div>
-                <div className={styles.divValorGrid}>{service.preco}</div>
+                <div className={styles.divValorGrid}>{"R$ " + formatarValor(service.preco)}</div>
               </div>
               <div className={styles.divVaziaGrid}>
                 <IconButton
@@ -287,6 +316,9 @@ function BoxServicos({ services, onEdit, onDelete, onToggleServiceStatus, onUpda
             value={serviceValue}
             onChange={(e) => setServiceValue(e.target.value)}
           />
+          <Button variant="outlined" onClick={handleDurationOpen}>
+            Selecionar Duração
+          </Button>
           <TextField
             margin="dense"
             label="Duração"
@@ -295,9 +327,6 @@ function BoxServicos({ services, onEdit, onDelete, onToggleServiceStatus, onUpda
             value={formatDuration(serviceDuration)}
             disabled
           />
-          <Button variant="outlined" onClick={handleDurationOpen}>
-            Selecionar Duração
-          </Button>
           <FormControl fullWidth margin="dense">
             <InputLabel>Responsáveis</InputLabel>
             <Select
@@ -322,6 +351,25 @@ function BoxServicos({ services, onEdit, onDelete, onToggleServiceStatus, onUpda
           <Button onClick={atualizarDados} color="primary">
             Salvar
           </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={durationOpen} onClose={handleDurationClose}>
+        <DialogTitle>Selecionar Duração</DialogTitle>
+        <DialogContent>
+          <Select
+            value={serviceDuration}
+            onChange={handleDurationSelect}
+            fullWidth
+          >
+            {durations.map((duration, index) => (
+              <MenuItem key={index} value={duration}>
+                {formatDuration(duration)}
+              </MenuItem>
+            ))}
+          </Select>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDurationClose}>Cancelar</Button>
         </DialogActions>
       </Dialog>
     </div>

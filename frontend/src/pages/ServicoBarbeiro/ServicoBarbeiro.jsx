@@ -22,7 +22,7 @@ import {
 } from '@mui/material';
 import BoxServicos from '../../components/BoxServicos/BoxServicos';
 
-const durations = Array.from({ length: 10 }, (_, i) => 30 + i * 15);
+const durations = Array.from({ length: 11 }, (_, i) => 30 + i * 15);
 
 const formatDuration = (minutes) => {
   const hours = Math.floor(minutes / 60);
@@ -64,7 +64,6 @@ export function ServicoBarbeiro() {
       }));
     } catch (error) {
       console.error('Erro ao buscar funcionários:', error);
-      toast.error('Erro ao buscar funcionários. Por favor, tente novamente.');
       return []; // Retorna um array vazio em caso de erro
     }
   };
@@ -82,7 +81,7 @@ export function ServicoBarbeiro() {
     };
 
     fetchFuncionarios();
-  }, []); // Não inclui nenhuma dependência, pois não precisamos recarregar
+  }, []);
 
   const mandarDados = async () => {
     try {
@@ -90,14 +89,20 @@ export function ServicoBarbeiro() {
         funcionarios.find((funcionario) => funcionario.nome === nome)?.email
       ).filter(email => email); // Filtra emails válidos
 
-      let response = await api.post('/servicos', {
+      const servico = {
         preco: parseFloat(serviceValue), // Converte para float
         descricao: serviceDescription,
         tipoServico: serviceName,
         tempoEstimado: parseInt(serviceDuration), // Converte para integer
         barbeirosEmails: barbeirosEmails, // Inclui a lista de emails dos barbeiros selecionados
         status: true, // Definindo o status como true por padrão ao cadastrar
-      }, {
+      };
+
+      // Log dos dados do serviço e emails dos barbeiros
+      console.log('Serviço:', servico);
+      console.log('Barbeiros relacionados:', barbeirosEmails);
+
+      let response = await api.post('/servicos', servico, {
         headers: {
           Authorization: token,
         },
@@ -144,7 +149,7 @@ export function ServicoBarbeiro() {
     };
 
     fetchServicosAtivos();
-  }, [token]);
+  }, [token, listaServicosAtivos]);
 
   useEffect(() => {
     const fetchServicosInativos = async () => {
@@ -166,7 +171,7 @@ export function ServicoBarbeiro() {
     };
 
     fetchServicosInativos();
-  }, [token]);
+  }, [token, listaServicosInativos]);
 
   const handleOpen = () => {
     setEditingService(null);
@@ -221,14 +226,14 @@ export function ServicoBarbeiro() {
           </div>
           <div className={styles.container}>
             {/* Passa apenas os serviços ativos para o BoxServicos */}
-            <BoxServicos 
-              services={listaServicosAtivos} 
-              funcionarios={funcionarios} 
+            <BoxServicos
+              services={listaServicosAtivos}
+              funcionarios={funcionarios}
             />
             <div className={styles.inativos}> SERVIÇOS INATIVOS</div>
-            <BoxServicos 
-              services={listaServicosInativos} 
-              funcionarios={funcionarios} 
+            <BoxServicos
+              services={listaServicosInativos}
+              funcionarios={funcionarios}
             />
           </div>
         </div>
