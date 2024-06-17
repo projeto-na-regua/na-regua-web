@@ -22,7 +22,7 @@ import {
 } from '@mui/material';
 import BoxServicos from '../../components/BoxServicos/BoxServicos';
 
-const durations = Array.from({ length: 10 }, (_, i) => 30 + i * 15);
+const durations = Array.from({ length: 11 }, (_, i) => 30 + i * 15);
 
 const formatDuration = (minutes) => {
   const hours = Math.floor(minutes / 60);
@@ -43,7 +43,8 @@ export function ServicoBarbeiro() {
   const [serviceValue, setServiceValue] = useState('');
   const [responsaveis, setResponsaveis] = useState([]);
   const [editingService, setEditingService] = useState(null);
-  const [listaServicos, setListaServicos] = useState([]);
+  const [listaServicosAtivos, setListaServicosAtivos] = useState([]);
+  const [listaServicosInativos, setListaServicosInativos] = useState([]);
   const [carregando, setCarregando] = useState(true);
   const [funcionarios, setFuncionarios] = useState([]);
   const [carregandoFuncionarios, setCarregandoFuncionarios] = useState(true);
@@ -63,7 +64,6 @@ export function ServicoBarbeiro() {
       }));
     } catch (error) {
       console.error('Erro ao buscar funcionários:', error);
-      toast.error('Erro ao buscar funcionários. Por favor, tente novamente.');
       return []; // Retorna um array vazio em caso de erro
     }
   };
@@ -81,49 +81,43 @@ export function ServicoBarbeiro() {
     };
 
     fetchFuncionarios();
-  }, []); // Não inclui nenhuma dependência, pois não precisamos recarregar
+  }, []);
 
   const mandarDados = async () => {
     try {
-      let response;
+      const barbeirosEmails = responsaveis.map((nome) =>
+        funcionarios.find((funcionario) => funcionario.nome === nome)?.email
+      ).filter(email => email); // Filtra emails válidos
 
-      // Cadastro de novo serviço
-      response = await api.post(
-        '/servicos',
-        {
-          preco: parseFloat(serviceValue), // Converte para float
-          descricao: serviceDescription,
-          tipoServico: serviceName,
-          tempoEstimado: parseInt(serviceDuration), // Converte para integer
-          status: true,
-          barbeiros: responsaveis.map((nome) => ({
-            nome,
-            email: funcionarios.find((funcionario) => funcionario.nome === nome)?.email,
-          })),
+      const servico = {
+        preco: parseFloat(serviceValue), // Converte para float
+        descricao: serviceDescription,
+        tipoServico: serviceName,
+        tempoEstimado: parseInt(serviceDuration), // Converte para integer
+        barbeirosEmails: barbeirosEmails, // Inclui a lista de emails dos barbeiros selecionados
+        status: true, // Definindo o status como true por padrão ao cadastrar
+      };
+
+      // Log dos dados do serviço e emails dos barbeiros
+      console.log('Serviço:', servico);
+      console.log('Barbeiros relacionados:', barbeirosEmails);
+
+      let response = await api.post('/servicos', servico, {
+        headers: {
+          Authorization: token,
         },
-        {
-          headers: {
-            Authorization: token,
-          },
-        }
-      );
+      });
 
-      // Verifica se a resposta da API foi bem-sucedida
       if (response.status === 201) {
-        // Adiciona o novo serviço na lista local
-        setListaServicos([...listaServicos, response.data]);
+        setListaServicosAtivos([...listaServicosAtivos, response.data]);
 
-        // Limpa os campos do formulário
         setServiceName('');
         setServiceDescription('');
         setServiceValue('');
         setServiceDuration('');
         setResponsaveis([]);
-
-        // Fecha o modal de cadastro
         handleClose();
 
-        // Exibe mensagem de sucesso
         toast.success('Serviço cadastrado com sucesso!', { autoClose: 2000 });
       } else {
         console.error('Erro ao cadastrar serviço:', response);
@@ -136,23 +130,48 @@ export function ServicoBarbeiro() {
   };
 
   useEffect(() => {
-    const fetchServicos = async () => {
+    const fetchServicosAtivos = async () => {
       try {
-        const response = await api.get('/servicos', {
+        const response = await api.get('/servicos/list-by-status/active', {
           headers: {
             Authorization: token,
           },
         });
-        setListaServicos(response.data);
+
+        // Definindo apenas os serviços ativos com status 1
+        setListaServicosAtivos(response.data);
       } catch (error) {
-        console.error('Erro ao buscar servicos:', error);
+        console.error('Erro ao buscar serviços ativos:', error);
+        toast.error('Erro ao buscar serviços ativos. Por favor, tente novamente.');
       } finally {
         setCarregando(false);
       }
     };
 
-    fetchServicos();
-  }, [token]);
+    fetchServicosAtivos();
+  }, [token, listaServicosAtivos]);
+
+  useEffect(() => {
+    const fetchServicosInativos = async () => {
+      try {
+        const response = await api.get('/servicos/list-by-status/deactive', {
+          headers: {
+            Authorization: token,
+          },
+        });
+
+        // Definindo apenas os serviços inativos com status 0
+        setListaServicosInativos(response.data);
+      } catch (error) {
+        console.error('Erro ao buscar serviços inativos:', error);
+        toast.error('Erro ao buscar serviços inativos. Por favor, tente novamente.');
+      } finally {
+        setCarregando(false);
+      }
+    };
+
+    fetchServicosInativos();
+  }, [token, listaServicosInativos]);
 
   const handleOpen = () => {
     setEditingService(null);
@@ -206,7 +225,16 @@ export function ServicoBarbeiro() {
             </Button>
           </div>
           <div className={styles.container}>
-            <BoxServicos services={listaServicos} funcionarios={funcionarios} />
+            {/* Passa apenas os serviços ativos para o BoxServicos */}
+            <BoxServicos
+              services={listaServicosAtivos}
+              funcionarios={funcionarios}
+            />
+            <div className={styles.inativos}> SERVIÇOS INATIVOS</div>
+            <BoxServicos
+              services={listaServicosInativos}
+              funcionarios={funcionarios}
+            />
           </div>
         </div>
       </div>
@@ -276,7 +304,11 @@ export function ServicoBarbeiro() {
       <Dialog open={durationOpen} onClose={handleDurationClose}>
         <DialogTitle>Selecionar Duração</DialogTitle>
         <DialogContent>
-          <Select value={serviceDuration} onChange={handleDurationSelect} fullWidth>
+          <Select
+            value={serviceDuration}
+            onChange={handleDurationSelect}
+            fullWidth
+          >
             {durations.map((duration, index) => (
               <MenuItem key={index} value={duration}>
                 {formatDuration(duration)}
@@ -293,3 +325,4 @@ export function ServicoBarbeiro() {
 }
 
 export default ServicoBarbeiro;
+
