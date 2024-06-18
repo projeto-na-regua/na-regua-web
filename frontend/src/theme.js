@@ -46,6 +46,21 @@ export const theme = createTheme({
             border: '1px solid #E3A74F',
             borderRadius: 10,
           }
+        },
+        {
+          props: { variant: 'containedBlue' },
+          style: {
+            backgroundColor: '#082031',
+            color: '#E3A74F',
+            borderRadius: 10,
+            fontFamily: 'Plus Jakarta Sans, sans-serif',
+            fontSize: 14,
+            fontWeight: 500,
+            '&:hover': {
+              backgroundColor: '#E3A74F',
+              color: '#082031',
+            },
+          }
         }
       ]
     },

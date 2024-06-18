@@ -9,14 +9,18 @@ export function HistoricoUsuario() {
 
     return (
         <ThemeProvider theme={theme}>
+          
             <div className="Header">
 
                 <HeaderUsuario />
 
-                <NavbarCliente />
+                <div className="fullHeightBg">
 
-                <BoxBarbeariaHistorico />
+                    <NavbarCliente />
 
+                    <BoxBarbeariaHistorico style={{marginTop: 20}}/>
+        
+                </div>
             </div>
 
         </ThemeProvider >
