@@ -123,9 +123,10 @@ export function Funcionarios() {
                   display: 'flex',
                   width: '100%',
                   alignItems: 'center',
-                  justifyContent: listaFuncionarios.length > 0 ? 'flex-start' : 'center',
+                  justifyContent: 'center',
                   marginLeft: 64,
-                  gap: 32
+                  gap: 32,
+                  flexWrap: 'wrap'
                 }}>
                   {carregando ? (
                     <CircularProgress style={{
