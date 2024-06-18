@@ -18,13 +18,16 @@
 .nomeCliente, .servicoEscolhido, .horario, .statusReserva, .nomeBarbeiro{
     width: 20%;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     font-weight: 600;
+    color: #E3A74F;
 }
 
-.nomeCliente, .nomeBarbeiro{
-    color: #E3A74F;
+.linhaDataHorario{
+    display: flex;
+    gap: 5px;
 }
 
 .statusReserva{

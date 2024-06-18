@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './CardDashboardStatus.module.css'
 
-export function CardDashboardStatus({iconStyle, spanValue}) {
+export function CardDashboardStatus({iconStyle, spanValue, valor}) {
     return (
         <>
             <div className={styles.cardTodo}>
@@ -18,7 +18,7 @@ export function CardDashboardStatus({iconStyle, spanValue}) {
                         </div>
 
                         <div className={styles.qtdStatus}>
-                            <span>5</span>
+                            <span>{valor}</span>
                         </div>
                     </div>
 

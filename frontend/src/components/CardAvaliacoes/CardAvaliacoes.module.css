@@ -7,6 +7,11 @@
     padding: 3% 10%;
 }
 
+.dataAvaliacao{
+    font-weight: 600;
+    color: #082031;
+}
+
 .nomeCliente{
     font-size: 18px;
     color: #E3A74F;
@@ -18,5 +23,6 @@
     border-radius: 100%;
     padding: 3%;
     font-weight: 600;
+    color: #082031;
 }
 

@@ -2,12 +2,12 @@ import { Chart, registerables } from 'chart.js';
 
 Chart.register(...registerables); // Register all necessary components
 
-export const createGraficoTotalClientes = (ctx) => {
+export const createGraficoTotalClientes = (ctx, dados, label) => {
     const data = {
-        labels: ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'],
+        labels: label,
         datasets: [{
             label: "Fluxo de caixa",
-            data: [320, 400, 230, 700, 500, 650, 320, 400, 230, 700, 500, 650],
+            data: dados,
             borderColor: '#E3A74F',
             pointBackgroundColor: '#E3A74F',
             pointRadius: 1,
@@ -23,7 +23,7 @@ export const createGraficoTotalClientes = (ctx) => {
             maintainAspectRatio: false,
             scales: {
                 y: {
-                    max: 1000,
+                    max: 10,
                     min: 0,
                     grid: {
                         display: true,

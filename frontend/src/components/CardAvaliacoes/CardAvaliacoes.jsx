@@ -1,16 +1,23 @@
 import React from 'react'
 import styles from './CardAvaliacoes.module.css'
 
-export function CardAvalicoes() {
+const CardAvalicoes = ({
+    nome, data, nota
+}) => {
     return (
         <>
             <div className={styles.cardTodo}>
+
+                <div className={styles.dataAvaliacao}>
+                    <span>{data}</span>
+                </div>
+
                 <div className={styles.nomeCliente}>
-                    <span>Lucas Faria</span>
+                    <span>{nome}</span>
                 </div>
 
                 <div className={styles.notaAvaliacao}>
-                    <div className={styles.circulo}>4,5</div>
+                    <div className={styles.circulo}>{nota}</div>
                 </div>
             </div>
 
