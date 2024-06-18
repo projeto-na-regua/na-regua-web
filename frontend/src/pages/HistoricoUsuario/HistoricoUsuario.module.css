@@ -1,0 +1,5 @@
+.fullHeightBg{
+    background-color: #F4F3EE;
+    min-height: 100vh;
+    overflow-y: scroll;
+}
