@@ -59,7 +59,7 @@ export function ModalVisualizacaoAvaliacao({ open, handleClose, avaliacao, comen
         </Box>
 
         <Typography variant="body1" sx={{ textAlign: 'center', marginTop: 2 }}>
-          Comentário: "{comentario}"
+          {comentario ? `Comentário: "${comentario}"` : ''}
         </Typography>
       </Box>
     </Modal>

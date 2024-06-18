@@ -5,7 +5,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { toast } from 'react-toastify';
 
 export function ModalAvaliacao({ open, handleClose, onSave }) {
-  const [value, setValue] = useState(2);
+  const [value, setValue] = useState(0);
   const [comentario, setComentario] = useState('');
 
   const handleComentarioChange = (event) => {

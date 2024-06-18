@@ -7,6 +7,7 @@ import { ThemeProvider } from '@mui/material'
 import { theme } from '../../theme'
 import { ModalAvaliacao } from '../../components/ModalAvaliacao/ModalAvaliacao';
 import { ModalVisualizacaoAvaliacao } from '../../components/ModalAvaliacao/ModalVisualizacaoAvaliacao';
+import imagemPerfilDefault from '../../utils/assets/imagem-perfil.svg'
 import { toast } from "react-toastify";
 
 function BoxBarbeariaHistorico() {
@@ -29,6 +30,7 @@ function BoxBarbeariaHistorico() {
         } else {
           const agendamentosFormatados = response.data.map(agendamento => ({
             id: agendamento ? agendamento.id : null,
+            imgBarbearia: agendamento ? agendamento.imgPerfilBarbearia : imagemPerfilDefault,
             nomeBarbearia: agendamento ? agendamento.nomeNegocio : 'Nome não disponível',
             dataAgendamento: agendamento ? format(new Date(agendamento.dataHora), 'dd/MM/yyyy') : "00/00/0000",
             endereco: agendamento ? `${agendamento.enderecoBarbearia.logradouro}, ${agendamento.enderecoBarbearia.numero} - ${agendamento.enderecoBarbearia.estado}` : 'Endereço não disponível',
@@ -71,46 +73,56 @@ function BoxBarbeariaHistorico() {
     setSelectedAgendamento(null);
   };
 
-  const handleSaveRating = async (idAgendamento, rating, comentario) => {
-    try {
-
-      const data = {
-        avaliacao: rating,
-        comentario: comentario,
-      };
-
-      console.log("Avaliação: " + data)
-
-      const response = await api.post(
-        `/agendamentos/avaliar/${idAgendamento}`, 
-        data,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: token
-          }
-        }
-      );
-
-      if (response.status !== 200) {
-        throw new Error('Erro ao enviar avaliação');
-      }
-
-      setAgendamentos(prevAgendamentos => 
-        prevAgendamentos.map(agendamento => 
-          agendamento.id === idAgendamento 
-            ? { ...agendamento, avaliacao: rating, comentario: comentario, avaliado: true }
-            : agendamento
-        )
-      );
-      toast.success("Avaliação enviada com sucesso!");
-      handleCloseModalAvaliacao();
-    } catch (error) {
-      console.error('Erro ao enviar avaliação:', error);
-      toast.error('Erro ao enviar avaliação. Tente novamente mais tarde.');
-    }
+  const formatRating = (rating) => {
+    return parseFloat(rating.toFixed(2));
   };
 
+  const handleSaveRating = async (idAgendamento, rating, comentario) => {
+    try {
+        const data = {
+            resultadoAvaliacao: formatRating(rating),
+            comentario: comentario,
+        };
+
+        // Imprimindo o objeto data como string JSON para depuração
+        console.log("Dados enviados: " + JSON.stringify(data));
+        console.log(data);
+
+        const response = await api.post(
+            `/agendamentos/avaliar/${idAgendamento}`, 
+            data,
+            {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: token
+                }
+            }
+        );
+
+        console.log("Resposta da API: ", response);
+
+        if (response.status !== 200) {
+            throw new Error('Erro ao enviar avaliação');
+        }
+
+        setAgendamentos(prevAgendamentos => 
+            prevAgendamentos.map(agendamento => 
+                agendamento.id === idAgendamento 
+                    ? { ...agendamento, avaliacao: formatRating(rating), comentario: comentario, avaliado: true }
+                    : agendamento
+            )
+        );
+        toast.success("Avaliação enviada com sucesso!");
+        handleCloseModalAvaliacao();
+        console.log(agendamentos)
+    } catch (error) {
+        console.error('Erro ao enviar avaliação:', error);
+        if (error.response) {
+            console.error('Resposta do erro: ', error.response);
+        }
+        toast.error('Erro ao enviar avaliação. Tente novamente mais tarde.');
+    }
+};
   return (
     <ThemeProvider theme={theme}>
       <div className={styles.divTodo}>
@@ -120,8 +132,8 @@ function BoxBarbeariaHistorico() {
               <div className={styles.card} key={index}>
                 <div className={styles.divBarbearia}>
                   <div className={styles.dataAgendamento}>{agendamento.dataAgendamento}</div>
-                  <div className={styles.imagem}></div>
-                  <div className={styles.titulo}>{agendamento.nomeBarbearia}</div>
+                  <div className={styles.imagem}><img src={agendamento.imgBarbearia} alt="foto de perfil barbearia" /></div>
+                  <div className={styles.titulo}> {agendamento.nomeBarbearia}</div>
                 </div>
                 <div className={styles.informacoes}>
                   <div className={styles.containerInformacoes}>
