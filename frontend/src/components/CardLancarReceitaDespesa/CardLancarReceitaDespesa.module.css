@@ -1,0 +1,110 @@
+.cardTodo {
+    background-color: #f4f3ee;
+    border-radius: 15px;
+    width: 500px;
+}
+
+.containerCard {
+    padding: 5%;
+}
+
+.conteudoCard {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.iconeTitulo {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    align-items: center;
+}
+
+.iconeFechar {
+    position: absolute;
+    padding-left: 5%;
+    left: 0;
+    cursor: pointer;
+}
+
+.tituloCard {
+    color: #082031;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.input {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    color: #082031;
+    font-size: 12px;
+    gap: 5px;
+    font-weight: 500;
+}
+
+.input input {
+    border: solid 1px #082031;
+    border-radius: 10px;
+    padding: 2.5% 0;
+    padding-left: 2.5%;
+    font-size: 12px;
+    background-color: #f4f3ee;
+    color: #082031;
+    font-weight: 600;
+}
+
+.input input::placeholder {
+    color: #082031;
+    font-weight: 500;
+}
+
+.selecao {
+    display: flex;
+    color: #082031;
+    gap: 10px;
+}
+
+.lucro,
+.despesa {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffe2b8;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 2.5% 8%;
+    cursor: pointer;
+}
+
+.lucro.selecionado {
+    background-color: #e3a74f; /* Cor de fundo quando selecionado */
+}
+
+.despesa.selecionado {
+    background-color: #e3a74f; /* Cor de fundo quando selecionado */
+}
+
+.botao {
+    width: 100%;
+}
+
+.botao button {
+    width: 100%;
+    padding: 4% 0;
+    color: #082031;
+    background-color: #e3a74f;
+    border-radius: 7.5px;
+    border: 0px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    cursor: pointer;
+}
+
+
+.botao button:hover{
+    background-color: #082031;
+    color: #e3a74f;
+}

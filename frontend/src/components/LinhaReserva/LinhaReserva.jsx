@@ -1,7 +1,9 @@
 import React from 'react'
 import styles from './LinhaReserva.module.css'
 
-export function LinhaReserva() {
+const LinhaReserva = ({
+    nomeCliente, nomeServico, data, hora, nomeFuncionario
+}) => {
     return (
         <>
             <div className={styles.linhaReserva}>
@@ -9,25 +11,48 @@ export function LinhaReserva() {
                     <div className={styles.conteudoLinhaReserva}>
 
                         <div className={styles.nomeCliente}>
-                            <span>Gabriella R.</span>
+                            <span style={{
+                                color: "#082031"
+                            }}>Cliente</span>
+                            <span>{nomeCliente}</span>
                         </div>
 
                         <div className={styles.servicoEscolhido}>
-                            <span>Corte + Escova</span>
+                            <span style={{
+                                color: "#082031"
+                            }}>Serviço</span>
+                            <span>{nomeServico}</span>
                         </div>
 
                         <div className={styles.horario}>
-                            <span>09:00 - 10:00</span>
+                            <div className={styles.linhaDataHorario}>
+                                <span style={{
+                                color: "#082031"
+                            }}>Data:</span>
+                                <span>{data}</span>
+                            </div>
+
+                            <div className={styles.linhaDataHorario}>
+                                <span style={{
+                                color: "#082031"
+                            }}>Hora:</span>
+                                <span>{hora}</span>
+                            </div>
                         </div>
 
                         <div className={styles.statusReserva}>
-                                <div className={styles.spanStatusReserva}>
-                                    <span>Confirmado</span>
+                            <div className={styles.spanStatusReserva}>
+                                <span style={{
+                                color: "#082031"
+                            }}>Confirmado</span>
                             </div>
                         </div>
 
                         <div className={styles.nomeBarbeiro}>
-                            <span>Lucas F.</span>
+                            <span style={{
+                                color: "#082031"
+                            }}>Barbeiro</span>
+                            <span>{nomeFuncionario}</span>
                         </div>
 
                     </div>

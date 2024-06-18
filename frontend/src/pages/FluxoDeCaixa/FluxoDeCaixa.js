@@ -1,12 +1,12 @@
 import { Chart, registerables } from 'chart.js';
 
 Chart.register(...registerables);
-export const createGraficoFluxoDeCaixa = (ctx) => {
+export const createGraficoFluxoDeCaixa = (ctx, dados, labels, maiorValor) => {
     const data = {
-        labels: ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'],
+        labels: labels,
         datasets: [{
             label: "Fluxo de caixa",
-            data: [320, 400, 230, 700, 500, 650, 320, 400, 230, 700, 500, 650],
+            data: dados,
             borderColor: '#E3A74F',
             pointBackgroundColor: '#E3A74F',
             pointRadius: 1,
@@ -22,7 +22,7 @@ export const createGraficoFluxoDeCaixa = (ctx) => {
             maintainAspectRatio: false,
             scales: {
                 y: {
-                    max: 1000,
+                    max: maiorValor + 100,
                     min: 0,
                     grid: {
                         display: true,
@@ -73,11 +73,12 @@ export const createGraficoFluxoDeCaixa = (ctx) => {
     return new Chart(ctx, config);
 };
 
-export const createGraficoLucratividade = (ctx) => {
+export const createGraficoLucratividade = (ctx, lucratividade) => {
+
     const data = {
         labels: ['Categoria A', 'Categoria B', 'Categoria C', 'Categoria D'],
         datasets: [{
-            data: [300, 200],
+            data: [lucratividade, 100 - lucratividade],
             backgroundColor: ['#E3A74F', '#082031'], 
             borderColor: '#FFFFFF', 
             borderWidth: 1 
