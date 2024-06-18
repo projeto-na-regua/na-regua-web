@@ -1,87 +1,218 @@
 import React, { useEffect, useState } from 'react'
 import HeaderUsuario from '../../../components/HeaderUsuario/HeaderUsuario'
 import NavbarBarbeiro from '../../../components/NavbarBarbeiro/NavbarBarbeiro'
-import { Typography } from '@mui/material'
+import { ThemeProvider, Typography } from '@mui/material'
 import { CardHorario } from '../../../components/CardHorario/CardHorario'
 import api from '../../../api'
+import { VisualizarAtendimento } from '../../../components/VisualizarAtendimento/VisualizarAtendimento'
+import { theme } from '../../../theme'
 
 function AgendamentoBarbearia() {
   const token = JSON.parse(sessionStorage.getItem('user'))
-  const [compromissos, setCompromissos] = useState([])
-  const [status, setStatus] = useState('Agendado')
+  const [modal, setModal] = useState(false)
+  const [open, setOpen] = useState(false)
+  const [compromissosPendentes, setCompromissosPendentes] = useState([])
+  const [compromissosAgendados, setCompromissosAgendados] = useState([])
+
+  const handleModal = (compromisso) => {
+    setModal(compromisso)
+    console.log(compromisso)
+  }
+
 
   useEffect(() => {
     const fetchAgendamentos = async () => {
       try {
-        const response = await api.get(`/agendamentos/list-all-by-status/${status}`, {
+        const responsePendentes = await api.get(`/agendamentos/list-all-by-status/Pendente`, {
           headers: {
             Authorization: token
           }
         })
 
-        setCompromissos(response.data)
+        const responseAgendados = await api.get(`/agendamentos/list-all-by-status/Agendado`, {
+          headers: {
+            Authorization: token
+          }
+        })
+
+        setCompromissosPendentes(responsePendentes.data)
+        setCompromissosAgendados(responseAgendados.data)
       } catch (error) {
         console.error('Erro ao buscar agendamentos:', error)
       }
     }
 
     fetchAgendamentos()
-  }, [token, status])
+  }, [token, compromissosAgendados, compromissosPendentes])
+
+
+  const confirmarAgendamento = async (id, statusAtt) => {
+    try {
+      const response = await api.put(`/agendamentos/${id}/${statusAtt}`, null, {
+        headers: {
+          Authorization: token
+        }
+      })
+
+      console.log(response.data)
+    } catch (error) {
+      console.error('Erro ao confirmar agendamento:', error)
+    }
+  }
+
+  const enviarValorDoServico = async (valor) => {
+    try {
+      await api.post(`/financas/lancar-valor`,
+        { valor }
+        , {
+        headers: {
+          Authorization: token
+        }
+      })
+
+      console.log('Valor do serviço enviado com sucesso!', valor)
+    } catch (error) {
+      console.error('Erro ao enviar valor do serviço:', error)
+    }
+  }
+
+
 
   const formatarDataHora = (dataHora) => {
-    const data = new Date(dataHora);
-    const dia = data.getDate();
-    const mes = data.getMonth() + 1;
-    const ano = data.getFullYear();
-    const hora = data.getHours();
-    const minutos = data.getMinutes();
-    return `${dia}/${mes}/${ano} às ${hora}:${minutos < 10 ? '0' + minutos : minutos}`;
-  };
+    const data = new Date(dataHora)
+    const dia = data.getDate()
+    const mes = data.getMonth() + 1
+    const ano = data.getFullYear()
+    const hora = data.getHours()
+    const minutos = data.getMinutes()
+    return `${dia}/${mes}/${ano} às ${hora}:${minutos < 10 ? '0' + minutos : minutos}`
+  }
 
   return (
-    <div>
-      <HeaderUsuario />
+    <ThemeProvider theme={theme}>
+      <div>
+        <HeaderUsuario />
 
-      <NavbarBarbeiro />
-
-      <div style={{
-        display: 'flex',
-        flexDirection: 'column',
-        padding: '20px 40px 20px 40px',
-        gap: 24
-      }}>
-        <Typography variant="h6">
-          Sua agenda de hoje
-        </Typography>
+        <NavbarBarbeiro />
 
         <div style={{
-          height: 200,
-          backgroundColor: '#082031',
-          borderRadius: 24,
           display: 'flex',
+          flexDirection: 'row',
+          height: '80vh',
+          width: '100%',
+          marginTop: 32,
+          justifyContent: 'space-between',
           gap: 32,
-          alignItems: 'center',
-          padding: 16,
-          overflowX: 'auto',
-          overflowY: 'hidden'
         }}>
-          {compromissos.length === 0 ? (
-            <Typography variant="body1" style={{ color: 'white' }}>
-              Nenhum compromisso agendado para hoje
-            </Typography>
-          )
-            : compromissos.map((compromisso, index) => (
-              <CardHorario
-                key={index}
-                nomeCliente={compromisso.nomeCliente}
-                horario={formatarDataHora(compromisso.dataHora)}
-                duracao={compromisso.tempoEstimado}
-                servico={compromisso.tipoServico}
+          <div style={{
+            padding: 32,
+          }}>
+            <div style={{
+            }}>
+              <Typography variant='h5' style={{ marginLeft: 32, marginBottom: 32, fontWeight: 'bold' }}>
+                Pendentes
+              </Typography>
+
+              <div style={{
+                display: 'flex',
+                flexDirection: 'row',
+                gap: 32,
+                maxWidth: 850,
+                overflowX: 'scroll'
+              }}>
+                {compromissosPendentes.length === 0 ? (
+                  <Typography variant='h6' style={{ marginLeft: 32 }}>
+                    Nenhum agendamento pendente
+                  </Typography>
+                ) : (
+                  compromissosPendentes.map((compromisso, index) => (
+                    <CardHorario
+                      key={index}
+                      nomeCliente={compromisso.nomeCliente}
+                      horario={formatarDataHora(compromisso.dataHora)}
+                      duracao={compromisso.tempoEstimado}
+                      servico={compromisso.tipoServico}
+                      onClick={() => {
+                        handleModal(compromisso)
+                        setOpen(true)
+                      }}
+                    />
+                  ))
+                )}
+              </div>
+            </div>
+
+            <div style={{
+              marginTop: 32,
+            }}>
+              <Typography variant='h5' style={{ marginLeft: 32, marginBottom: 32, fontWeight: 'bold' }}>
+                Agendados
+              </Typography>
+
+              <div style={{
+                display: 'flex',
+                flexDirection: 'row',
+                gap: 32,
+                maxWidth: 850,
+                overflowX: 'scroll'
+              }}>
+                {compromissosAgendados.length === 0 ? (
+                  <Typography variant='h6' style={{ marginLeft: 32 }}>
+                    Nenhum agendamento
+                  </Typography>
+                ) : (
+                  compromissosAgendados.map((compromisso, index) => (
+                    <CardHorario
+                      key={index}
+                      nomeCliente={compromisso.nomeCliente}
+                      horario={formatarDataHora(compromisso.dataHora)}
+                      duracao={compromisso.tempoEstimado}
+                      servico={compromisso.tipoServico}
+                      onClick={() => {
+                        handleModal(compromisso)
+                        setOpen(true)
+                      }}
+                    />
+                  ))
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div style={{
+            padding: 32,
+          }}>
+            {open && (
+              <VisualizarAtendimento
+                nomeCliente={modal.nomeCliente}
+                data={formatarDataHora(modal.dataHora)}
+                horario={modal.horario}
+                servico={modal.tipoServico}
+                status={modal.status}
+                onClickConfirm={() => {
+                  if (modal.status === 'Pendente') {
+                    confirmarAgendamento(modal.id, 'Agendado')
+                  }
+
+                  if (modal.status === 'Agendado') {
+                    confirmarAgendamento(modal.id, 'Concluido')
+                    enviarValorDoServico(modal.valorServico)
+                    console.log(modal.valorServico)
+                  }
+
+                  setOpen(false)
+                }}
+                onClickCancel={() => {
+                  confirmarAgendamento(modal.id, 'cancelado')
+                  setOpen(false)
+                }}
+                titleButton={modal.status === 'Pendente' ? 'Confirmar' : 'Concluir'}
               />
-            ))}
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </ThemeProvider>
   )
 }
 
