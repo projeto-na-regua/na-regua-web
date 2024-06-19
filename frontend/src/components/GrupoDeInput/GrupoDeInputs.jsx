@@ -1,6 +1,6 @@
-import React from 'react';
-import { Button, TextField, createTheme, ThemeProvider } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react'
+import { Button, TextField, createTheme, ThemeProvider } from '@mui/material'
+import { useNavigate } from 'react-router-dom'
 
 const theme = createTheme({
   components: {
@@ -36,10 +36,19 @@ const theme = createTheme({
       },
     },
   },
-});
+})
 
 function GrupoDeInputs() {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
+  const [servico, setServico] = useState('')
+  const [localizacao, setLocalizacao] = useState('')
+  const [data, setData] = useState('')
+  const [horario, setHorario] = useState('')
+
+  const handleButtonClick = () => {
+    const url = `/busca-barbearias?servico=${encodeURIComponent(servico)}&localizacao=${encodeURIComponent(localizacao)}&data=${encodeURIComponent(data)}&horario=${encodeURIComponent(horario)}`
+    navigate(url)
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -52,23 +61,29 @@ function GrupoDeInputs() {
         <TextField
           label="Serviço"
           variant="outlined"
+          value={servico}
+          onChange={(e) => setServico(e.target.value)}
         />
         <TextField
           label="Localização"
           variant="outlined"
+          value={localizacao}
+          onChange={(e) => setLocalizacao(e.target.value)}
         />
         <TextField
           label="Data"
           variant="outlined"
+          value={data}
+          onChange={(e) => setData(e.target.value)}
         />
         <TextField
           label="Horário"
           variant="outlined"
+          value={horario}
+          onChange={(e) => setHorario(e.target.value)}
         />
         <Button
-          onClick={() => {
-            navigate('/busca-barbearias');
-          }}
+          onClick={handleButtonClick}
           variant="contained"
           style={{
             borderRadius: 12,
@@ -82,7 +97,7 @@ function GrupoDeInputs() {
         </Button>
       </div>
     </ThemeProvider>
-  );
+  )
 }
 
-export default GrupoDeInputs;
+export default GrupoDeInputs
