@@ -24,7 +24,6 @@ const CardBarbeariaEncontrada = ({
                 <div className={styles.informacoesBarbearia}>
                     <div className={styles.nomeDistancia}>
                         <span>{nomeBarbearia}</span>
-                        <span>1,4 km</span>
                     </div>
 
                     <div className={styles.endereco}>
