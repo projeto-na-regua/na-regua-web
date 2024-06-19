@@ -13,8 +13,8 @@ function CardLancarValores({ setMostrarModal, setScrollHabilitado }) {
                 <div className={styles.divIcon}>
                     <div className={styles.icone} onClick={handleIconClick}>
                         <svg
-                            width="40"
-                            height="40"
+                            width="30"
+                            height="30"
                             viewBox="0 0 25 25"
                             fill="none"
                             xmlns="http://www.w3.org/2000/svg"

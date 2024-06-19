@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styles from './CardLancarReceitaDespesa.module.css';
 import api from '../../api.js';
+import { toast } from 'react-toastify';
 const token = JSON.parse(sessionStorage.getItem('user'));
 
 export function CardLancarReceitaDespesa({ onClose }) {
@@ -32,6 +33,8 @@ export function CardLancarReceitaDespesa({ onClose }) {
                 }
             });
             console.log(response.data);
+            toast.success('Valores lançados!');
+            onClose(); // Fechar o modal após lançar os valores
         } catch (error) {
             console.error('Erro ao lançar valores:', error);
         }
