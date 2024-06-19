@@ -61,6 +61,23 @@ export const theme = createTheme({
               color: '#082031',
             },
           }
+        },
+        {
+          props: { variant: 'outlinedBlue' },
+          style: {
+            backgroundColor: '#F4F3EE',
+            border: '1px solid #082031',
+            color: '#082031',
+            borderRadius: 10,
+            fontWeight: 500,
+            fontFamily: 'Plus Jakarta Sans, sans-serif',
+            fontSize: 14,
+            cursor: 'pointer',
+            '&:hover': {
+              backgroundColor: '#082031',
+              color: '#E3A74F',
+            },
+          }
         }
       ]
     },

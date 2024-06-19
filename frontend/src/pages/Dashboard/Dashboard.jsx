@@ -14,6 +14,45 @@ import { format, parseISO } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import Chart from 'chart.js/auto';
 
+class Pilha {
+    constructor() {
+        this.items = [];
+    }
+
+    push(element) {
+        this.items.push(element);
+    }
+
+    pop() {
+        if (this.isEmpty()) {
+            return "A pilha está vazia";
+        }
+        return this.items.pop();
+    }
+
+    peek() {
+        if (this.isEmpty()) {
+            return "A pilha está vazia";
+        }
+        return this.items[this.items.length - 1];
+    }
+
+    isEmpty() {
+        return this.items.length === 0;
+    }
+
+    size() {
+        return this.items.length;
+    }
+
+    clear() {
+        this.items = [];
+    }
+
+    getItems() {
+        return this.items;
+    }
+}
 
 export function Dashboard() {
     const graficoTotalClientesRef = useRef(null);
@@ -26,7 +65,7 @@ export function Dashboard() {
     const [qtdDiasGrafico, setQtdDiasGrafico] = useState(7);
     const [labelsGrafico, setLabelsGrafico] = useState([]);
     const [dadosGrafico, setDadosGrafico] = useState([]);
-    const [avaliacoes, setAvaliacoes] = useState([])
+    const [avaliacoesPilha, setAvaliacoesPilha] = useState(new Pilha());
     const [maiorValor, setMaiorValor] = useState();
 
     const token = JSON.parse(sessionStorage.getItem('user'));
@@ -34,13 +73,12 @@ export function Dashboard() {
     useEffect(() => {
         fetchAgendamentosAgendados();
         fetchAvaliacoes();
-    }, []); // Run effect only once after the initial render
+    }, []);
 
     useEffect(() => {
         if (labelsGrafico.length && dadosGrafico.length) {
             const ctxTotalClientes = graficoTotalClientesRef.current.getContext('2d');
 
-            // Destroy previous chart instances if they exist
             if (totalClientesChartRef.current) {
                 totalClientesChartRef.current.destroy();
             }
@@ -52,7 +90,7 @@ export function Dashboard() {
 
     useEffect(() => {
         fetchAgendamentosDashboard();
-    }, [qtdDiasGrafico]); // Fetch dashboard data whenever qtdDiasGrafico changes
+    }, [qtdDiasGrafico]); 
 
     const fetchAgendamentosAgendados = async () => {
         try {
@@ -131,8 +169,11 @@ export function Dashboard() {
                     Authorization: token,
                 }
             });
-            setAvaliacoes(response.data)
-            console.log(response.data)
+
+            // Utilizando as avaliações como pilha
+            const avaliacoesData = response.data;
+            avaliacoesData.forEach(avaliacao => avaliacoesPilha.push(avaliacao));
+            console.log(avaliacoesPilha.getItems());
         } catch (error) {
             console.error('Erro ao buscar as avaliações:', error);
         }
@@ -219,7 +260,7 @@ export function Dashboard() {
                                         <span>Últimas avaliações</span>
                                     </div>
                                     <div className={styles.linhasAvaliacoes}>
-                                        {Array.isArray(avaliacoes) && avaliacoes.map((avaliacao, index) => (
+                                        {avaliacoesPilha.getItems().map((avaliacao, index) => (
                                             <CardAvalicoes
                                                 key={index}
                                                 nome={avaliacao.nomeCliente}
@@ -234,7 +275,6 @@ export function Dashboard() {
                     </div>
                 </div>
             </div>
-
         </ThemeProvider>
     );
 }
