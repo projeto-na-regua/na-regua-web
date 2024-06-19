@@ -90,7 +90,9 @@ function AgendamentoBarbearia() {
 
   return (
     <ThemeProvider theme={theme}>
-      <div>
+      <div style={{
+        backgroundColor: '#F4F3EE',
+      }}>
         <HeaderUsuario />
 
         <NavbarBarbeiro />
@@ -102,7 +104,7 @@ function AgendamentoBarbearia() {
           width: '100%',
           marginTop: 32,
           justifyContent: 'space-between',
-          gap: 32,
+          gap: 32
         }}>
           <div style={{
             padding: 32,

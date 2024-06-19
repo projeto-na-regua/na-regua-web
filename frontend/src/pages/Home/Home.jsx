@@ -1,7 +1,7 @@
 import { ThemeProvider } from '@emotion/react'
 import { theme } from '../../theme.js'
 import Header from '../../components/Header/Header.jsx'
-import { Button, Typography } from '@mui/material'
+import { Button, ImageList, ImageListItem, ImageListItemBar, Typography } from '@mui/material'
 import logo from '../../utils/assets/logo-scale0.svg'
 import GrupoDeInputs from '../../components/GrupoDeInput/GrupoDeInputs.jsx'
 import mockup from '../../utils/assets/mockup.png'
@@ -11,13 +11,25 @@ import MenuLateralUsuario from '../../components/MenuLateralUsuario/MenuLateralU
 import imageHome from '../../utils/assets/imagem-barbeiro-home.jpg'
 import { Footer } from '../../components/Footer/Footer.jsx'
 import { Logo } from '../../components/Logo/Logo.jsx'
+import api from '../../api.js'
 
 function Home() {
   const navigate = useNavigate()
-
+  const userInfo = sessionStorage.getItem('userInfo')
   const [isAuth, setIsAuth] = useState(false)
   const token = JSON.parse(sessionStorage.getItem('user'))
   const [open, setOpen] = useState(false)
+  const [barbearias, setBarbearias] = useState([])
+
+  const top3Barbearias = async () => {
+    try {
+      const response = await api.get('/barbearias/top-3-barbarias-avaliacoes')
+      console.log(response.data)
+      setBarbearias(response.data)
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
   useEffect(() => {
     if (!token) {
@@ -26,6 +38,10 @@ function Home() {
       setIsAuth(true)
     }
   }, [token])
+
+  useEffect(() => {
+    top3Barbearias()
+  }, [])
 
   return (
     <ThemeProvider theme={theme}>
@@ -55,9 +71,9 @@ function Home() {
               }}
               >
                 <svg width="30" height="30" viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M5 21C5 17.134 8.13401 14 12 14C15.866 14 19 17.134 19 21M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="#000000" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  <path d="M5 21C5 17.134 8.13401 14 12 14C15.866 14 19 17.134 19 21M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="#ffffff" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
-                Usuário
+                {userInfo ? JSON.parse(userInfo).nome : 'Usuário'}
                 <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none">
                   <path fill="#ffffff" fill-rule="evenodd" d="M19 4a1 1 0 01-1 1H2a1 1 0 010-2h16a1 1 0 011 1zm0 6a1 1 0 01-1 1H2a1 1 0 110-2h16a1 1 0 011 1zm-1 7a1 1 0 100-2H2a1 1 0 100 2h16z" />
                 </svg>
@@ -107,32 +123,46 @@ function Home() {
         marginTop: 64
       }}>
         <div style={{
-          background: 'linear-gradient(114deg, rgba(227,167,79,1) 8%, rgba(8,32,49,1) 70%)',
           width: '100%',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
-          alignItems: 'flex-end',
-          gap: 16,
-          padding: '64px 0 64px 0',
+          alignItems: 'flex-start',
+          gap: 16
         }}>
-          <Typography variant='h1' style={{ color: '#ffffff', textAlign: 'center', marginRight: 80 }}>
+          <Typography variant='h1' style={{ color: '#082031', textAlign: 'center', marginRight: 80, marginLeft: 32 }}>
             Melhores avaliações
           </Typography>
 
-          <Typography variant='h6' style={{ color: '#ffffff', textAlign: 'center', marginRight: 80 }}>
+          <Typography variant='h6' style={{ color: '#082031', textAlign: 'center', marginRight: 80, marginLeft: 32 }}>
             Veja as barbearias mais bem avaliadas do <span style={{ color: '#E3A74F' }}>cenário</span>!
           </Typography>
         </div>
 
-        <div style={{
+        <ImageList sx={{
+          height: '100%',
+          width: '100%',
           display: 'flex',
-          height: '60vh',
-          width: '30%',
-          justifyContent: 'space-between'
+          justifyContent: 'center',
+          alignItems: 'center',
         }}>
-
-        </div>
+          {barbearias.map((item) => (
+            <ImageListItem key={item.imgPerfilBarbearia}>
+              <img
+                src={item.imgPerfilBarbearia}
+                alt='barbearia'
+                style={{ width: 300, height: 300, objectFit: 'cover', borderRadius: 24 }}
+              />
+              <ImageListItemBar
+                title={item.nomeBarbearia}
+                position="below"
+                style={{
+                  textAlign: 'center',
+                }}
+              />
+            </ImageListItem>
+          ))}
+        </ImageList>
       </div>
 
       <div style={{
@@ -141,7 +171,8 @@ function Home() {
         display: 'flex',
         justifyContent: 'space-around',
         alignItems: 'center',
-        marginBottom: 128
+        marginBottom: 200,
+        marginTop: 200
       }}>
         <div style={{
           display: 'flex',

@@ -2,7 +2,7 @@ import { Chart, registerables } from 'chart.js';
 
 Chart.register(...registerables); // Register all necessary components
 
-export const createGraficoTotalClientes = (ctx, dados, label) => {
+export const createGraficoTotalClientes = (ctx, dados, label, maiorValor) => {
     const data = {
         labels: label,
         datasets: [{
@@ -23,7 +23,7 @@ export const createGraficoTotalClientes = (ctx, dados, label) => {
             maintainAspectRatio: false,
             scales: {
                 y: {
-                    max: 10,
+                    max: maiorValor + 5,
                     min: 0,
                     grid: {
                         display: true,

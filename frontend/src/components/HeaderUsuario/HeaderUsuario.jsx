@@ -15,6 +15,7 @@ function HeaderUsuario() {
     const token = JSON.parse(sessionStorage.getItem('user'))
     const userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
     const barbeariaInfo = JSON.parse(sessionStorage.getItem('barbearia'))
+    const [usuario, setUsuario] = useState()
 
 
     useEffect(() => {
@@ -29,7 +30,7 @@ function HeaderUsuario() {
                 console.error('Erro ao validar o funcionário', error)
             }
         }
-
+        fetchPerfil()
         validarTipoUsuario()
     }, [barbeariaInfo])
 
@@ -39,6 +40,21 @@ function HeaderUsuario() {
 
     const cadastroBarbearia = () => {
         navigate('/cadastro-barbearia')
+    }
+
+    const fetchPerfil = async () => {
+        try {
+            console.log('Fetching perfil')
+            const response = await api.get(`usuarios/perfil`, {
+                headers: {
+                    Authorization: token
+                }
+            })
+            console.log(response.data)
+            setUsuario(response.data)
+        } catch (error) {
+            console.log('Erro ao buscar o perfil: ' + error)
+        }
     }
 
     const [values, setValues] = useState({
@@ -64,6 +80,8 @@ function HeaderUsuario() {
             cep: '',
             imgPerfil: ''
         })
+
+        setIsModalOpen(false)
     }
 
     const handleChange = (prop) => (event) => {
@@ -139,24 +157,43 @@ function HeaderUsuario() {
                                         placeholder='Digite Aqui'
                                         value={values.nome}
                                         onChange={handleChange('nome')}
+                                        fullWidth
                                     />
                                     <TextField
                                         label='Email'
                                         placeholder='Digite Aqui'
                                         value={values.email}
                                         onChange={handleChange('email')}
+                                        fullWidth
                                     />
                                     <TextField
                                         label='Celular'
                                         placeholder='Digite Aqui'
                                         value={values.celular}
                                         onChange={handleChange('celular')}
+                                        fullWidth
                                     />
                                 </div>
                             </div>
                             <div className={styles.divButtonDescartarESalvar}>
-                                <button className={styles.buttonDescartarInfos} onClick={resetValues}>Descartar Informações</button>
-                                <button className={styles.buttonSalvarInfos} onClick={enviarAtualizacaoUsuario}>Salvar Informações</button>
+                                <Button
+                                    variant='outlined'
+                                    onClick={resetValues}
+                                    style={{
+                                        height: '100%'
+                                    }}
+                                    fullWidth
+                                >
+                                    Descartar informações
+                                </Button>
+
+                                <Button
+                                    variant='contained'
+                                    onClick={resetValues}
+                                    fullWidth
+                                >
+                                    Salvar informações
+                                </Button>
                             </div>
                         </div>
                     </>

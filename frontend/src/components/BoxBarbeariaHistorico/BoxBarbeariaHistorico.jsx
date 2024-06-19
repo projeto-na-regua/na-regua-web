@@ -16,6 +16,7 @@ function BoxBarbeariaHistorico() {
   const [openModalAvaliacao, setOpenModalAvaliacao] = useState(false);
   const [openModalVisualizacao, setOpenModalVisualizacao] = useState(false);
   const [selectedAgendamento, setSelectedAgendamento] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchAgendamentos = async () => {
@@ -89,7 +90,7 @@ function BoxBarbeariaHistorico() {
         console.log(data);
 
         const response = await api.post(
-            `/agendamentos/avaliar/${idAgendamento}`, 
+            `/agendamentos/avaliar/${idAgendamento}`,
             data,
             {
                 headers: {
@@ -105,9 +106,9 @@ function BoxBarbeariaHistorico() {
             throw new Error('Erro ao enviar avaliação');
         }
 
-        setAgendamentos(prevAgendamentos => 
-            prevAgendamentos.map(agendamento => 
-                agendamento.id === idAgendamento 
+        setAgendamentos(prevAgendamentos =>
+            prevAgendamentos.map(agendamento =>
+                agendamento.id === idAgendamento
                     ? { ...agendamento, avaliacao: formatRating(rating), comentario: comentario, avaliado: true }
                     : agendamento
             )
@@ -143,13 +144,13 @@ function BoxBarbeariaHistorico() {
                     <div className={styles.dados}>Valor: {agendamento.valor}</div>
                     <div className={styles.dados}>Barbeiro: {agendamento.barbeiro}</div>
                     <div className={styles.botao}>
-                      <Button 
-                        style={{ width: '100%', height: '50px' }} 
+                      <Button
+                        style={{ width: '100%', height: '50px' }}
                         variant={agendamento.avaliado ? 'containedBlue' : 'contained'}
                         onClick={() => handleOpenModal(agendamento)}
                       >
                         {agendamento.avaliado ? 'Avaliação enviada' : 'Enviar avaliação'}
-                      </Button> 
+                      </Button>
                     </div>
                   </div>
                 </div>
@@ -159,13 +160,13 @@ function BoxBarbeariaHistorico() {
         </div>
         {selectedAgendamento && (
           <>
-            <ModalAvaliacao 
-              open={openModalAvaliacao} 
+            <ModalAvaliacao
+              open={openModalAvaliacao}
               handleClose={handleCloseModalAvaliacao}
               onSave={(rating, comentario) => handleSaveRating(selectedAgendamento.id, rating, comentario)}
             />
-            <ModalVisualizacaoAvaliacao 
-              open={openModalVisualizacao} 
+            <ModalVisualizacaoAvaliacao
+              open={openModalVisualizacao}
               handleClose={handleCloseModalVisualizacao}
               avaliacao={selectedAgendamento.avaliacao}
               comentario={selectedAgendamento.comentario}

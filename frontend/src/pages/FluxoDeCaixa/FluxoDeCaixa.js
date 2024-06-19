@@ -9,7 +9,7 @@ export const createGraficoFluxoDeCaixa = (ctx, dados, labels, maiorValor) => {
             data: dados,
             borderColor: '#E3A74F',
             pointBackgroundColor: '#E3A74F',
-            pointRadius: 1,
+            pointRadius: 3,
             borderWidth: 1,
             lineTension: .4
         }]
@@ -74,14 +74,13 @@ export const createGraficoFluxoDeCaixa = (ctx, dados, labels, maiorValor) => {
 };
 
 export const createGraficoLucratividade = (ctx, lucratividade) => {
-
     const data = {
-        labels: ['Categoria A', 'Categoria B', 'Categoria C', 'Categoria D'],
+        labels: [lucratividade > 0 ? 'Lucro' : '', lucratividade > 0 ? '' : 'Prejuízo'],
         datasets: [{
-            data: [lucratividade, 100 - lucratividade],
-            backgroundColor: ['#E3A74F', '#082031'], 
-            borderColor: '#FFFFFF', 
-            borderWidth: 1 
+            data: [lucratividade > 0 ? lucratividade : 0, lucratividade > 0 ? 100 - lucratividade : lucratividade],
+            backgroundColor: [lucratividade > 0 ? '#E3A74F' : '#082031', lucratividade > 0 ? '#082031' : 'red'],
+            borderColor: '#FFFFFF',
+            borderWidth: 1
         }]
     };
 
@@ -93,6 +92,20 @@ export const createGraficoLucratividade = (ctx, lucratividade) => {
             plugins: {
                 legend: {
                     display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            let label = context.label || '';
+                            let value = Math.abs(context.raw).toFixed(1);
+                            if (context.dataset.data[1] === 0) {
+                                value = lucratividade > 0 ? `${value}% de lucro` : `${value}% de prejuízo`;
+                            } else {
+                                value = `${value}%`;
+                            }
+                            return `${label}: ${value}`;
+                        }
+                    }
                 }
             }
         }
@@ -100,6 +113,7 @@ export const createGraficoLucratividade = (ctx, lucratividade) => {
 
     return new Chart(ctx, config);
 };
+
 
 const chartConfig = { createGraficoFluxoDeCaixa, createGraficoLucratividade };
 

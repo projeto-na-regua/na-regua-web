@@ -15,7 +15,6 @@ import MenuLateralUsuario from '../../components/MenuLateralUsuario/MenuLateralU
 import { Button } from '@mui/material';
 import imgBarbeariaPadrao from '../../utils/assets/imagem-login.png'
 import bannerBarbeariaPadrao from '../../utils/assets/bannerBarbearia.jpg';
-import mapaBarbearia from '../../utils/assets/mapaBarbearia.png';
 import api from "../../api.js";
 import Mapa from "../../components/Mapa/mapa.jsx";
 
@@ -39,6 +38,11 @@ export function VisualizarBarbearia() {
     const [imgPerfil, setImgPerfil] = useState();
     const [imgBanner, setImgBanner] = useState();
     const [imgPerfilFuncionarios, setImgPerfilFuncionarios] = useState([])
+    const [avaliacoes, setAvaliacoes] = useState([]);
+    const [avaliacoesCarregadas, setAvaliacoesCarregadas] = useState(false); // Novo estado
+    const [mediaAvaliacao, setMediaAvaliacao] = useState();
+    const valoresAvaliacoes = [];
+    const avaliacoesFiltradas = [];
 
     useEffect(() => {
         if (!token) {
@@ -69,6 +73,43 @@ export function VisualizarBarbearia() {
             console.log('Erro ao buscar a imagem de perfil: ' + error);
         }
     };
+
+    const fetchAvaliacoes = async () => {
+        try {
+            console.log('Fetching avaliacoes (cliente)');
+            const response = await api.get(`agendamentos/cliente-side/ultimas-avaliacoes`, {
+                headers: {
+                    Authorization: token
+                },
+                params: {
+                    qtd: 1000,
+                    idBarbearia: valor
+                }
+            });
+            var j = 0;
+            for(var i = 0; i < response.data.length; i++){
+                if(!(response.data[i].resultadoAvaliacao == null)){
+                    valoresAvaliacoes[j] = response.data[i].resultadoAvaliacao
+                    avaliacoesFiltradas[j] = response.data[i]
+                    j++;
+                }
+            }
+            setMediaAvaliacao(mediaAvaliacaoBarbearia(valoresAvaliacoes))
+            setAvaliacoes(avaliacoesFiltradas);
+            setAvaliacoesCarregadas(true); // Marca as avaliações como carregadas
+            console.log(response.data);
+        } catch (error) {
+            console.log('Erro as avaliações da barbearia: ' + error);
+        }
+    };
+
+    function mediaAvaliacaoBarbearia(vetor){
+        var soma = 0;
+        for(var i = 0; i < vetor.length; i++){
+            soma += vetor[i]
+        }
+        return soma / vetor.length;
+    }
 
     const fetchImagePerfilFuncionarios = async () => {
         try {
@@ -106,7 +147,7 @@ export function VisualizarBarbearia() {
 
     const fetchMapaGoogle = async (endereco) => {
         try {
-            const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${endereco}&key=AIzaSyAxvzxTNJOHpy1zXGqjfcq2pAncM4EwNfU`);
+            const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${endereco}&key=AIzaSyB_bpX4vjXwCdDSo5xd0E4tqIWOJexOJYQ`);
             const data = await response.json();
 
             // Verifica se a resposta retornou um status OK
@@ -178,20 +219,13 @@ export function VisualizarBarbearia() {
     };
 
     useEffect(() => {
-        if (!token) {
-            setIsAuth(false);
-        } else {
-            setIsAuth(true);
-        }
-    }, [token]);
-
-    useEffect(() => {
         fetchPerfilBarbearia();
         fetchServicosBarbearia();
         fetchFuncionariosBarbearia();
         fetchImagePerfil();
         fetchImageBanner();
         fetchImagePerfilFuncionarios();
+        fetchAvaliacoes();
     }, []);
 
     useEffect(() => {
@@ -240,12 +274,13 @@ export function VisualizarBarbearia() {
             <div className={styles.visualizarBarbearia}>
                 <div className={styles.containerVisualizarBarbearia}>
                     <div className={styles.conteudoVisualizarBarbearia}>
-                        {barbearia && (
+                        {barbearia && avaliacoesCarregadas ? (
                             <>
                                 <div className={styles.nomeAvaliacaoBarbearia}>
                                     <NomeAvaliacaoBarbearia
                                         nome={barbearia.nomeNegocio}
-                                        horario={barbearia.diaSemanas} />
+                                        horario={barbearia.diaSemanas} 
+                                        avaliacao={mediaAvaliacao}/>
                                 </div>
 
                                 <div className={styles.bannerFotoPerfilBarbearia}>
@@ -328,8 +363,8 @@ export function VisualizarBarbearia() {
                                             <span>Nossa equipe</span>
                                         </div>
                                         <div className={styles.fotosEquipe}>
-                                            {Array.isArray(funcionarios) && funcionarios.map((funcionarios, index) => (
-                                                <FotoPerfilEquipe nome={funcionarios.nome} foto={imgPerfilFuncionarios[index] == 'https://upload0naregua.blob.core.windows.net/upload/' ? 'https://i.pinimg.com/736x/b1/aa/73/b1aa73786a14bf19fb208dfbf90488e5.jpg' : imgPerfilFuncionarios[index]} />
+                                            {Array.isArray(funcionarios) && funcionarios.map((funcionario, index) => (
+                                                <FotoPerfilEquipe key={index} nome={funcionario.nome} foto={imgPerfilFuncionarios[index] === 'https://upload0naregua.blob.core.windows.net/upload/' ? 'https://i.pinimg.com/736x/b1/aa/73/b1aa73786a14bf19fb208dfbf90488e5.jpg' : imgPerfilFuncionarios[index]} />
                                             ))}
                                         </div>
                                     </div>
@@ -339,12 +374,21 @@ export function VisualizarBarbearia() {
                                             <span>Avaliações</span>
                                         </div>
                                         <div className={styles.cardAvaliacoes}>
-                                            <CardAvaliacoesVisualizarBarbearia />
-                                            <CardAvaliacoesVisualizarBarbearia />
+                                        {Array.isArray(avaliacoes) && avaliacoes.map((avaliacao, index) => (
+                                                <CardAvaliacoesVisualizarBarbearia
+                                                key={index}
+                                                nomeCliente={avaliacao.nomeCliente}
+                                                dataAvaliacao={avaliacao.data}
+                                                comentario={avaliacao.comentario}
+                                                estrelas={avaliacao.resultadoAvaliacao}
+                                            />
+                                            ))}
                                         </div>
                                     </div>
                                 </div>
                             </>
+                        ) : (
+                            <div>Carregando...</div>
                         )}
                     </div>
                 </div>

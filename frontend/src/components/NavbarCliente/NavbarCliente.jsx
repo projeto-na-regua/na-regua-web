@@ -39,12 +39,6 @@ function NavbarCliente() {
           <span>Meus agendamentos</span>
         </div>
         <div
-          className={`${styles.opcoesTelas} ${activeButton === 2 ? styles.active : ''}`}
-          onClick={() => handleNavigation(2, '/perfil/meus-cortes')}
-        >
-          <span>Meus cortes</span>
-        </div>
-        <div
           className={`${styles.opcoesTelas} ${activeButton === 3 ? styles.active : ''}`}
           onClick={() => handleNavigation(3, '/perfil/historico')}
         >

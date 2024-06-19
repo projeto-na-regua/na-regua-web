@@ -40,7 +40,6 @@ function Rotas() {
           <Route path="/confirmacao-barbearia" element={<ConfirmacaoBarbearia />} />
 
           <Route path="/perfil/meus-agendamentos" element={<Perfil />}/>
-          <Route path="/perfil/meus-cortes" element={<MeusCortes />}/>
           <Route path="/perfil/historico" element={<Historico />} />
 
           <Route path="/agenda" element={<AgendamentosBarbearia />}/>

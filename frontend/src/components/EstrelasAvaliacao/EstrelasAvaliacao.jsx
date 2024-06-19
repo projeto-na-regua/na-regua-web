@@ -11,7 +11,7 @@ export default function EstrelasAvaliacao({ value }) {
 
   return (
     <Stack spacing={1}>
-      <Rating name="half-rating-read" value={rating} precision={0.5} onChange={handleChange} readOnly />
+      <Rating name="half-rating-read" value={value} precision={0.5} readOnly />
     </Stack>
   );
 }

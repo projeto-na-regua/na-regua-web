@@ -17,26 +17,25 @@ export function CardLancarReceitaDespesa({ onClose }) {
     };
 
     const handleLancarValores = () => {
-        fetchLancarValores();
+        fetchLancarValores(valor);
     };
 
     const fetchLancarValores = async (valor) => {
-    try {
-        console.log('Lançando valores:', valor);
-        const response = await api.post(`financas/lancar-valor`, {
-            valor: valor,
-            despesa: despesa
-        }, {
-            headers: {
-                Authorization: token
-            }
-        });
-        console.log(response.data);
-    } catch (error) {
-        console.error('Erro ao lançar valores:', error);
-    }
-};
-
+        try {
+            console.log('Lançando valores:', valor);
+            const response = await api.post('financas/lancar-valor', {
+                valor: valor.replace('R$ ', ''), // Removendo o prefixo 'R$' antes de enviar
+                despesa: despesa
+            }, {
+                headers: {
+                    Authorization: token
+                }
+            });
+            console.log(response.data);
+        } catch (error) {
+            console.error('Erro ao lançar valores:', error);
+        }
+    };
 
     const handleValorChange = (event) => {
         // Remove qualquer caractere não numérico, exceto o ponto decimal
@@ -80,7 +79,7 @@ export function CardLancarReceitaDespesa({ onClose }) {
                     <div className={styles.selecao}>
                         {/* Aplica a classe 'selecionado' à div que estiver selecionada */}
                         <div className={`${styles.lucro} ${selecionado === 'lucro' ? styles.selecionado : ''}`} onClick={() => { handleSelecao('lucro'); setDespesa(false); }}>
-                            <span>Lucro</span>
+                            <span>Receita</span>
                         </div>
 
                         <div className={`${styles.despesa} ${selecionado === 'despesa' ? styles.selecionado : ''}`} onClick={() => { handleSelecao('despesa'); setDespesa(true); }}>
