@@ -34,6 +34,8 @@ function BoxServicos({ services }) {
   const [durationOpen, setDurationOpen] = useState(false);
   const [funcionarios, setFuncionarios] = useState([]);
   const [carregandoFuncionarios, setCarregandoFuncionarios] = useState(true);
+  const [enableStack, setEnableStack] = useState([]);
+  const [disableStack, setDisableStack] = useState([]);
   const token = JSON.parse(sessionStorage.getItem('user'));
 
   const pegarFuncionario = async () => {
@@ -105,6 +107,57 @@ function BoxServicos({ services }) {
     handleDurationClose();
   };
 
+  const handleEnableSelected = async () => {
+    try {
+      const enablePromises = selectedServices.map(async (service) => {
+        const response = await api.put(`/servicos/update-status/${service.id}`, {
+          status: true,
+        }, {
+          headers: {
+            Authorization: token,
+          },
+        });
+        return response;
+      });
+
+      const enableResponses = await Promise.all(enablePromises);
+      const enabledIds = enableResponses.map((response) => response.data.id);
+      setEnableStack(enabledIds);
+
+      toast.success('Serviços habilitados com sucesso!', { autoClose: 2000 });
+    } catch (error) {
+      console.error('Erro ao habilitar serviços:', error);
+      toast.error('Erro ao habilitar serviços. Por favor, tente novamente.', { autoClose: 2000 });
+    } finally {
+      handleClose();
+    }
+  };
+
+  const handleDisableSelected = async () => {
+    try {
+      const disablePromises = selectedServices.map(async (service) => {
+        const response = await api.put(`/servicos/update-status/${service.id}`, {
+          status: false,
+        }, {
+          headers: {
+            Authorization: token,
+          },
+        });
+        return response;
+      });
+
+      const disableResponses = await Promise.all(disablePromises);
+      const disabledIds = disableResponses.map((response) => response.data.id);
+      setDisableStack(disabledIds);
+
+      toast.success('Serviços desabilitados com sucesso!', { autoClose: 2000 });
+    } catch (error) {
+      console.error('Erro ao desabilitar serviços:', error);
+      toast.error('Erro ao desabilitar serviços. Por favor, tente novamente.', { autoClose: 2000 });
+    } finally {
+      handleClose();
+    }
+  };
 
   const atualizarDados = async () => {
     try {
@@ -150,11 +203,10 @@ function BoxServicos({ services }) {
     } catch (error) {
       console.error('Erro ao salvar serviço:', error);
       toast.error('Erro ao salvar serviço. Por favor, tente novamente.');
+    } finally {
+      handleClose();
     }
-    handleClose();
   };
-  
-
 
   const handleClick = (event, service) => {
     setAnchorEl(event.currentTarget);
@@ -208,10 +260,9 @@ function BoxServicos({ services }) {
     return `${mins} m`;
   };
 
-  const handleToggleServiceStatus = async () => {
-    const newStatus = !selectedService.status;
+  const handleToggleServiceStatus = async (serviceId, newStatus) => {
     try {
-      const response = await api.put(`/servicos/update-status/${selectedService.id}`, {
+      const response = await api.put(`/servicos/update-status/${serviceId}`, {
         status: newStatus,
       }, {
         headers: {
@@ -278,8 +329,14 @@ function BoxServicos({ services }) {
                   onClose={handleClose}
                 >
                   <MenuItemMUI onClick={handleEdit}>Editar</MenuItemMUI>
-                  <MenuItemMUI onClick={handleToggleServiceStatus}>
+                  <MenuItemMUI onClick={() => handleToggleServiceStatus(service.id, !service.status)}>
                     {service.status ? 'Desabilitar' : 'Habilitar'}
+                  </MenuItemMUI>
+                  <MenuItemMUI onClick={handleEnableSelected}>
+                    Habilitar Selecionados
+                  </MenuItemMUI>
+                  <MenuItemMUI onClick={handleDisableSelected}>
+                    Desabilitar Selecionados
                   </MenuItemMUI>
                 </Menu>
               </div>
