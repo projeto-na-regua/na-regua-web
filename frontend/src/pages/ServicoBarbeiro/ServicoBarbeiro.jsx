@@ -149,7 +149,7 @@ export function ServicoBarbeiro() {
     };
 
     fetchServicosAtivos();
-  }, [token, listaServicosAtivos]);
+  }, [token]);
 
   useEffect(() => {
     const fetchServicosInativos = async () => {
@@ -171,7 +171,7 @@ export function ServicoBarbeiro() {
     };
 
     fetchServicosInativos();
-  }, [token, listaServicosInativos]);
+  }, [token]);
 
   const handleOpen = () => {
     setEditingService(null);
