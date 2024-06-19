@@ -73,12 +73,14 @@ function GrupoDeInputs() {
         <TextField
           label="Data"
           variant="outlined"
+          type='date'
           value={data}
           onChange={(e) => setData(e.target.value)}
         />
         <TextField
           label="Horário"
           variant="outlined"
+          type='time'
           value={horario}
           onChange={(e) => setHorario(e.target.value)}
         />

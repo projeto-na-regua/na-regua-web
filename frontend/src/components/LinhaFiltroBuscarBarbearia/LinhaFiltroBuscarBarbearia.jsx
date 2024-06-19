@@ -1,28 +1,38 @@
-import React from "react";
+import React, { useState, useEffect } from "react"
+import { useLocation } from "react-router-dom"
 import styles from "./LinhaFiltroBuscarBarbearia.module.css"
+import { TextField, ThemeProvider } from '@mui/material'
+import { theme } from '../../theme'
 
 export function LinhaFiltroBuscarBarbearia() {
+    const [localizacao, setLocalizacao] = useState('')
+    const location = useLocation()
+
+    useEffect(() => {
+        const params = new URLSearchParams(location.search)
+        const localizacaoParam = params.get('localizacao')
+        if (localizacaoParam) {
+            setLocalizacao(localizacaoParam)
+        }
+    }, [location.search])
+
     return (
-        <>
+        <ThemeProvider theme={theme}>
             <div className={styles.conteudoLinhaFiltroBuscarBarbearia}>
-
-                <div className={styles.label}>
-                    <span>Barbearias próximas de</span>
-                </div>
-
                 <div className={styles.inputs}>
-                    <div className={styles.inputEsquerda}>
-                        <input type="text" placeholder="Local"/>
-                    </div>
-
-                    <div className={styles.inputDireita}>
-                        <input type="text" placeholder="Filtros"/>
-                    </div>
+                    <TextField
+                        label="Barbearias próximas de:"
+                        variant="outlined"
+                        value={localizacao}
+                        onChange={(e) => setLocalizacao(e.target.value)}
+                        style={{
+                            width: '25%'
+                        }}
+                    />
                 </div>
-
-
             </div>
-        </>
+        </ThemeProvider>
     )
 }
-export default LinhaFiltroBuscarBarbearia;
+
+export default LinhaFiltroBuscarBarbearia
