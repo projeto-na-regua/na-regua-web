@@ -15,8 +15,8 @@ function HeaderUsuario() {
     const token = JSON.parse(sessionStorage.getItem('user'))
     const userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
     const barbeariaInfo = JSON.parse(sessionStorage.getItem('barbearia'))
+    const endereco = JSON.parse(sessionStorage.getItem('endereco')) || {}
     const [usuario, setUsuario] = useState()
-
 
     useEffect(() => {
         const validarTipoUsuario = async () => {
@@ -235,7 +235,7 @@ function HeaderUsuario() {
                             </div>
                         </div>
                         <div className={styles.divEndereco}>
-                            {!userInfo.logradouro && !userInfo.numero && (
+                            {(!endereco.logradouro && !endereco.numero) ? (
                                 <>
                                     <div className={styles.divTextEndereco}>Endereço</div>
                                     <div className={styles.divConteudoEndereco}>
@@ -244,13 +244,12 @@ function HeaderUsuario() {
                                         </div>
                                     </div>
                                 </>
-                            )}
-                            {userInfo.logradouro && userInfo.numero && (
+                            ) : (
                                 <>
                                     <div className={styles.divTextEndereco}>Endereço</div>
                                     <div className={styles.divConteudoEndereco}>
                                         <div className={styles.divConteudoEnderecoTexto}>
-                                            {userInfo.logradouro}, {userInfo.numero}
+                                            {endereco.logradouro}, {endereco.numero}
                                         </div>
                                     </div>
                                 </>
