@@ -89,11 +89,54 @@ body {
     width: 55%;
 }
 
-.formularioInformacoesAdicionais{
-    display: grid;
-    gap: 20px;
+.ContainerInformacoesAdicionais {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 35px;
+}
+
+.ContainerDiasHorarios {
     width: 20%;
 }
+
+.labelHorario {
+    display: block;
+    text-align: center; 
+    margin: 10px;
+    font-weight: bold;
+    position: relative;
+    background-color: white;
+    width: 21%;
+    top: 18px;
+    left: 45px;
+}
+  
+.bordaInformacoesAdicionais {
+    border: 1px solid #082031;
+    padding: 16px;
+    border-radius: 30px;
+    height: 500px;
+    width: 97%;
+    display: flex;
+}
+
+.ContainerCardsDiasFuncionamento {
+    margin-left: -4px; 
+    margin-right: -4px;
+  }
+
+.ContainerDiasHorarios {
+    display: flex;
+    flex-direction: column;
+}
+
+.botaoFecharDia,
+.botaoDefinirHorario {
+    height: 50px;
+    width: 200;
+}
+  
 
 .botoesFormulario{
     display: flex;
