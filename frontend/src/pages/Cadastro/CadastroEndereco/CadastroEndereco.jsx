@@ -1,13 +1,14 @@
-import { Button, TextField, ThemeProvider, Typography } from '@mui/material'
-import { Formik, useFormik } from 'formik'
-import * as yup from 'yup'
-import { theme } from '../../../theme.js'
-import { useNavigate } from 'react-router-dom'
-import { toast } from "react-toastify"
+import { Button, TextField, ThemeProvider, Typography } from '@mui/material';
+import { Formik, useFormik } from 'formik';
+import * as yup from 'yup';
+import { theme } from '../../../theme.js';
+import { useNavigate } from 'react-router-dom';
+import { toast } from "react-toastify";
+import axios from 'axios';
 
 function CadastroEndereco() {
-  const navigate = useNavigate()
-  const nomeUsuario = JSON.parse(sessionStorage.getItem('userInfo')).nome
+  const navigate = useNavigate();
+  const nomeUsuario = JSON.parse(sessionStorage.getItem('userInfo')).nome;
 
   const formik = useFormik({
     initialValues: {
@@ -20,12 +21,11 @@ function CadastroEndereco() {
     },
     onSubmit: async (values) => {
       try {
-        sessionStorage.setItem('endereco', JSON.stringify(values))
-
-        navigate('/confirmacao')
+        sessionStorage.setItem('endereco', JSON.stringify(values));
+        navigate('/confirmacao');
       } catch (error) {
         if (error.response) {
-          toast.error("Erro ao cadastrar endereço!")
+          toast.error("Erro ao cadastrar endereço!");
         }
       }
     },
@@ -48,7 +48,37 @@ function CadastroEndereco() {
       complemento: yup
         .string()
     }),
-  })
+  });
+
+  const fetchCep = async (cep) => {
+    try {
+      const response = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
+      const data = response.data;
+
+      if (!data.erro) {
+        formik.setValues({
+          ...formik.values,
+          logradouro: data.logradouro,
+          cidade: data.localidade,
+          estado: data.uf,
+          complemento: data.complemento,
+          bairro: data.bairro
+        });
+      } else {
+        toast.error("CEP não encontrado!");
+      }
+    } catch (error) {
+      console.error('Erro ao buscar CEP:', error);
+      toast.error("Erro ao buscar CEP!");
+    }
+  };
+
+  const handleCepBlur = (event) => {
+    const cep = event.target.value.replace(/\D/g, '');
+    if (cep.length === 8) {
+      fetchCep(cep);
+    }
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -82,91 +112,99 @@ function CadastroEndereco() {
             onSubmit={formik.handleSubmit}
             validationSchema={formik.validationSchema}
           >
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-              <TextField
-                type="text"
-                name="cep"
-                value={formik.values.cep}
-                label="CEP"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={formik.touched.cep && Boolean(formik.errors.cep)}
-                helperText={formik.touched.cep ? formik.errors.cep : ''}
-              />
+            {() => (
+              <form onSubmit={formik.handleSubmit}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                  <TextField
+                    type="text"
+                    name="cep"
+                    value={formik.values.cep}
+                    label="CEP"
+                    onChange={formik.handleChange}
+                    onBlur={(e) => {
+                      formik.handleBlur(e);
+                      handleCepBlur(e);
+                    }}
+                    error={formik.touched.cep && Boolean(formik.errors.cep)}
+                    helperText={formik.touched.cep ? formik.errors.cep : ''}
+                  />
 
-              <TextField
-                type="text"
-                name="logradouro"
-                value={formik.values.logradouro}
-                label="Logradouro"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={formik.touched.logradouro && Boolean(formik.errors.logradouro)}
-                helperText={formik.touched.logradouro ? formik.errors.logradouro : ''}
-              />
+                  <TextField
+                    type="text"
+                    name="logradouro"
+                    value={formik.values.logradouro}
+                    label="Logradouro"
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={formik.touched.logradouro && Boolean(formik.errors.logradouro)}
+                    helperText={formik.touched.logradouro ? formik.errors.logradouro : ''}
+                  />
 
-              <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
-                <TextField
-                  type="text"
-                  name="cidade"
-                  value={formik.values.cidade}
-                  label="Cidade"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  error={formik.touched.cidade && Boolean(formik.errors.cidade)}
-                  helperText={formik.touched.cidade ? formik.errors.cidade : ''}
-                  style={{ width: '45%' }}
-                />
+                  <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
+                    <TextField
+                      type="text"
+                      name="cidade"
+                      value={formik.values.cidade}
+                      label="Cidade"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      error={formik.touched.cidade && Boolean(formik.errors.cidade)}
+                      helperText={formik.touched.cidade ? formik.errors.cidade : ''}
+                      style={{ width: '45%' }}
+                    />
 
-                <TextField
-                  type="text"
-                  name="estado"
-                  value={formik.values.estado}
-                  label="Estado"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  error={formik.touched.estado && Boolean(formik.errors.estado)}
-                  helperText={formik.touched.estado ? formik.errors.estado : ''}
-                  style={{ width: '45%' }}
-                />
-              </div>
+                    <TextField
+                      type="text"
+                      name="estado"
+                      value={formik.values.estado}
+                      label="Estado"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      error={formik.touched.estado && Boolean(formik.errors.estado)}
+                      helperText={formik.touched.estado ? formik.errors.estado : ''}
+                      style={{ width: '45%' }}
+                    />
+                  </div>
 
-              <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
-                <TextField
-                  type="text"
-                  name="numero"
-                  value={formik.values.numero}
-                  label="Número"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  error={formik.touched.numero && Boolean(formik.errors.numero)}
-                  helperText={formik.touched.numero ? formik.errors.numero : ''}
-                  style={{ width: '45%' }}
-                />
+                  <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
+                    <TextField
+                      type="text"
+                      name="numero"
+                      value={formik.values.numero}
+                      label="Número"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      error={formik.touched.numero && Boolean(formik.errors.numero)}
+                      helperText={formik.touched.numero ? formik.errors.numero : ''}
+                      style={{ width: '45%' }}
+                    />
 
-                <TextField
-                  type="text"
-                  name="complemento"
-                  value={formik.values.complemento}
-                  label="Complemento"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
-                  error={formik.touched.complemento && Boolean(formik.errors.complemento)}
-                  helperText={formik.touched.complemento ? formik.errors.complemento : ''}
-                  style={{ width: '45%' }}
-                />
-              </div>
+                    <TextField
+                      type="text"
+                      name="complemento"
+                      value={formik.values.complemento}
+                      label="Complemento"
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      error={formik.touched.complemento && Boolean(formik.errors.complemento)}
+                      helperText={formik.touched.complemento ? formik.errors.complemento : ''}
+                      style={{ width: '45%' }}
+                    />
+                  </div>
 
-              <Button
-                variant='contained'
-                type="submit"
-                onClick={formik.handleSubmit}
-              >Cadastrar</Button>
-            </div>
+                  <Button
+                    variant='contained'
+                    type="submit"
+                  >
+                    Cadastrar
+                  </Button>
+                </div>
+              </form>
+            )}
           </Formik>
         </div>
       </div>
     </ThemeProvider>
-  )
+  );
 }
-export default CadastroEndereco
+export default CadastroEndereco;
