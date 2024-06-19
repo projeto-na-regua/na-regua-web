@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './CardFluxoCaixa.module.css'
 
-export function CardFluxoCaixa({ spanValue, valor }) {
+export function CardFluxoCaixa({ spanValue, valor, icone }) {
     // Função para formatar o número como string com vírgula ao invés de ponto
     const formatarNumero = (numero) => {
         return numero.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -13,6 +13,7 @@ export function CardFluxoCaixa({ spanValue, valor }) {
                 <div className={styles.conteudoCard}>
                     <div className={styles.divIcon}>
                         <div className={styles.icone}>
+                            {icone}
                         </div>
                     </div>
 
