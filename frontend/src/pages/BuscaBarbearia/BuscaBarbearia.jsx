@@ -28,94 +28,6 @@ export function BuscaBarbearia() {
     const location = useLocation()
 
     useEffect(() => {
-        const params = new URLSearchParams(location.search)
-        const servicoParam = params.get('servico')
-        const dataParam = params.get('data')
-        const horarioParam = params.get('horario')
-        if (servicoParam) {
-            setServico(servicoParam)
-        }
-        if (dataParam) {
-            setData(dataParam)
-        }
-        if (horarioParam) {
-            setHorario(horarioParam)
-        }
-    }, [location.search])
-
-    function getLocalizacao() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const latitude = position.coords.latitude
-                    const longitude = position.coords.longitude
-                    console.log(`Latitude: ${latitude}, Longitude: ${longitude}`)
-                    setLatitude(latitude)
-                    setLongitude(longitude)
-                },
-                (error) => {
-                    console.error('Erro ao obter localização:', error.message)
-                }
-            )
-        } else {
-            console.error('Geolocalização não suportada pelo navegador.')
-        }
-    }
-
-    useEffect(() => {
-        getLocalizacao()
-    }, [])
-
-    useEffect(() => {
-        fetchBarbeariasPorParametro()
-    }, [latitude, longitude, servico, data, horario])
-
-    function getLocalizacao() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const lat = parseFloat(position.coords.latitude)
-                    const lng = parseFloat(position.coords.longitude)
-
-
-                    console.log(`Latitude: ${lat}, Longitude: ${lng}`)
-                    setLatitude(lat)
-                    setLongitude(lng)
-                },
-                (error) => {
-                    console.error('Erro ao obter localização:', error.message)
-                    // Trate os erros de geolocalização aqui
-                }
-            )
-        } else {
-            console.error('Geolocalização não suportada pelo navegador.')
-            // Trate a situação onde geolocalização não é suportada pelo navegador
-        }
-    }
-
-
-    const fetchBarbeariasPorParametro = async () => {
-        try {
-            const response = await api.get('barbearias/client-side/pesquisa-by-localizacao', {
-                headers: {
-                    Authorization: token
-                },
-                params: {
-                    servico: servico,
-                    date: data,
-                    time: horario
-                },
-
-            })
-
-            console.log('Response:', response.data)
-            setBarbearias(response.data)
-        } catch (error) {
-            console.error('Erro ao buscar as barbearias:', error)
-        }
-    }
-
-    useEffect(() => {
         if (!token) {
             setIsAuth(false)
         } else {
@@ -123,46 +35,43 @@ export function BuscaBarbearia() {
         }
     }, [token])
 
-    // useEffect(() => {
-    //     fetchBarbearias()
-    //     fetchImage()
-    // }, [])
+    useEffect(() => {
+        fetchBarbearias()
+        fetchImage()
+    }, [])
 
-    // const fetchBarbearias = async () => {
-    //     try {
-    //         console.log('Fetching barbearias (cliente):')
+    const fetchBarbearias = async () => {
+        try {
+            console.log('Fetching barbearias (cliente):')
 
-    //         const response = await api.get('barbearias/client-side/pesquisa', {
-    //             headers: {
-    //                 Authorization: token,
-    //             }
-    //         })
-    //         console.log('Response:', response.data)
-    //         setBarbearias(response.data)
-    //     } catch (error) {
-    //         console.error('Erro ao buscar as barbearias:', error)
-    //     }
-    // }
+            const response = await api.get('barbearias/client-side/pesquisa', {
+                headers: {
+                    Authorization: token,
+                }
+            })
+            console.log('Response:', response.data)
+            setBarbearias(response.data)
+        } catch (error) {
+            console.error('Erro ao buscar as barbearias:', error)
+        }
+    }
 
-    // const fetchImage = async () => {
-    //     try {
-    //         console.log('Fetching imagens de perfil das barbearias (cliente)')
-    //         const response = await api.get('barbearias/client-side/get-image-perfil', {
-    //             headers: {
-    //                 Authorization: token
-    //             }
-    //         })
-    //         console.log(response.data)
-    //         const imageBytesList = response.data
-    //         setImgPerfil(imageBytesList)
+    const fetchImage = async () => {
+        try {
+            console.log('Fetching imagens de perfil das barbearias (cliente)')
+            const response = await api.get('barbearias/client-side/get-image-perfil', {
+                headers: {
+                    Authorization: token
+                }
+            })
+            console.log(response.data)
+            const imageBytesList = response.data
+            setImgPerfil(imageBytesList)
 
-    //     } catch (error) {
-    //         console.log('Erro ao buscar a imagem de capa: ' + error)
-    //     }
-    // }
-
-
-
+        } catch (error) {
+            console.log('Erro ao buscar a imagem de capa: ' + error)
+        }
+    }
 
     return (
         <ThemeProvider theme={theme}>
