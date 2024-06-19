@@ -108,6 +108,7 @@
     align-items: center; /* Alinha os itens ao topo */
     width: 55%; /* Largura do container ajustada para 100% */
     max-height: 350px;
+    overflow-x: auto;
 }
 
 .tituloSubTituloSelecionarHorario{

@@ -21,7 +21,7 @@ export function FluxoDeCaixa() {
     const [maiorValorServico, setMaiorValorServico] = useState();
     const [lucro, setLucro] = useState();
     const [despesa, setDespesa] = useState();
-    const [saldo, setSaldo] = useState();
+    const [receita, setReceita] = useState();
     const [lucratividade, setLucratividade] = useState();
     const [mostrarModal, setMostrarModal] = useState(false); // Estado para controlar exibição do modal
     const [scrollHabilitado, setScrollHabilitado] = useState(true);
@@ -79,6 +79,7 @@ export function FluxoDeCaixa() {
             dataInicial.setDate(dataInicial.getDate() - qtdDiasGrafico);
             const dataInicialFormatada = dataInicial.toISOString().split('T')[0];
 
+            console.log('Fetching fluxo de caixa')
             const response = await api.get(`financas`, {
                 headers: {
                     Authorization: token,
@@ -90,19 +91,19 @@ export function FluxoDeCaixa() {
                 }
             });
 
-            const datasGraficoFormatadas = response.data.servicosData.map(data => {
+            const datasGraficoFormatadas = response.data.servicos[0].map(data => {
                 const [ano, mes, dia] = data.split('-');
                 return `${dia}/${mes}`;
             });
             setLabelsGrafico(datasGraficoFormatadas);
-            setDadosGrafico(response.data.servicosPreco);
+            setDadosGrafico(response.data.servicos[1]);
             setLucratividade(response.data.lucratividade);
             setLucro(response.data.lucro);
             setDespesa(response.data.despesa);
-            setSaldo(response.data.saldo);
+            setReceita(response.data.receita);
             console.log(response.data)
 
-            const vetorPrecosServicos = response.data.servicosPreco;
+            const vetorPrecosServicos = response.data.servicos[1];
             const maiorValor = vetorPrecosServicos.reduce((max, valor) => Math.max(max, valor), vetorPrecosServicos[0]);
             setMaiorValorServico(maiorValor);
 
@@ -144,7 +145,7 @@ export function FluxoDeCaixa() {
                     <div className={styles.modalAdicionarValorDespesa}>
                         <div className={styles.backgroundShade} />
                         <div className={styles.conteudoModal}>
-                            <CardLancarReceitaDespesa onClose={handleFecharModal}/>
+                            <CardLancarReceitaDespesa onClose={handleFecharModal} />
                         </div>
                     </div>
                 )}
@@ -155,13 +156,13 @@ export function FluxoDeCaixa() {
                         {typeof lucro !== 'undefined' && (
                             <CardFluxoCaixa spanValue={"Lucro"} valor={formatarNumero(lucro)} />
                         )}
-                        {typeof saldo !== 'undefined' && (
-                            <CardFluxoCaixa spanValue={"Receita"} valor={formatarNumero(saldo)} />
+                        {typeof receita !== 'undefined' && (
+                            <CardFluxoCaixa spanValue={"Receita"} valor={formatarNumero(receita)} />
                         )}
                         {typeof despesa !== 'undefined' && (
                             <CardFluxoCaixa spanValue={"Despesas"} valor={formatarNumero(despesa)} />
                         )}
-                        <CardLancarValores onClick={handleLancarValoresClick} />
+                        <CardLancarValores setMostrarModal={setMostrarModal} setScrollHabilitado={setScrollHabilitado} />
                     </div>
 
                     <div className={styles.graficos}>

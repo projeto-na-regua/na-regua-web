@@ -54,7 +54,20 @@
 }
 
 .conteudoAvaliacao span {
-    margin-left: 5%;
     font-size: 16px;
     word-break: break-word; 
+}
+
+.nomeData{
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.data{
+    font-weight: 600;
+}
+
+.valorAvaliacao{
+    margin-right: 10%;
 }

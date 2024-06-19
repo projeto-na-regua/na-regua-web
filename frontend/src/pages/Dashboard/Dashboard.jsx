@@ -27,6 +27,7 @@ export function Dashboard() {
     const [labelsGrafico, setLabelsGrafico] = useState([]);
     const [dadosGrafico, setDadosGrafico] = useState([]);
     const [avaliacoes, setAvaliacoes] = useState([])
+    const [maiorValor, setMaiorValor] = useState();
 
     const token = JSON.parse(sessionStorage.getItem('user'));
 
@@ -45,7 +46,7 @@ export function Dashboard() {
             }
 
             // Create new chart instances
-            totalClientesChartRef.current = createGraficoTotalClientes(ctxTotalClientes, dadosGrafico, labelsGrafico);
+            totalClientesChartRef.current = createGraficoTotalClientes(ctxTotalClientes, dadosGrafico, labelsGrafico, maiorValor);
         }
     }, [labelsGrafico, dadosGrafico]);
 
@@ -105,9 +106,15 @@ export function Dashboard() {
                 setIndicadorconfirmados(response.data.confirmados);
                 setLabelsGrafico(datasGraficoFormatadas);
                 setDadosGrafico(response.data.valoresGrafico);
+                const vetorPrecosServicos = response.data.valoresGrafico;
+                const maiorValor = vetorPrecosServicos.reduce((max, valor) => Math.max(max, valor), vetorPrecosServicos[0]);
+                setMaiorValor(maiorValor);
             } else {
                 setLabelsGrafico(datasGraficoFormatadas);
                 setDadosGrafico(response.data.valoresGrafico);
+                const vetorPrecosServicos = response.data.valoresGrafico;
+                const maiorValor = vetorPrecosServicos.reduce((max, valor) => Math.max(max, valor), vetorPrecosServicos[0]);
+                setMaiorValor(maiorValor);
             }
             console.log(response.data);
             util++;
