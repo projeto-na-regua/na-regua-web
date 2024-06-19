@@ -69,7 +69,9 @@ export function Funcionarios() {
 
   return (
     <ThemeProvider theme={theme}>
-      <div className="Header">
+      <div className="Header" style={{
+        backgroundColor: '#F4F3EE'
+      }}>
 
         <HeaderBarbeiro />
         <NavbarBarbeiro />
@@ -126,7 +128,8 @@ export function Funcionarios() {
                   justifyContent: 'center',
                   marginLeft: 64,
                   gap: 32,
-                  flexWrap: 'wrap'
+                  flexWrap: 'wrap',
+                  backgroundColor: '#F4F3EE'
                 }}>
                   {carregando ? (
                     <CircularProgress style={{

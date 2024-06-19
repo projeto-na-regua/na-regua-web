@@ -241,7 +241,9 @@ export function Personalizacao() {
 
   return (
     <ThemeProvider theme={theme}>
-      <div className="Header">
+      <div className="Header" style={{
+        backgroundColor: '#F4F3EE'
+      }}>
         <HeaderUsuario />
         <div className={styles.conteudo}>
           <div className={styles.container}>
@@ -454,16 +456,17 @@ export function Personalizacao() {
 
               <div className={styles.botoesFormulario}>
                 <Button
-                  className={styles.botaoDescartar}
                   variant='outlined'
                   type='button'
                   onClick={() => setModalDescartarOpen(true)}
+                  style={{
+                    height: '100%'
+                  }}
                 >
                   Descartar informações
                 </Button>
 
                 <Button
-                  className={styles.botaoEditar}
                   variant='contained'
                   type='button'
                   onClick={() => setModalEditarOpen(true)}

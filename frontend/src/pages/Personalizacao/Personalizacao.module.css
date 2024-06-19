@@ -57,7 +57,7 @@ body {
 .containerFotoPerfil:hover .overlay {
     opacity: 1;
 }
-  
+
 .editIcon {
     width: 50px; /* Defina o tamanho desejado */
     height: 50px; /* Defina o tamanho desejado */
@@ -69,14 +69,14 @@ body {
 
 .input {
     width: 260px;
-    border-color: #082031 !important; 
+    border-color: #082031 !important;
     outline: #082031 !important;
 }
 
 .formularioInformacoes{
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr; 
+    grid-template-rows: 1fr 1fr;
     gap: 30px;
     width: 55%;
 }
@@ -84,7 +84,7 @@ body {
 .formularioEndereco{
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr; 
+    grid-template-rows: 1fr 1fr;
     gap: 30px;
     width: 55%;
 }
@@ -103,10 +103,11 @@ body {
     gap: 20px;
     width: 100%;
     margin: 4%;
+    height: 60px;
 }
 
 .botaoDescartar{
-    width: 20% !important;           
+    width: 20% !important;
     background-color: white;
     line-height: 4.2 !important;
     border: 2px solid #082031 !important;
