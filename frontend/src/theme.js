@@ -65,7 +65,7 @@ export const theme = createTheme({
         {
           props: { variant: 'outlinedBlue' },
           style: {
-            backgroundColor: 'white',
+            backgroundColor: '#F4F3EE',
             border: '1px solid #082031',
             color: '#082031',
             borderRadius: 10,
