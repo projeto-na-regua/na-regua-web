@@ -1,12 +1,17 @@
 import React from 'react';
 import styles from './CardLancarValores.module.css';
 
-function CardLancarValores({ onClick }) {
+function CardLancarValores({ setMostrarModal, setScrollHabilitado }) {
+    const handleIconClick = () => {
+        setMostrarModal(true); // Exibir o modal ao clicar no ícone
+        setScrollHabilitado(false); // Desabilitar o scroll
+    };
+
     return (
-        <div className={styles.cardTodo} onClick={onClick}>
+        <div className={styles.cardTodo}>
             <div className={styles.conteudoCard}>
                 <div className={styles.divIcon}>
-                    <div className={styles.icone}>
+                    <div className={styles.icone} onClick={handleIconClick}>
                         <svg
                             width="40"
                             height="40"

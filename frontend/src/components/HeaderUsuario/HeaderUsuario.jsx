@@ -15,6 +15,7 @@ function HeaderUsuario() {
     const token = JSON.parse(sessionStorage.getItem('user'))
     const userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
     const barbeariaInfo = JSON.parse(sessionStorage.getItem('barbearia'))
+    const [usuario, setUsuario] = useState();
 
 
     useEffect(() => {
@@ -29,7 +30,7 @@ function HeaderUsuario() {
                 console.error('Erro ao validar o funcionário', error)
             }
         }
-
+        fetchPerfil();
         validarTipoUsuario()
     }, [barbeariaInfo])
 
@@ -40,6 +41,21 @@ function HeaderUsuario() {
     const cadastroBarbearia = () => {
         navigate('/cadastro-barbearia')
     }
+
+    const fetchPerfil = async () => {
+        try {
+            console.log('Fetching perfil');
+            const response = await api.get(`usuarios/perfil`, {
+                headers: {
+                    Authorization: token
+                }
+            });
+            console.log(response.data)
+            setUsuario(response.data)
+        } catch (error) {
+            console.log('Erro ao buscar o perfil: ' + error);
+        }
+    };
 
     const [values, setValues] = useState({
         nome: '',

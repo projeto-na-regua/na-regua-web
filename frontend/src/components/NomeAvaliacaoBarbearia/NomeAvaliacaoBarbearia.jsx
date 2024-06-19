@@ -4,15 +4,14 @@ import EstrelasAvaliacao from "../EstrelasAvaliacao/EstrelasAvaliacao.jsx";
 import { format, parse, isAfter, isBefore } from "date-fns";
 
 const NomeAvaliacaoBarbearia = ({ nome, avaliacao, horario }) => {
-    const [rating, setRating] = useState(2);
     const [status, setStatus] = useState("");
 
     useEffect(() => {
         const now = new Date();
         const dayOfWeek = now.getDay(); // 0 (Domingo) a 6 (Sábado)
-        const todaySchedule = horario.find(day => day.id === dayOfWeek);
+        const todaySchedule = horario[dayOfWeek - 1];
 
-        console.log(todaySchedule)
+        console.log(todaySchedule);
 
         if (todaySchedule) {
             const { horaAbertura, horaFechamento } = todaySchedule;
@@ -37,26 +36,24 @@ const NomeAvaliacaoBarbearia = ({ nome, avaliacao, horario }) => {
     }, [horario]);
 
     return (
-        <>
-            <div className={styles.conteudoNomeAvaliacaoBarbearia}>
-                <div className={styles.nomeEstrelasBarbearia}>
-                    <div className={styles.nomeBarbearia}>
-                        <span>{nome}</span>
+        <div className={styles.conteudoNomeAvaliacaoBarbearia}>
+            <div className={styles.nomeEstrelasBarbearia}>
+                <div className={styles.nomeBarbearia}>
+                    <span>{nome}</span>
+                </div>
+                <div className={styles.estrelasHorarioBarbearia}>
+                    <div className={styles.estrelasBarbearia}>
+                        <EstrelasAvaliacao value={avaliacao} />
                     </div>
-                    <div className={styles.estrelasHorarioBarbearia}>
-                        <div className={styles.estrelasBarbearia}>
-                            <EstrelasAvaliacao value={2.5} />
-                        </div>
-                        <div className={styles.ponto}>
-                            <span>•</span>
-                        </div>
-                        <div className={styles.horarioBarbearia}>
-                            <span>{status}</span>
-                        </div>
+                    <div className={styles.ponto}>
+                        <span>•</span>
+                    </div>
+                    <div className={styles.horarioBarbearia}>
+                        <span>{status}</span>
                     </div>
                 </div>
             </div>
-        </>
+        </div>
     );
 }
 
