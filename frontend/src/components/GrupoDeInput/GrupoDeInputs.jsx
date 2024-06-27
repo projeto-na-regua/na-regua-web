@@ -76,6 +76,17 @@ function GrupoDeInputs() {
           type='date'
           value={data}
           onChange={(e) => setData(e.target.value)}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          InputProps={{
+            style: {
+              borderBottom: 'none',
+            },
+            inputProps: {
+              step: 1,
+            },
+          }}
         />
         <TextField
           label="Horário"
@@ -83,6 +94,17 @@ function GrupoDeInputs() {
           type='time'
           value={horario}
           onChange={(e) => setHorario(e.target.value)}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          InputProps={{
+            style: {
+              borderBottom: 'none',
+            },
+            inputProps: {
+              step: 1,
+            },
+          }}
         />
         <Button
           onClick={handleButtonClick}
