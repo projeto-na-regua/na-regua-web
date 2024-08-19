@@ -21,6 +21,7 @@ import VisualizarBarbearia from "./pages/VisualizarBarbearia/VisualizarBarbearia
 import PersonalizarBarbearia from './pages/Personalizacao/Personalizacao'
 import SelecionarDataHora from "./pages/SelecionarDataHora/SelecionarDataHora.jsx"
 import Perfil from './pages/Agendamento/Usuario/Perfil.jsx'
+import DataHora from './pages/DataHora/DataHora.jsx'
 
 function Rotas() {
   return (
@@ -48,6 +49,8 @@ function Rotas() {
           <Route path="/fluxo-de-caixa" element={<FluxoDeCaixa />} />
           <Route path="/funcionarios" element={<Funcionarios />} />
           <Route path="/personalizar-barbearia" element={<PersonalizarBarbearia />} />
+          <Route path="/data-hora" element={<DataHora />} />
+
 
           <Route path="/busca-barbearias" element={<BuscaBarbearia />} />
           <Route path="/imagem-perfil" element={<ImagePerfil />} />

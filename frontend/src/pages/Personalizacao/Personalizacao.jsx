@@ -97,6 +97,8 @@ export function Personalizacao() {
           },
         });
 
+        sessionStorage.setItem('barbearia', JSON.stringify(values))
+
         toast.success("Informações atualizadas com sucesso!");
         setModalEditarOpen(false);
 
@@ -539,139 +541,6 @@ export function Personalizacao() {
                   }
                   fullWidth
                 />
-              </div>
-
-              <h2
-                style={{
-                  fontSize: 26,
-                  fontWeight: 600,
-                  color: theme.palette.primary.main,
-                }}
-              >
-                Informações adicionais
-              </h2>
-              <label
-                htmlFor="inputId"
-                style={{ color: "#082031" }}
-                className={styles.labelHorario}
-              >
-                Horário de funcionamento
-              </label>
-              <div className={styles.bordaInformacoesAdicionais}>
-                <div className={styles.ContainerInformacoesAdicionais}>
-                  <div className={styles.ContainerDiasHorarios}>
-                    <FormControl
-                      variant="outlined"
-                      fullWidth
-                      style={{ marginBottom: "16px" }}
-                    >
-                      <InputLabel
-                        id="diaSemana-label"
-                        className={styles.labelDefinirDiaHorario}
-                      >
-                        Dia da Semana
-                      </InputLabel>
-                      <Select
-                        labelId="diaSemana-label"
-                        id="diaSemana"
-                        value={diaSelecionado || ""}
-                        onChange={handleDiaChange}
-                        label="Dia da Semana"
-                        className={styles.selectBox}
-                        style={{
-                          borderRadius: "10px",
-                          fontWeigth: 500,
-                          color: "#082031",
-                        }}
-                      >
-                        {horarios.map((dia) => (
-                          <MenuItem key={dia.id} value={dia.id}>
-                            {dia.nome}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </FormControl>
-
-                    <TextField
-                      id="horaAbertura"
-                      label="Hora de Abertura"
-                      type="time"
-                      value={diaAtual.horaAbertura}
-                      onChange={(e) => handleHorarioChange(e, "horaAbertura")}
-                      variant="outlined"
-                      fullWidth
-                      className={styles.inputHora}
-                      inputProps={{
-                        step: 1,
-                      }}
-                      style={{ marginBottom: "16px" }}
-                    />
-
-                    <TextField
-                      id="horaFechamento"
-                      label="Hora de Fechamento"
-                      type="time"
-                      value={diaAtual.horaFechamento}
-                      onChange={(e) => handleHorarioChange(e, "horaFechamento")}
-                      variant="outlined"
-                      fullWidth
-                      className={styles.inputHora}
-                      inputProps={{
-                        step: 1,
-                      }}
-                      style={{ marginBottom: "16px" }}
-                    />
-
-                    <Button
-                      className={styles.botaoFecharDia}
-                      variant="outlinedBlue"
-                      type="button"
-                      onClick={handleFecharDia}
-                      style={{ marginBottom: "16px" }}
-                    >
-                      {diaAtual.fechado || diaAtual.horaAbertura === null || diaAtual.horaFechamento === null ? "Abrir Este Dia" : "Fechar Este Dia"}
-                    </Button>
-
-                    <Button
-                      className={styles.botaoDefinirHorario}
-                      variant="contained"
-                      type="button"
-                      onClick={handleDefinirHorario}
-                      style={{ marginBottom: "16px" }}
-                    >
-                      Definir Horário
-                    </Button>
-                  </div>
-
-                  <Grid
-                    container
-                    className={styles.ContainerCardsDiasFuncionamento}
-                    spacing={1}
-                  >
-                    {horarios.map((horario) => (
-                      <Grid
-                        item
-                        key={horario.id}
-                        xs={8}
-                        sm={6}
-                        md={3}
-                        style={{ padding: "-2px" }}
-                      >
-                        {horario.fechado || horario.horaAbertura === null || horario.horaFechamento === null ? (
-                          <CardDataHoraClosed nome={horario.nome} />
-                        ) : (
-                          <>
-                            <CardDataHora
-                              nome={horario.nome}
-                              horaInicio={horario.horaAbertura}
-                              horaFim={horario.horaFechamento}
-                            />
-                          </>
-                        )}
-                      </Grid>
-                    ))}
-                  </Grid>
-                </div>
               </div>
 
               <div className={styles.botoesFormulario}>

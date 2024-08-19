@@ -27,6 +27,9 @@ function NavbarBarbeiro() {
       case '/personalizar-barbearia':
         setActiveButton(6);
         break;
+      case '/data-hora':
+        setActiveButton(7);
+        break;
       default:
         setActiveButton(0);
         break;
@@ -76,6 +79,12 @@ function NavbarBarbeiro() {
           onClick={() => handleNavigation(6, '/personalizar-barbearia')}
         >
           <span>Personalização</span>
+        </div>
+        <div
+          className={`${styles.opcoesTelas} ${activeButton === 7 ? styles.active : ''}`}
+          onClick={() => handleNavigation(7, '/data-hora')}
+        >
+          <span>Horários</span>
         </div>
       </div>
     </div>
