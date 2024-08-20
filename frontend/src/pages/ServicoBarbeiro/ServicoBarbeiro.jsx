@@ -22,181 +22,188 @@ import {
 } from '@mui/material';
 import BoxServicos from '../../components/BoxServicos/BoxServicos';
 
-const durations = Array.from({ length: 11 }, (_, i) => 30 + i * 15);
+// Formatar duração da seleção de duração do servico
+const duracoes = Array.from({ length: 11 }, (_, i) => 30 + i * 15);
 
-const formatDuration = (minutes) => {
-  const hours = Math.floor(minutes / 60);
-  const mins = minutes % 60;
-  if (hours > 0) {
-    return `${hours} h ${mins > 0 ? `${mins} m` : ''}`;
+const formatarDuracao = (minutos) => {
+  const horas = Math.floor(minutos / 60);
+  const mins = minutos % 60;
+  if (horas > 0) {
+    return `${horas} h ${mins > 0 ? `${mins} m` : ''}`;
   }
   return `${mins} m`;
 };
 
+
 export function ServicoBarbeiro() {
-  const [open, setOpen] = useState(false);
+  const [aberto, setAberto] = useState(false);
   const token = JSON.parse(sessionStorage.getItem('user'));
-  const [durationOpen, setDurationOpen] = useState(false);
-  const [serviceDuration, setServiceDuration] = useState('');
-  const [serviceName, setServiceName] = useState('');
-  const [serviceDescription, setServiceDescription] = useState('');
-  const [serviceValue, setServiceValue] = useState('');
+  const [duracaoAberta, setDuracaoAberta] = useState(false);
+  const [duracaoServico, setDuracaoServico] = useState('');
+  const [nomeServico, setNomeServico] = useState('');
+  const [descricaoServico, setDescricaoServico] = useState('');
+  const [valorServico, setValorServico] = useState('');
   const [responsaveis, setResponsaveis] = useState([]);
-  const [editingService, setEditingService] = useState(null);
+  const [servicoEditando, setServicoEditando] = useState(null);
   const [listaServicosAtivos, setListaServicosAtivos] = useState([]);
   const [listaServicosInativos, setListaServicosInativos] = useState([]);
   const [carregando, setCarregando] = useState(true);
   const [funcionarios, setFuncionarios] = useState([]);
   const [carregandoFuncionarios, setCarregandoFuncionarios] = useState(true);
 
-  const pegarFuncionario = async () => {
+  // Função para pegar funcionários
+  const pegarFuncionarios = async () => {
     try {
-      const response = await api.get('/funcionarios', {
+      const resposta = await api.get('/funcionarios', {
         headers: {
           Authorization: token,
         },
       });
 
       // Mapeia a resposta para retornar apenas nome e email
-      return response.data.map((funcionario) => ({
+      return resposta.data.map((funcionario) => ({
         nome: funcionario.nome,
         email: funcionario.email,
       }));
-    } catch (error) {
-      console.error('Erro ao buscar funcionários:', error);
-      return []; // Retorna um array vazio em caso de erro
+    } catch (erro) {
+      console.error('Erro ao buscar funcionários:', erro);
+      return [];
     }
   };
 
+  // Função para buscar funcionários
   useEffect(() => {
-    const fetchFuncionarios = async () => {
+    const buscarFuncionarios = async () => {
       try {
-        const funcionariosData = await pegarFuncionario();
+        const funcionariosData = await pegarFuncionarios();
         setFuncionarios(funcionariosData);
-      } catch (error) {
-        console.error('Erro ao carregar funcionários:', error);
+      } catch (erro) {
+        console.error('Erro ao carregar funcionários:', erro);
       } finally {
         setCarregandoFuncionarios(false);
       }
     };
 
-    fetchFuncionarios();
+    buscarFuncionarios();
   }, []);
 
-  const mandarDados = async () => {
+  // Função para enviar dados do serviço
+  const enviarDados = async () => {
     try {
-      const barbeirosEmails = responsaveis.map((nome) =>
-        funcionarios.find((funcionario) => funcionario.nome === nome)?.email
-      ).filter(email => email); // Filtra emails válidos
+      const emailsBarbeiros = responsaveis
+        .map((nome) =>
+          funcionarios.find((funcionario) => funcionario.nome === nome)?.email
+        )
+        .filter((email) => email); // Filtra emails válidos
 
       const servico = {
-        preco: parseFloat(serviceValue), // Converte para float
-        descricao: serviceDescription,
-        tipoServico: serviceName,
-        tempoEstimado: parseInt(serviceDuration), // Converte para integer
-        barbeirosEmails: barbeirosEmails, // Inclui a lista de emails dos barbeiros selecionados
-        status: true, // Definindo o status como true por padrão ao cadastrar
+        preco: parseFloat(valorServico),
+        descricao: descricaoServico,
+        tipoServico: nomeServico,
+        tempoEstimado: parseInt(duracaoServico),
+        emailsBarbeiros: emailsBarbeiros,
+        status: true,
       };
 
-      // Log dos dados do serviço e emails dos barbeiros
       console.log('Serviço:', servico);
-      console.log('Barbeiros relacionados:', barbeirosEmails);
+      console.log('Barbeiros relacionados:', emailsBarbeiros);
 
-      let response = await api.post('/servicos', servico, {
+      let resposta = await api.post('/servicos', servico, {
         headers: {
           Authorization: token,
         },
       });
 
-      if (response.status === 201) {
-        setListaServicosAtivos([...listaServicosAtivos, response.data]);
+      if (resposta.status === 201) {
+        setListaServicosAtivos([...listaServicosAtivos, resposta.data]);
 
-        setServiceName('');
-        setServiceDescription('');
-        setServiceValue('');
-        setServiceDuration('');
+        setNomeServico('');
+        setDescricaoServico('');
+        setValorServico('');
+        setDuracaoServico('');
         setResponsaveis([]);
-        handleClose();
+        fecharDialogo();
 
         toast.success('Serviço cadastrado com sucesso!', { autoClose: 2000 });
       } else {
-        console.error('Erro ao cadastrar serviço:', response);
+        console.error('Erro ao cadastrar serviço:', resposta);
         toast.error('Erro ao cadastrar serviço. Por favor, tente novamente.');
       }
-    } catch (error) {
-      console.error('Erro ao salvar serviço:', error);
+    } catch (erro) {
+      console.error('Erro ao salvar serviço:', erro);
       toast.error('Erro ao salvar serviço. Por favor, tente novamente.');
     }
   };
 
+  // Função para buscar serviços ativos
   useEffect(() => {
-    const fetchServicosAtivos = async () => {
+    const buscarServicosAtivos = async () => {
       try {
-        const response = await api.get('/servicos/list-by-status/active', {
+        const resposta = await api.get('/servicos/list-by-status/active', {
           headers: {
             Authorization: token,
           },
         });
 
-        // Definindo apenas os serviços ativos com status 1
-        setListaServicosAtivos(response.data);
-      } catch (error) {
-        console.error('Erro ao buscar serviços ativos:', error);
+        setListaServicosAtivos(resposta.data);
+      } catch (erro) {
+        console.error('Erro ao buscar serviços ativos:', erro);
         toast.error('Erro ao buscar serviços ativos. Por favor, tente novamente.');
       } finally {
         setCarregando(false);
       }
     };
 
-    fetchServicosAtivos();
+    buscarServicosAtivos();
   }, [token]);
 
+  // Função para buscar serviços inativos
   useEffect(() => {
-    const fetchServicosInativos = async () => {
+    const buscarServicosInativos = async () => {
       try {
-        const response = await api.get('/servicos/list-by-status/deactive', {
+        const resposta = await api.get('/servicos/list-by-status/deactive', {
           headers: {
             Authorization: token,
           },
         });
 
-        // Definindo apenas os serviços inativos com status 0
-        setListaServicosInativos(response.data);
-      } catch (error) {
-        console.error('Erro ao buscar serviços inativos:', error);
+        setListaServicosInativos(resposta.data);
+      } catch (erro) {
+        console.error('Erro ao buscar serviços inativos:', erro);
         toast.error('Erro ao buscar serviços inativos. Por favor, tente novamente.');
       } finally {
         setCarregando(false);
       }
     };
 
-    fetchServicosInativos();
+    buscarServicosInativos();
   }, [token]);
 
-  const handleOpen = () => {
-    setEditingService(null);
-    setOpen(true);
+  // Funções de controle de diálogos
+  const abrirDialogo = () => {
+    setServicoEditando(null);
+    setAberto(true);
   };
 
-  const handleClose = () => {
-    setOpen(false);
+  const fecharDialogo = () => {
+    setAberto(false);
   };
 
-  const handleDurationOpen = () => {
-    setDurationOpen(true);
+  const abrirDuracao = () => {
+    setDuracaoAberta(true);
   };
 
-  const handleDurationClose = () => {
-    setDurationOpen(false);
+  const fecharDuracao = () => {
+    setDuracaoAberta(false);
   };
 
-  const handleDurationSelect = (event) => {
-    setServiceDuration(event.target.value);
-    handleDurationClose();
+  const selecionarDuracao = (evento) => {
+    setDuracaoServico(evento.target.value);
+    fecharDuracao();
   };
 
-  const handleResponsaveisChange = (event) => {
-    setResponsaveis(event.target.value);
+  const alterarResponsaveis = (evento) => {
+    setResponsaveis(evento.target.value);
   };
 
   return (
@@ -207,6 +214,7 @@ export function ServicoBarbeiro() {
       </div>
       <div className={styles.conteudo}>
         <div className={styles.containerTodo}>
+          {/* Barra de busca e botão de cadastro */}
           <div
             style={{
               display: 'flex',
@@ -216,31 +224,26 @@ export function ServicoBarbeiro() {
               justifyContent: 'space-between',
             }}
           >
-            <TextField
-              label="Buscar por serviço"
-              style={{ width: '20vw' }}
-            />
-            <Button variant="contained" onClick={handleOpen}>
+            <TextField label="Buscar por serviço" style={{ width: '20vw' }} />
+            <Button variant="contained" onClick={abrirDialogo}>
               Cadastrar Serviço
             </Button>
           </div>
+
+          {/* Listagem de serviços ativos e inativos */}
+          <div className={styles.inativos}> SERVIÇOS ATIVOS</div>
           <div className={styles.container}>
-            {/* Passa apenas os serviços ativos para o BoxServicos */}
-            <BoxServicos
-              services={listaServicosAtivos}
-              funcionarios={funcionarios}
-            />
+            <BoxServicos services={listaServicosAtivos} funcionarios={funcionarios} />
             <div className={styles.inativos}> SERVIÇOS INATIVOS</div>
-            <BoxServicos
-              services={listaServicosInativos}
-              funcionarios={funcionarios}
-            />
+            <BoxServicos services={listaServicosInativos} funcionarios={funcionarios} />
           </div>
         </div>
+
       </div>
 
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>{editingService ? 'Editar Serviço' : 'Cadastrar Serviço'}</DialogTitle>
+      {/*cadastro/edição de serviço */}
+      <Dialog open={aberto} onClose={fecharDialogo}>
+        <DialogTitle>{servicoEditando ? 'Editar Serviço' : 'Cadastrar Serviço'}</DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
@@ -248,26 +251,26 @@ export function ServicoBarbeiro() {
             label="Nome do serviço"
             type="text"
             fullWidth
-            value={serviceName}
-            onChange={(e) => setServiceName(e.target.value)}
+            value={nomeServico}
+            onChange={(e) => setNomeServico(e.target.value)}
           />
           <TextField
             margin="dense"
             label="Descrição do serviço"
             type="text"
             fullWidth
-            value={serviceDescription}
-            onChange={(e) => setServiceDescription(e.target.value)}
+            value={descricaoServico}
+            onChange={(e) => setDescricaoServico(e.target.value)}
           />
           <TextField
             margin="dense"
             label="Valor do serviço"
             type="number"
             fullWidth
-            value={serviceValue}
-            onChange={(e) => setServiceValue(e.target.value)}
+            value={valorServico}
+            onChange={(e) => setValorServico(e.target.value)}
           />
-          <Button variant="outlined" onClick={handleDurationOpen}>
+          <Button variant="outlined" onClick={abrirDuracao}>
             Selecionar Duração
           </Button>
           <TextField
@@ -275,7 +278,7 @@ export function ServicoBarbeiro() {
             label="Duração"
             type="text"
             fullWidth
-            value={formatDuration(serviceDuration)}
+            value={formatarDuracao(duracaoServico)}
             disabled
           />
           <FormControl fullWidth margin="dense">
@@ -283,11 +286,11 @@ export function ServicoBarbeiro() {
             <Select
               multiple
               value={responsaveis}
-              onChange={handleResponsaveisChange}
+              onChange={alterarResponsaveis}
               renderValue={(selected) => selected.join(', ')}
             >
               {funcionarios.map((funcionario) => (
-                <MenuItem key={funcionario.nome} value={funcionario.nome}>
+                <MenuItem key={funcionario.email} value={funcionario.nome}>
                   <Checkbox checked={responsaveis.indexOf(funcionario.nome) > -1} />
                   <ListItemText primary={funcionario.nome} />
                 </MenuItem>
@@ -296,28 +299,10 @@ export function ServicoBarbeiro() {
           </FormControl>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancelar</Button>
-          <Button onClick={mandarDados}>{editingService ? 'Salvar' : 'Cadastrar'}</Button>
-        </DialogActions>
-      </Dialog>
-
-      <Dialog open={durationOpen} onClose={handleDurationClose}>
-        <DialogTitle>Selecionar Duração</DialogTitle>
-        <DialogContent>
-          <Select
-            value={serviceDuration}
-            onChange={handleDurationSelect}
-            fullWidth
-          >
-            {durations.map((duration, index) => (
-              <MenuItem key={index} value={duration}>
-                {formatDuration(duration)}
-              </MenuItem>
-            ))}
-          </Select>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDurationClose}>Cancelar</Button>
+          <Button onClick={fecharDialogo}>Cancelar</Button>
+          <Button onClick={enviarDados}>
+            {servicoEditando ? 'Salvar Alterações' : 'Cadastrar'}
+          </Button>
         </DialogActions>
       </Dialog>
     </ThemeProvider>
