@@ -29,6 +29,9 @@ export function OptionsSidebar(props) {
           case 'Funcionários':
             navigate('/funcionarios')
             break
+            case 'Configurações':
+              navigate('/configuracoes')
+              break
           default:
             break
         }
@@ -40,15 +43,13 @@ export function OptionsSidebar(props) {
         cursor: 'pointer'
       }}>
       <div style={{
-        height: 32,
-        width: 32,
+        height: 24,
+        width: 24,
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'center',
-        border: props.selected ? '1px solid #E3A74F' : '1px solid white',
-        borderRadius: 8
+        alignItems: 'center'
       }}>
-        <img src={props.icon} style={{ width: 32, height: 32, borderRadius: 12 }} />
+        <img alt='icon' src={props.icon} />
       </div>
 
       <Typography variant='body1' style={{ color: props.selected ? '#E3A74F' : 'white' }}>{props.text}</Typography>

@@ -46,7 +46,7 @@ function Rotas() {
           <Route path="/servicos" element={<ServicoBarbeiro />} />
           <Route path="/fluxo-de-caixa" element={<FluxoDeCaixa />} />
           <Route path="/funcionarios" element={<Funcionarios />} />
-          <Route path="/personalizar-barbearia" element={<PersonalizarBarbearia />} />
+          <Route path="/configuracoes" element={<PersonalizarBarbearia />} />
 
           <Route path="/busca-barbearias" element={<BuscaBarbearia />} />
           <Route path="/imagem-perfil" element={<ImagePerfil />} />

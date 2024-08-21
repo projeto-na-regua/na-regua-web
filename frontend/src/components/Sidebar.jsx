@@ -3,6 +3,13 @@ import { theme } from '../theme.js'
 import { OptionsSidebar } from './OptionsSidebar/OptionsSidebar.jsx'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import calendario from '../utils/assets/calendario.svg'
+import galeria from '../utils/assets/galeria.svg'
+import dashboard from '../utils/assets/dashboard.svg'
+import servicos from '../utils/assets/servicos.svg'
+import funcionarios from '../utils/assets/funcionarios.svg'
+import chart from '../utils/assets/chart.svg'
+import config from '../utils/assets/config.svg'
 
 export function Sidebar() {
   const [isAuth, setIsAuth] = useState(false)
@@ -46,9 +53,9 @@ export function Sidebar() {
         }}>
           <Typography variant='h7' style={{ color: 'white' }}>Perfil</Typography>
 
-          <OptionsSidebar text='Agendamentos' />
+          <OptionsSidebar text='Agendamentos' icon={calendario} />
 
-          <OptionsSidebar text='Galeria' />
+          <OptionsSidebar text='Galeria' icon={galeria} />
 
           {isAuth && (
             <div style={{
@@ -59,15 +66,15 @@ export function Sidebar() {
             }}>
               <Typography variant='h7' style={{ color: 'white' }}>{barbeariaInfo.nomeNegocio}</Typography>
 
-              <OptionsSidebar text='Agenda' />
+              <OptionsSidebar text='Agenda' icon={calendario} />
 
-              <OptionsSidebar text='Dashboard' />
+              <OptionsSidebar text='Dashboard' icon={chart} />
 
-              <OptionsSidebar text='Serviços' />
+              <OptionsSidebar text='Serviços' icon={servicos} />
 
-              <OptionsSidebar text='Fluxo de Caixa' />
+              <OptionsSidebar text='Fluxo de Caixa' icon={dashboard} />
 
-              <OptionsSidebar text='Funcionários' />
+              <OptionsSidebar text='Funcionários' icon={funcionarios} />
             </div>
           )}
 
@@ -89,7 +96,7 @@ export function Sidebar() {
               width: 180
             }}>Possui barbearia?</Button>
 
-          <OptionsSidebar text='Configurações' selected={true} />
+          <OptionsSidebar text='Configurações' icon={config} />
         </div>
       </div>
     </ThemeProvider>

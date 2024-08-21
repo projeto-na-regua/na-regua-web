@@ -107,7 +107,7 @@ export function Funcionarios() {
 
                   <Button
                     variant='contained'
-                    onClick={handleExtrairRelatorio}
+                    onClick={handleAdicionar}
                   >
                     Adicionar funcionário
                   </Button>
