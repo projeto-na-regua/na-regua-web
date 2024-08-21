@@ -34,7 +34,7 @@ function AgendamentoBarbearia() {
             Authorization: token
           }
         })
-
+        console.log(responsePendentes.data)
         setCompromissosPendentes(responsePendentes.data)
         setCompromissosAgendados(responseAgendados.data)
       } catch (error) {
