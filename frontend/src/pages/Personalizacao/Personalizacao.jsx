@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Personalizacao.module.css";
-import NavbarBarbeiro from "../../components/NavbarBarbeiro/NavbarBarbeiro";
-import HeaderUsuario from "../../components/HeaderUsuario/HeaderUsuario";
 import imagemPerfilDefault from "../../utils/assets/imagem-perfil.svg";
 import imagemCapaDefault from "../../utils/assets/capa-barbearia.svg";
 import editIcon from "../../utils/assets/IconsHeaderUsuario/IconEditar.svg";
@@ -24,6 +22,7 @@ import { ModalEditar } from "../../components/ModalEditarBarbearia/ModalEditarBa
 import { ModalDescartar } from "../../components/ModalDescartarInformacoes/ModalDescartarInformacoes";
 import CardDataHora from "../../components/CardDataHora/CardDataHora";
 import CardDataHoraClosed from "../../components/CardDataHora/CardDataHoraClosed";
+import { Sidebar } from '../../components/Sidebar'
 
 export function Personalizacao() {
   const token = JSON.parse(sessionStorage.getItem("user"));
@@ -284,10 +283,9 @@ export function Personalizacao() {
       <div className="Header" style={{
         backgroundColor: '#F4F3EE'
       }}>
-        <HeaderUsuario />
+        <Sidebar />
         <div className={styles.conteudo}>
           <div className={styles.container}>
-            <NavbarBarbeiro />
             <div className={styles.conteudoFotos}>
               <div
                 className={styles.containerFotoCapa}

@@ -1,14 +1,14 @@
 import React from 'react'
 import styles from './CardDashboardStatus.module.css'
 
-export function CardDashboardStatus({iconStyle, spanValue, valor}) {
+export function CardDashboardStatus({icon, iconStyle, spanValue, valor}) {
     return (
         <>
             <div className={styles.cardTodo}>
                 <div className={styles.conteudoCard}>
                     <div className={styles.divIcon}>
                         <div className={styles.icone} style={iconStyle}>
-                            <span>V</span>
+                            {icon}
                         </div>
                     </div>
 

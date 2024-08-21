@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import styles from "./Perfil.module.css";
-import HeaderUsuario from '../../components/HeaderUsuario/HeaderUsuario';
-import NavbarCliente from '../../components/NavbarCliente/NavbarCliente';
 import Agendamento from '../../components/CardAgendamento/CardAgendamento';
 import api from '../../api.js';
 import CircularProgress from '@mui/material/CircularProgress';
 import { ThemeProvider } from '@mui/material/styles';
 import { theme } from '../../theme';
+import { Sidebar } from '../../components/Sidebar.jsx'
 
 function Perfil() {
   const [agendamentos, setAgendamentos] = useState([]);
@@ -25,7 +24,7 @@ function Perfil() {
       });
 
       console.log('Response:', response.data);
-      setAgendamentos(response.data); 
+      setAgendamentos(response.data);
     } catch (error) {
       if (error.response) {
         console.error('Erro ao buscar os agendamentos!');
@@ -46,8 +45,7 @@ function Perfil() {
   return (
     <ThemeProvider theme={theme}>
       <div className={`${styles.fullHeightBg} ${styles.perfilContainer}`}>
-        <HeaderUsuario />
-        <NavbarCliente />
+        <Sidebar />
         <div className={styles.cardsAgendamento }>
           {!carregado ? (
             <div className={styles.loadingContainer}>
