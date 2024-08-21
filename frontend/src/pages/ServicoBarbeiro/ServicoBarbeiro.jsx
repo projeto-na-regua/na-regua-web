@@ -24,33 +24,33 @@ import { Sidebar } from '../../components/Sidebar'
 import { HeaderUsuario } from '../../components/Header'
 
 // Formatar duração da seleção de duração do servico
-const duracoes = Array.from({ length: 11 }, (_, i) => 30 + i * 15);
+const duracoes = Array.from({ length: 11 }, (_, i) => 30 + i * 15)
 
 const formatarDuracao = (minutos) => {
-  const horas = Math.floor(minutos / 60);
-  const mins = minutos % 60;
+  const horas = Math.floor(minutos / 60)
+  const mins = minutos % 60
   if (horas > 0) {
-    return `${horas} h ${mins > 0 ? `${mins} m` : ''}`;
+    return `${horas} h ${mins > 0 ? `${mins} m` : ''}`
   }
   return `${mins} m`
 }
 
 
 export function ServicoBarbeiro() {
-  const [aberto, setAberto] = useState(false);
-  const token = JSON.parse(sessionStorage.getItem('user'));
-  const [duracaoAberta, setDuracaoAberta] = useState(false);
-  const [duracaoServico, setDuracaoServico] = useState('');
-  const [nomeServico, setNomeServico] = useState('');
-  const [descricaoServico, setDescricaoServico] = useState('');
-  const [valorServico, setValorServico] = useState('');
-  const [responsaveis, setResponsaveis] = useState([]);
-  const [servicoEditando, setServicoEditando] = useState(null);
-  const [listaServicosAtivos, setListaServicosAtivos] = useState([]);
-  const [listaServicosInativos, setListaServicosInativos] = useState([]);
-  const [carregando, setCarregando] = useState(true);
-  const [funcionarios, setFuncionarios] = useState([]);
-  const [carregandoFuncionarios, setCarregandoFuncionarios] = useState(true);
+  const [aberto, setAberto] = useState(false)
+  const token = JSON.parse(sessionStorage.getItem('user'))
+  const [duracaoAberta, setDuracaoAberta] = useState(false)
+  const [duracaoServico, setDuracaoServico] = useState('')
+  const [nomeServico, setNomeServico] = useState('')
+  const [descricaoServico, setDescricaoServico] = useState('')
+  const [valorServico, setValorServico] = useState('')
+  const [responsaveis, setResponsaveis] = useState([])
+  const [servicoEditando, setServicoEditando] = useState(null)
+  const [listaServicosAtivos, setListaServicosAtivos] = useState([])
+  const [listaServicosInativos, setListaServicosInativos] = useState([])
+  const [carregando, setCarregando] = useState(true)
+  const [funcionarios, setFuncionarios] = useState([])
+  const [carregandoFuncionarios, setCarregandoFuncionarios] = useState(true)
 
   // Função para pegar funcionários
   const pegarFuncionarios = async () => {
@@ -65,10 +65,10 @@ export function ServicoBarbeiro() {
       return resposta.data.map((funcionario) => ({
         nome: funcionario.nome,
         email: funcionario.email,
-      }));
+      }))
     } catch (erro) {
-      console.error('Erro ao buscar funcionários:', erro);
-      return [];
+      console.error('Erro ao buscar funcionários:', erro)
+      return []
     }
   }
 
@@ -76,17 +76,17 @@ export function ServicoBarbeiro() {
   useEffect(() => {
     const buscarFuncionarios = async () => {
       try {
-        const funcionariosData = await pegarFuncionarios();
-        setFuncionarios(funcionariosData);
+        const funcionariosData = await pegarFuncionarios()
+        setFuncionarios(funcionariosData)
       } catch (erro) {
-        console.error('Erro ao carregar funcionários:', erro);
+        console.error('Erro ao carregar funcionários:', erro)
       } finally {
         setCarregandoFuncionarios(false)
       }
     }
 
-    buscarFuncionarios();
-  }, []);
+    buscarFuncionarios()
+  }, [])
 
   // Função para enviar dados do serviço
   const enviarDados = async () => {
@@ -95,7 +95,7 @@ export function ServicoBarbeiro() {
         .map((nome) =>
           funcionarios.find((funcionario) => funcionario.nome === nome)?.email
         )
-        .filter((email) => email); // Filtra emails válidos
+        .filter((email) => email) // Filtra emails válidos
 
       const servico = {
         preco: parseFloat(valorServico),
@@ -104,10 +104,10 @@ export function ServicoBarbeiro() {
         tempoEstimado: parseInt(duracaoServico),
         emailsBarbeiros: emailsBarbeiros,
         status: true,
-      };
+      }
 
-      console.log('Serviço:', servico);
-      console.log('Barbeiros relacionados:', emailsBarbeiros);
+      console.log('Serviço:', servico)
+      console.log('Barbeiros relacionados:', emailsBarbeiros)
 
       let resposta = await api.post('/servicos', servico, {
         headers: {
@@ -116,23 +116,23 @@ export function ServicoBarbeiro() {
       })
 
       if (resposta.status === 201) {
-        setListaServicosAtivos([...listaServicosAtivos, resposta.data]);
+        setListaServicosAtivos([...listaServicosAtivos, resposta.data])
 
-        setNomeServico('');
-        setDescricaoServico('');
-        setValorServico('');
-        setDuracaoServico('');
-        setResponsaveis([]);
-        fecharDialogo();
+        setNomeServico('')
+        setDescricaoServico('')
+        setValorServico('')
+        setDuracaoServico('')
+        setResponsaveis([])
+        fecharDialogo()
 
         toast.success('Serviço cadastrado com sucesso!', { autoClose: 2000 })
       } else {
-        console.error('Erro ao cadastrar serviço:', resposta);
-        toast.error('Erro ao cadastrar serviço. Por favor, tente novamente.');
+        console.error('Erro ao cadastrar serviço:', resposta)
+        toast.error('Erro ao cadastrar serviço. Por favor, tente novamente.')
       }
     } catch (erro) {
-      console.error('Erro ao salvar serviço:', erro);
-      toast.error('Erro ao salvar serviço. Por favor, tente novamente.');
+      console.error('Erro ao salvar serviço:', erro)
+      toast.error('Erro ao salvar serviço. Por favor, tente novamente.')
     }
   }
 
@@ -146,17 +146,17 @@ export function ServicoBarbeiro() {
           },
         })
 
-        setListaServicosAtivos(resposta.data);
+        setListaServicosAtivos(resposta.data)
       } catch (erro) {
-        console.error('Erro ao buscar serviços ativos:', erro);
-        toast.error('Erro ao buscar serviços ativos. Por favor, tente novamente.');
+        console.error('Erro ao buscar serviços ativos:', erro)
+        toast.error('Erro ao buscar serviços ativos. Por favor, tente novamente.')
       } finally {
         setCarregando(false)
       }
-    };
+    }
 
-    buscarServicosAtivos();
-  }, [token]);
+    buscarServicosAtivos()
+  }, [token])
 
   // Função para buscar serviços inativos
   useEffect(() => {
@@ -168,44 +168,44 @@ export function ServicoBarbeiro() {
           },
         })
 
-        setListaServicosInativos(resposta.data);
+        setListaServicosInativos(resposta.data)
       } catch (erro) {
-        console.error('Erro ao buscar serviços inativos:', erro);
-        toast.error('Erro ao buscar serviços inativos. Por favor, tente novamente.');
+        console.error('Erro ao buscar serviços inativos:', erro)
+        toast.error('Erro ao buscar serviços inativos. Por favor, tente novamente.')
       } finally {
         setCarregando(false)
       }
     }
-    
-    buscarServicosInativos();
-  }, [token]);
+
+    buscarServicosInativos()
+  }, [token])
 
   // Funções de controle de diálogos
   const abrirDialogo = () => {
-    setServicoEditando(null);
-    setAberto(true);
-  };
+    setServicoEditando(null)
+    setAberto(true)
+  }
 
   const fecharDialogo = () => {
-    setAberto(false);
-  };
+    setAberto(false)
+  }
 
   const abrirDuracao = () => {
-    setDuracaoAberta(true);
-  };
+    setDuracaoAberta(true)
+  }
 
   const fecharDuracao = () => {
-    setDuracaoAberta(false);
-  };
+    setDuracaoAberta(false)
+  }
 
   const selecionarDuracao = (evento) => {
-    setDuracaoServico(evento.target.value);
-    fecharDuracao();
-  };
+    setDuracaoServico(evento.target.value)
+    fecharDuracao()
+  }
 
   const alterarResponsaveis = (evento) => {
-    setResponsaveis(evento.target.value);
-  };
+    setResponsaveis(evento.target.value)
+  }
 
   const [pageAtivos, setPageAtivos] = useState(1)
   const rowsPerPageAtivos = 5
@@ -225,11 +225,11 @@ export function ServicoBarbeiro() {
 
   return (
     <ThemeProvider theme={theme}>
-      <div className="Header">
-        <HeaderUsuario />
-        <NavbarBarbeiro />
-      </div>
+      <Sidebar />
+
       <div className={styles.conteudo}>
+        <HeaderUsuario title='Serviços' />
+
         <div className={styles.containerTodo}>
           {/* Barra de busca e botão de cadastro */}
           <div
@@ -248,11 +248,28 @@ export function ServicoBarbeiro() {
           </div>
 
           {/* Listagem de serviços ativos e inativos */}
-          <div className={styles.inativos}> SERVIÇOS ATIVOS</div>
-          <div className={styles.container}>
-            <BoxServicos services={listaServicosAtivos} funcionarios={funcionarios} />
+          <div style={{
+            marginBottom: 32,
+            marginTop: 32,
+          }}>
+            <div className={styles.inativos}> SERVIÇOS ATIVOS</div>
+            <BoxServicos
+              services={listaServicosAtivos}
+              funcionarios={funcionarios}
+              handlePageChange={handlePageChangeAtivos}
+              rowsPerPage={rowsPerPageAtivos}
+              page={pageAtivos}
+              slice={servicosAtivosPaginados}
+            />
             <div className={styles.inativos}> SERVIÇOS INATIVOS</div>
-            <BoxServicos services={listaServicosInativos} funcionarios={funcionarios} />
+            <BoxServicos
+              services={listaServicosInativos}
+              funcionarios={funcionarios}
+              handlePageChange={handlePageChangeInativos}
+              rowsPerPage={rowsPerPageInativos}
+              page={pageInativos}
+              slice={servicosInativosPaginados}
+            />
           </div>
         </div>
 
@@ -326,4 +343,4 @@ export function ServicoBarbeiro() {
   )
 }
 
-export default ServicoBarbeiro;
+export default ServicoBarbeiro
