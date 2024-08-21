@@ -1,22 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap');
 
-body {
-    margin: 0;
-    padding: 0;
-    background-color: #F4F3EE;
-}
-
 .container {
     display: flex;
-    width: 90%;
-    margin: auto;
+    margin-left: 15vw;
+    flex-direction: column;
 }
 
 .conteudoFuncionarios{
     display: flex;
     flex-direction: column;
     font-family: Plus Jakarta Sans;
-    width: 100%;
+    margin-left: 16px;
+    margin-right: 16px;
 }
 
 .inputsPesquisaFiltro{
@@ -45,12 +40,11 @@ body {
   }
 
 .quadroFuncionarios{
-    margin-top: 5%;
     display: flex;
     flex-direction: row;
     width: 100%;
-    height: 350px;
-    justify-content: space-between;
+    margin-top: 32px;
+    gap: 32px
 }
 
 .totalAdicionarFuncionarios{

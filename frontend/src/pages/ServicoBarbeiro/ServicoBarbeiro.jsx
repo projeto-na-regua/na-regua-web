@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import styles from './ServicoBarbeiro.module.css';
-import api from '../../api';
-import NavbarBarbeiro from '../../components/NavbarBarbeiro/NavbarBarbeiro';
-import HeaderUsuario from '../../components/HeaderUsuario/HeaderUsuario';
-import { toast } from 'react-toastify';
-import { theme } from '../../theme';
+import React, { useState, useEffect } from 'react'
+import styles from './ServicoBarbeiro.module.css'
+import api from '../../api'
+import { toast } from 'react-toastify'
+import { theme } from '../../theme'
 import {
   Button,
   TextField,
@@ -19,8 +17,11 @@ import {
   ListItemText,
   InputLabel,
   FormControl,
-} from '@mui/material';
-import BoxServicos from '../../components/BoxServicos/BoxServicos';
+  CircularProgress,
+} from '@mui/material'
+import BoxServicos from '../../components/BoxServicos/BoxServicos'
+import { Sidebar } from '../../components/Sidebar'
+import { HeaderUsuario } from '../../components/Header'
 
 // Formatar duração da seleção de duração do servico
 const duracoes = Array.from({ length: 11 }, (_, i) => 30 + i * 15);
@@ -31,8 +32,8 @@ const formatarDuracao = (minutos) => {
   if (horas > 0) {
     return `${horas} h ${mins > 0 ? `${mins} m` : ''}`;
   }
-  return `${mins} m`;
-};
+  return `${mins} m`
+}
 
 
 export function ServicoBarbeiro() {
@@ -58,7 +59,7 @@ export function ServicoBarbeiro() {
         headers: {
           Authorization: token,
         },
-      });
+      })
 
       // Mapeia a resposta para retornar apenas nome e email
       return resposta.data.map((funcionario) => ({
@@ -69,7 +70,7 @@ export function ServicoBarbeiro() {
       console.error('Erro ao buscar funcionários:', erro);
       return [];
     }
-  };
+  }
 
   // Função para buscar funcionários
   useEffect(() => {
@@ -80,9 +81,9 @@ export function ServicoBarbeiro() {
       } catch (erro) {
         console.error('Erro ao carregar funcionários:', erro);
       } finally {
-        setCarregandoFuncionarios(false);
+        setCarregandoFuncionarios(false)
       }
-    };
+    }
 
     buscarFuncionarios();
   }, []);
@@ -112,7 +113,7 @@ export function ServicoBarbeiro() {
         headers: {
           Authorization: token,
         },
-      });
+      })
 
       if (resposta.status === 201) {
         setListaServicosAtivos([...listaServicosAtivos, resposta.data]);
@@ -124,7 +125,7 @@ export function ServicoBarbeiro() {
         setResponsaveis([]);
         fecharDialogo();
 
-        toast.success('Serviço cadastrado com sucesso!', { autoClose: 2000 });
+        toast.success('Serviço cadastrado com sucesso!', { autoClose: 2000 })
       } else {
         console.error('Erro ao cadastrar serviço:', resposta);
         toast.error('Erro ao cadastrar serviço. Por favor, tente novamente.');
@@ -133,7 +134,7 @@ export function ServicoBarbeiro() {
       console.error('Erro ao salvar serviço:', erro);
       toast.error('Erro ao salvar serviço. Por favor, tente novamente.');
     }
-  };
+  }
 
   // Função para buscar serviços ativos
   useEffect(() => {
@@ -143,14 +144,14 @@ export function ServicoBarbeiro() {
           headers: {
             Authorization: token,
           },
-        });
+        })
 
         setListaServicosAtivos(resposta.data);
       } catch (erro) {
         console.error('Erro ao buscar serviços ativos:', erro);
         toast.error('Erro ao buscar serviços ativos. Por favor, tente novamente.');
       } finally {
-        setCarregando(false);
+        setCarregando(false)
       }
     };
 
@@ -165,17 +166,17 @@ export function ServicoBarbeiro() {
           headers: {
             Authorization: token,
           },
-        });
+        })
 
         setListaServicosInativos(resposta.data);
       } catch (erro) {
         console.error('Erro ao buscar serviços inativos:', erro);
         toast.error('Erro ao buscar serviços inativos. Por favor, tente novamente.');
       } finally {
-        setCarregando(false);
+        setCarregando(false)
       }
-    };
-
+    }
+    
     buscarServicosInativos();
   }, [token]);
 
@@ -205,6 +206,22 @@ export function ServicoBarbeiro() {
   const alterarResponsaveis = (evento) => {
     setResponsaveis(evento.target.value);
   };
+
+  const [pageAtivos, setPageAtivos] = useState(1)
+  const rowsPerPageAtivos = 5
+  const servicosAtivosPaginados = listaServicosAtivos.slice((pageAtivos - 1) * rowsPerPageAtivos, pageAtivos * rowsPerPageAtivos)
+
+  const handlePageChangeAtivos = (event, value) => {
+    setPageAtivos(value)
+  }
+
+  const [pageInativos, setPageInativos] = useState(1)
+  const rowsPerPageInativos = 5
+  const servicosInativosPaginados = listaServicosInativos.slice((pageInativos - 1) * rowsPerPageInativos, pageInativos * rowsPerPageInativos)
+
+  const handlePageChangeInativos = (event, value) => {
+    setPageInativos(value)
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -306,8 +323,7 @@ export function ServicoBarbeiro() {
         </DialogActions>
       </Dialog>
     </ThemeProvider>
-  );
+  )
 }
 
 export default ServicoBarbeiro;
-

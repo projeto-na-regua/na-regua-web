@@ -1,5 +1,4 @@
 .linhaReserva{
-    background-color: #F4F3EE;
     display: flex;
     border-radius: 15px;
 }
@@ -13,6 +12,8 @@
     display: flex;
     flex-direction: row;
     padding: 2% 0;
+    border: 1px solid #CBD5E0;
+    border-radius: 12px;
 }
 
 .nomeCliente, .servicoEscolhido, .horario, .statusReserva, .nomeBarbeiro{

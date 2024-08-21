@@ -1,6 +1,7 @@
 .cardTodo{
     display: flex;
-    width: 300px;
+    width: 250px;
+    min-height: 150px;
 }
 
 .conteudoCard{
