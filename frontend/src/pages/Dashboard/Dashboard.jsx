@@ -69,14 +69,14 @@ export function Dashboard() {
     const [avaliacoesPilha, setAvaliacoesPilha] = useState(new Pilha())
     const [maiorValor, setMaiorValor] = useState()
     const iconeCancelado = <svg width="25" height="25" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M33 33L18 18M18 18L3 3M18 18L33 3M18 18L3 33" stroke="#591919" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M33 33L18 18M18 18L3 3M18 18L33 3M18 18L3 33" stroke="#591919" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
     </svg>
     const iconeConfirmado = <svg width="32" height="22" viewBox="0 0 46 34" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M3 18.5278L15.3077 30.75L43 3.25" stroke="#1B6727" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M3 18.5278L15.3077 30.75L43 3.25" stroke="#1B6727" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
     </svg>
     const iconePendente = <svg width="40" height="40" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M30 52.5C42.4264 52.5 52.5 42.4264 52.5 30C52.5 17.5736 42.4264 7.5 30 7.5C17.5736 7.5 7.5 17.5736 7.5 30C7.5 42.4264 17.5736 52.5 30 52.5Z" stroke="#704300" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-    <path d="M30 15V30H15" stroke="#704300" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M30 52.5C42.4264 52.5 52.5 42.4264 52.5 30C52.5 17.5736 42.4264 7.5 30 7.5C17.5736 7.5 7.5 17.5736 7.5 30C7.5 42.4264 17.5736 52.5 30 52.5Z" stroke="#704300" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+        <path d="M30 15V30H15" stroke="#704300" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
     </svg>
 
 
@@ -182,10 +182,16 @@ export function Dashboard() {
                 }
             })
 
-            // Utilizando as avaliações como pilha
+            // Criar uma nova pilha para garantir que as avaliações não sejam duplicadas
+            const novaPilhaAvaliacoes = new Pilha()
+
+            // Adicionar as avaliações à nova pilha
             const avaliacoesData = response.data
-            avaliacoesData.forEach(avaliacao => avaliacoesPilha.push(avaliacao))
-            console.log(avaliacoesPilha.getItems())
+            avaliacoesData.forEach(avaliacao => novaPilhaAvaliacoes.push(avaliacao))
+
+            // Atualizar o estado com a nova pilha
+            setAvaliacoesPilha(novaPilhaAvaliacoes)
+            console.log(novaPilhaAvaliacoes.getItems())
         } catch (error) {
             console.error('Erro ao buscar as avaliações:', error)
         }
