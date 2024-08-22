@@ -66,6 +66,7 @@
     border-radius: 15px;
     padding: 1.5%;
     margin-left: 16px;
+    background-color: #082031;
 }
 
 .titulosGraficoLinha {
@@ -126,6 +127,7 @@
     flex-direction: column;
     border-radius: 15px;
     margin-right: 16px;
+    background-color: #082031;
 }
 
 .containerAvaliacoes{
@@ -134,7 +136,7 @@
 }
 
 .tituloAvaliacoes{
-    color: #082031;
+    color: #E3A74F;
     font-size: 18px;
     font-weight: 600;
 }

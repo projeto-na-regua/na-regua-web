@@ -3,6 +3,7 @@ import { CircularProgress, Pagination, Stack, TablePagination, ThemeProvider, Ty
 import { theme } from '../../theme'
 import { Sidebar } from '../../components/Sidebar'
 import { HeaderUsuario } from '../../components/Header'
+import BoxBarbeariaHistorico from '../../components/BoxBarbeariaHistorico/BoxBarbeariaHistorico'
 import api from '../../api'
 
 export function AgendamentoUsuario() {
@@ -168,7 +169,7 @@ export function AgendamentoUsuario() {
                     }}>
                         <Typography variant='h7' style={{ color: '#082031', marginLeft: 16, marginTop: 16 }}>Histórico</Typography>
 
-                        {/* <BoxBarbeariaHistorico /> */}
+                        <BoxBarbeariaHistorico /> 
 
                         <Stack spacing={2} style={{ marginTop: 16, alignItems: 'center' }}>
                             <Pagination

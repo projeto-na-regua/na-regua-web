@@ -13,7 +13,7 @@ import { ThemeProvider } from '@emotion/react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import MenuLateralUsuario from '../../components/MenuLateralUsuario/MenuLateralUsuario.jsx';
 import { Button } from '@mui/material';
-import imgBarbeariaPadrao from '../../utils/assets/imagem-login.png'
+import imgBarbeariaPadrao from '../../utils/assets/barbeariaPadrao.png'
 import bannerBarbeariaPadrao from '../../utils/assets/bannerBarbearia.jpg';
 import api from "../../api.js";
 import Mapa from "../../components/Mapa/mapa.jsx";
@@ -26,6 +26,7 @@ export function VisualizarBarbearia() {
 
     const [isAuth, setIsAuth] = useState(false);
     const token = JSON.parse(sessionStorage.getItem('user'));
+    const userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
     const [open, setOpen] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(-1);
     const [barbearia, setBarbearia] = useState(null);
@@ -39,7 +40,7 @@ export function VisualizarBarbearia() {
     const [imgBanner, setImgBanner] = useState();
     const [imgPerfilFuncionarios, setImgPerfilFuncionarios] = useState([])
     const [avaliacoes, setAvaliacoes] = useState([]);
-    const [avaliacoesCarregadas, setAvaliacoesCarregadas] = useState(false); // Novo estado
+    const [avaliacoesCarregadas, setAvaliacoesCarregadas] = useState(false);
     const [mediaAvaliacao, setMediaAvaliacao] = useState();
     const valoresAvaliacoes = [];
     const avaliacoesFiltradas = [];
@@ -87,8 +88,8 @@ export function VisualizarBarbearia() {
                 }
             });
             var j = 0;
-            for(var i = 0; i < response.data.length; i++){
-                if(!(response.data[i].resultadoAvaliacao == null)){
+            for (var i = 0; i < response.data.length; i++) {
+                if (!(response.data[i].resultadoAvaliacao == null)) {
                     valoresAvaliacoes[j] = response.data[i].resultadoAvaliacao
                     avaliacoesFiltradas[j] = response.data[i]
                     j++;
@@ -103,9 +104,9 @@ export function VisualizarBarbearia() {
         }
     };
 
-    function mediaAvaliacaoBarbearia(vetor){
+    function mediaAvaliacaoBarbearia(vetor) {
         var soma = 0;
-        for(var i = 0; i < vetor.length; i++){
+        for (var i = 0; i < vetor.length; i++) {
             soma += vetor[i]
         }
         return soma / vetor.length;
@@ -258,7 +259,7 @@ export function VisualizarBarbearia() {
                                     <svg width="30" height="30" viewBox="0 0 24 24" fill="#ffffff" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M5 21C5 17.134 8.13401 14 12 14C15.866 14 19 17.134 19 21M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="#000000" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                                     </svg>
-                                    Usuário
+                                    {userInfo ? userInfo.nome.split(" ")[0] : 'Usuário'}
                                     <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill="none">
                                         <path fill="#ffffff" fillRule="evenodd" d="M19 4a1 1 0 01-1 1H2a1 1 0 010-2h16a1 1 0 011 1zm0 6a1 1 0 01-1 1H2a1 1 0 110-2h16a1 1 0 011 1zm-1 7a1 1 0 100-2H2a1 1 0 100 2h16z" />
                                     </svg>
@@ -279,17 +280,24 @@ export function VisualizarBarbearia() {
                                 <div className={styles.nomeAvaliacaoBarbearia}>
                                     <NomeAvaliacaoBarbearia
                                         nome={barbearia.nomeNegocio}
-                                        horario={barbearia.diaSemanas} 
-                                        avaliacao={mediaAvaliacao}/>
+                                        horario={barbearia.diaSemanas}
+                                        avaliacao={mediaAvaliacao} />
                                 </div>
 
                                 <div className={styles.bannerFotoPerfilBarbearia}>
                                     <div className={styles.bannerBarbearia}>
-                                        <img src={imgBanner ?? bannerBarbeariaPadrao} alt="" />
+                                        <img
+                                            src={imgBanner && /^https:\/\/upload0naregua\.blob\.core\.windows\.net\/upload\/.+/.test(imgBanner) ? imgBanner : bannerBarbeariaPadrao}
+                                            alt=""
+                                        />
                                     </div>
 
+
+
+
+
                                     <div className={styles.circuloPerfilBarbearia}>
-                                        <CirculoPerfilBarbearia fotoPerfil={imgPerfil ?? imgBarbeariaPadrao} />
+                                        <CirculoPerfilBarbearia fotoPerfil={imgPerfil && /^https:\/\/upload0naregua\.blob\.core\.windows\.net\/upload\/.+/.test(imgPerfil) ? imgPerfil : imgBarbeariaPadrao} />
 
                                     </div>
                                 </div>
@@ -374,14 +382,14 @@ export function VisualizarBarbearia() {
                                             <span>Avaliações</span>
                                         </div>
                                         <div className={styles.cardAvaliacoes}>
-                                        {Array.isArray(avaliacoes) && avaliacoes.map((avaliacao, index) => (
+                                            {Array.isArray(avaliacoes) && avaliacoes.map((avaliacao, index) => (
                                                 <CardAvaliacoesVisualizarBarbearia
-                                                key={index}
-                                                nomeCliente={avaliacao.nomeCliente}
-                                                dataAvaliacao={avaliacao.data}
-                                                comentario={avaliacao.comentario}
-                                                estrelas={avaliacao.resultadoAvaliacao}
-                                            />
+                                                    key={index}
+                                                    nomeCliente={avaliacao.nomeCliente}
+                                                    dataAvaliacao={avaliacao.data}
+                                                    comentario={avaliacao.comentario}
+                                                    estrelas={avaliacao.resultadoAvaliacao}
+                                                />
                                             ))}
                                         </div>
                                     </div>

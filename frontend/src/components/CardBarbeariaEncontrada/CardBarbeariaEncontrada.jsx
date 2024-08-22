@@ -1,9 +1,11 @@
 import React from "react";
 import styles from "./CardBarbeariaEncontrada.module.css"
 import { useNavigate } from "react-router-dom";
+import { Button } from '@mui/material'
+import EstrelasAvaliacao from "../EstrelasAvaliacao/EstrelasAvaliacao";
 
 const CardBarbeariaEncontrada = ({
-    nomeBarbearia, endereco, foto, valor }) => {
+    nomeBarbearia, endereco, foto, valor, avaliacao }) => {
 
     const navigate = useNavigate();
 
@@ -22,6 +24,9 @@ const CardBarbeariaEncontrada = ({
                 </div>
 
                 <div className={styles.informacoesBarbearia}>
+
+                    {/*<EstrelasAvaliacao value={avaliacao}/>*/}
+
                     <div className={styles.nomeDistancia}>
                         <span>{nomeBarbearia}</span>
                     </div>
@@ -31,7 +36,7 @@ const CardBarbeariaEncontrada = ({
                     </div>
 
                     <div className={styles.botaoVisualizarPerfil}>
-                        <button onClick={handleClick}>Visualizar perfil</button>
+                        <Button onClick={handleClick}>Visualizar perfil</Button>
                     </div>
                 </div>
 
