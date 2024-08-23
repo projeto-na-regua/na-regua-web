@@ -20,7 +20,6 @@ export function BuscaBarbearia() {
     const token = JSON.parse(sessionStorage.getItem('user'));
     const [open, setOpen] = useState(false);
     const [barbearias, setBarbearias] = useState([]);
-    /* const [idsBarbearias, setIdsBarbearias] = useState([]); */
     const [imgPerfil, setImgPerfil] = useState([]);
     const [latitude, setLatitude] = useState(0);
     const [longitude, setLongitude] = useState(0);
@@ -28,10 +27,14 @@ export function BuscaBarbearia() {
     const [data, setData] = useState('');
     const [horario, setHorario] = useState('');
     const location = useLocation();
-    /* const [avaliacoes, setAvaliacoes] = useState([]);
-    const [avaliacoesCarregadas, setAvaliacoesCarregadas] = useState(false);
-    const [mediaAvaliacao, setMediaAvaliacao] = useState(null); // Inicialmente null
-    const [carregandoAvaliacoes, setCarregandoAvaliacoes] = useState(true); // Estado de carregamento */
+
+    useEffect(() => {
+        const urlParams = new URLSearchParams(window.location.search);
+
+        setServico(urlParams.get('servico'));
+        setData(urlParams.get('data'));
+        setHorario(urlParams.get('horario'));
+    }, []); // Este useEffect será executado apenas uma vez, quando o componente for montado
 
     useEffect(() => {
         if (!token) {
@@ -44,25 +47,26 @@ export function BuscaBarbearia() {
     useEffect(() => {
         fetchBarbearias();
         fetchImage();
-    }, []);
-
-    /* useEffect(() => {
-        if (idsBarbearias.length > 0) {
-            fetchAvaliacoes();
-        }
-    }, [idsBarbearias]); // Chama fetchAvaliacoes quando idsBarbearias muda */
+    }, [servico, data, horario]); // Agora as buscas são acionadas quando os parâmetros mudam
 
     const fetchBarbearias = async () => {
+        console.log('Serviço:', servico);
+        console.log('Data:', data);
+        console.log('Horário:', horario);
         try {
             console.log('Fetching barbearias (cliente):');
-            const response = await api.get('barbearias/client-side/pesquisa', {
+            const response = await api.get('barbearias/client-side/pesquisa-by-localizacao', {
                 headers: {
                     Authorization: token,
+                },
+                params: {
+                    servico: servico,
+                    date: data,
+                    time: horario
                 }
             });
             console.log('Response fetch barbearias:', response.data);
             setBarbearias(response.data);
-            /* setIdsBarbearias(response.data.map(barbearia => barbearia.id)); // Atualiza idsBarbearias */
         } catch (error) {
             console.error('Erro ao buscar as barbearias:', error);
         }
@@ -82,46 +86,6 @@ export function BuscaBarbearia() {
             console.log('Erro ao buscar a imagem de capa: ' + error);
         }
     };
-
-    /* const fetchAvaliacoes = async () => {
-        try {
-            console.log('Fetching avaliacoes (cliente)');
-            setCarregandoAvaliacoes(true); // Inicia o carregamento
-            const response = await api.get('/agendamentos/cliente-side/all-ultimas-avaliacoes', {
-                headers: {
-                    Authorization: token
-                },
-                params: {
-                    qtd: 1000,
-                    idBarbearias: idsBarbearias.join(',')
-                }
-            });
-
-            const valoresAvaliacoes = [];
-            const avaliacoesFiltradas = [];
-
-            for (let i = 0; i < response.data.length; i++) {
-                if (response.data[i].resultadoAvaliacao != null) {
-                    valoresAvaliacoes.push(response.data[i].resultadoAvaliacao);
-                    avaliacoesFiltradas.push(response.data[i]);
-                }
-            }
-
-            setMediaAvaliacao(mediaAvaliacaoBarbearia(valoresAvaliacoes));
-            setAvaliacoes(avaliacoesFiltradas);
-            setAvaliacoesCarregadas(true);
-            setCarregandoAvaliacoes(false); // Atualiza o estado de carregamento
-        } catch (error) {
-            console.error('Erro ao buscar avaliações da barbearia:', error.response ? error.response.data : error.message);
-            setCarregandoAvaliacoes(false); // Atualiza o estado de carregamento mesmo em erro
-        }
-    };
-
-    function mediaAvaliacaoBarbearia(vetor) {
-        if (vetor.length === 0) return 0; // Evita divisão por zero
-        const soma = vetor.reduce((acc, valor) => acc + valor, 0);
-        return soma / vetor.length;
-    } */
 
     return (
         <ThemeProvider theme={theme}>
@@ -170,8 +134,7 @@ export function BuscaBarbearia() {
                                     key={barbearia.id} // Use o id como chave
                                     nomeBarbearia={barbearia.nomeNegocio}
                                     endereco={`${barbearia.logradouro}, ${barbearia.numero}`}
-                                    foto={imgPerfil[index] && /^https:\/\/upload0naregua\.blob\.core\.windows\.net\/upload\/.+/.test(imgPerfil[index]) ? imgPerfil[index] : imgBarbeariaPadrao }
-                                    /* avaliacao={avaliacoes.find(av => av.barbeariaId === barbearia.id)?.resultadoAvaliacao || 0} // Forneça uma avaliação padrão */
+                                    foto={imgPerfil[index] && /^https:\/\/upload0naregua\.blob\.core\.windows\.net\/upload\/.+/.test(imgPerfil[index]) ? imgPerfil[index] : imgBarbeariaPadrao}
                                 />
                             ))}
                         </div>

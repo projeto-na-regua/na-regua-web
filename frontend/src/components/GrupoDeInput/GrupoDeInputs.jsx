@@ -48,6 +48,8 @@ function GrupoDeInputs() {
   const handleButtonClick = () => {
     const url = `/busca-barbearias?servico=${encodeURIComponent(servico)}&localizacao=${encodeURIComponent(localizacao)}&data=${encodeURIComponent(data)}&horario=${encodeURIComponent(horario)}`
     navigate(url)
+    
+    console.log(url)
   }
 
   return (
