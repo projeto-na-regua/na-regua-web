@@ -13,8 +13,7 @@ export function VisualizarAtendimento(props) {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: '24px 32px 24px 32px',
-        gap: 32,
-        marginTop: 32
+        gap: 32
       }}>
         <div>
           <Typography variant="h6" color={'#ffffff'}>

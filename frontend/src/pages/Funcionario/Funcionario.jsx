@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react'
 import React from 'react'
 import styles from './Funcionario.module.css'
-import NavbarBarbeiro from '../../components/NavbarBarbeiro/NavbarBarbeiro'
-import HeaderBarbeiro from '../../components/HeaderUsuario/HeaderUsuario'
-import { Button, TextField, ThemeProvider } from '@mui/material'
+import { Button, Pagination, Stack, TextField, ThemeProvider, Typography } from '@mui/material'
 import CardPequenoFuncionario from '../../components/CardPequenoFuncionario/CardPequenoFuncionario'
 import CardFuncionario from '../../components/CardFuncionario/CardFuncionario'
 import api from '../../api'
@@ -11,6 +9,8 @@ import CircularProgress from '@mui/material/CircularProgress'
 import ModalAdicionar from '../../components/ModalAdicionar/ModalAdicionar'
 import { theme } from '../../theme'
 import { toast } from "react-toastify"
+import { Sidebar } from '../../components/Sidebar'
+import { HeaderUsuario } from '../../components/Header'
 
 export function Funcionarios() {
   const [modalAdicionar, setModalAdicionar] = useState(false)
@@ -67,43 +67,55 @@ export function Funcionarios() {
     }
   }
 
+  const [page, setPage] = useState(1)
+  const rowsPerPage = 4
+  const funcionariosPaginados = listaFuncionarios.slice((page - 1) * rowsPerPage, page * rowsPerPage)
+
+  const handlePageChange = (event, value) => {
+    setPage(value)
+  }
+
   return (
     <ThemeProvider theme={theme}>
-      <div className="Header" style={{
-        backgroundColor: '#F4F3EE'
-      }}>
-
-        <HeaderBarbeiro />
-        <NavbarBarbeiro />
+      <div>
+        <Sidebar />
 
         <div className={styles.conteudo}>
           <div className={styles.container}>
+            <HeaderUsuario title='Funcionários' />
             <div className={styles.conteudoFuncionarios}>
-
               <div style={{
                 display: 'flex',
                 marginTop: 32,
                 gap: 32,
                 width: '100%',
                 justifyContent: 'space-between',
+                alignItems: 'center',
               }}>
-                <TextField
-                  label="Buscar por funcionário"
-                  style={{
-                    width: '20vw'
-                  }}
-                />
+                <Typography variant='h7'>Total de funcionários: {listaFuncionarios.length}</Typography>
 
-                <Button
-                  variant='contained'
-                  onClick={handleExtrairRelatorio}
-                >
-                  Extrair relatório
-                </Button>
+                <div style={{
+                  display: 'flex',
+                  gap: 16
+                }}>
+                  <Button
+                    variant='contained'
+                    onClick={handleExtrairRelatorio}
+                  >
+                    Extrair relatório
+                  </Button>
+
+                  <Button
+                    variant='contained'
+                    onClick={handleAdicionar}
+                  >
+                    Adicionar funcionário
+                  </Button>
+                </div>
               </div>
 
               <div className={styles.quadroFuncionarios}>
-                <div className={styles.totalAdicionarFuncionarios}>
+                {/* <div className={styles.totalAdicionarFuncionarios}>
                   <CardPequenoFuncionario
                     title='Total de funcionários'
                     icon={totalFuncionarios}
@@ -119,41 +131,52 @@ export function Funcionarios() {
                     cursor='pointer'
                     onClick={handleAdicionar}
                   />
-                </div>
+                </div> */}
 
                 <div style={{
                   display: 'flex',
+                  flexDirection: 'column',
+                  height: '60vh',
                   width: '100%',
                   alignItems: 'center',
-                  justifyContent: 'center',
-                  marginLeft: 64,
-                  gap: 32,
-                  flexWrap: 'wrap',
-                  backgroundColor: '#F4F3EE'
                 }}>
-                  {carregando ? (
-                    <CircularProgress style={{
-                      alignSelf: 'center',
-                      justifySelf: 'center',
-                    }} />
-                  ) : (
-                    listaFuncionarios.length > 0 ? (
-                      listaFuncionarios.map((funcionario) => (
-                        <CardFuncionario
-                          key={funcionario.id}
-                          name={funcionario.nome}
-                          email={funcionario.email}
-                          phone={funcionario.celular}
-                          onClick={() => setVerMais(funcionario.id)}
-                          setOpen={setVerMais}
-                          open={verMais === funcionario.id}
-                          atualizarFuncionarios={() => setListaFuncionarios(listaFuncionarios.filter((func) => func.id !== funcionario.id))}
-                        />
-                      ))
+                  <div style={{
+                    display: 'flex',
+                    gap: 32,
+                    minHeight: '50vh',
+                  }}>
+                    {carregando ? (
+                      <CircularProgress style={{
+                        alignSelf: 'center',
+                        justifySelf: 'center',
+                      }} />
                     ) : (
-                      <div>Nenhum funcionário encontrado.</div>
-                    )
-                  )}
+                      listaFuncionarios.length > 0 ? (
+                        funcionariosPaginados.map((funcionario) => (
+                          <CardFuncionario
+                            key={funcionario.id}
+                            name={funcionario.nome}
+                            email={funcionario.email}
+                            phone={funcionario.celular}
+                            onClick={() => setVerMais(funcionario.id)}
+                            setOpen={setVerMais}
+                            open={verMais === funcionario.id}
+                            atualizarFuncionarios={() => setListaFuncionarios(listaFuncionarios.filter((func) => func.id !== funcionario.id))}
+                          />
+                        ))
+                      ) : (
+                        <div>Nenhum funcionário encontrado.</div>
+                      )
+                    )}
+                  </div>
+                  <Stack spacing={2} style={{ marginTop: 16, alignItems: 'center' }}>
+                    <Pagination
+                      count={Math.ceil(listaFuncionarios.length / rowsPerPage)}
+                      page={page}
+                      onChange={handlePageChange}
+                      color="primary"
+                    />
+                  </Stack>
                 </div>
               </div>
             </div>

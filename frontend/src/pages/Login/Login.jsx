@@ -9,13 +9,17 @@ import { Button, Link } from '@mui/material'
 import image from '../../utils/assets/Imagem Login.png'
 import logo from '../../utils/assets/logo-scale1.svg'
 import { toast } from "react-toastify"
+import { useState } from 'react'
+import { LoadingButton } from '@mui/lab'
 
 function Login() {
   const navigate = useNavigate()
+  const [isLoading, setIsLoading] = useState(false)
 
   const formik = useFormik({
     initialValues: { email: '', password: '' },
     onSubmit: async (values) => {
+      setIsLoading(true)
       try {
         const response = await api.post('/usuarios', {
           email: values.email,
@@ -23,6 +27,8 @@ function Login() {
         })
 
         const data = response.data
+
+        setIsLoading(false)
 
         sessionStorage.setItem('user', JSON.stringify(data))
         toast.success("Login realizado com sucesso!", {
@@ -68,7 +74,7 @@ function Login() {
 
         setTimeout(() => {
           if (user) {
-            navigate('/perfil/meus-agendamentos')
+            navigate('/perfil/agendamentos')
           }
         }, 4000)
       } catch (error) {
@@ -149,7 +155,16 @@ function Login() {
 
                 <Link to="/cadastro" alignSelf='flex-end' style={{ cursor: 'pointer' }}>Esqueceu sua senha?</Link>
 
-                <Button variant='contained' type='submit' onClick={formik.handleSubmit}>Entrar</Button>
+                <LoadingButton
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  loading={isLoading}
+                  style={{ width: '100%', height: 48, alignSelf: 'center' }}
+                  onClick={formik.handleSubmit}
+                >
+                  Entrar
+                </LoadingButton>
 
                 <div style={{ display: 'flex', gap: 8, alignSelf: 'center' }}>
                   <span>Não tem uma conta?</span>

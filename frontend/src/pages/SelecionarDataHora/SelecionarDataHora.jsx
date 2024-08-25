@@ -56,7 +56,7 @@ export function SelecionarDataHora() {
     };
 
     const handleNavigate = () => {
-        navigate('/perfil/meus-agendamentos')
+        navigate('/perfil/agendamentos')
     };
 
     const handleClick = () => {

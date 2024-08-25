@@ -8,19 +8,18 @@ import CadastroBarbearia from './pages/Cadastro/CadastroBarbearia/CadastroBarbea
 import Confirmacao from './pages/Cadastro/Confirmacao/Confirmacao'
 import CadastroEndereco from './pages/Cadastro/CadastroEndereco/CadastroEndereco'
 import Funcionarios from "./pages/Funcionario/Funcionario"
-import MeusCortes from './pages/MeusCortes/MeusCortes'
-import AgendamentosBarbearia from "./pages/Agendamento/Barbearia/AgendamentoBarbearia"
 import ConfirmacaoBarbearia from './pages/Cadastro/ConfirmacaoBarbearia/ConfirmacaoBarbearia'
 import Dashboard from './pages/Dashboard/Dashboard.jsx'
 import ServicoBarbeiro from "./pages/ServicoBarbeiro/ServicoBarbeiro"
 import FluxoDeCaixa from "./pages/FluxoDeCaixa/FluxoDeCaixa.jsx"
-import Historico from "./pages/HistoricoUsuario/HistoricoUsuario.jsx"
 import BuscaBarbearia from "./pages/BuscaBarbearia/BuscaBarbearia.jsx"
 import ImagePerfil from "./pages/ImagePerfil.jsx"
 import VisualizarBarbearia from "./pages/VisualizarBarbearia/VisualizarBarbearia.jsx"
 import PersonalizarBarbearia from './pages/Personalizacao/Personalizacao'
 import SelecionarDataHora from "./pages/SelecionarDataHora/SelecionarDataHora.jsx"
-import Perfil from './pages/Agendamento/Usuario/Perfil.jsx'
+import AgendamentoUsuario from './pages/AgendamentoUsuario/AgendamentosUsuario.jsx'
+import { Galeria } from './pages/Galeria/Galeria.jsx'
+import AgendamentoBarbearia from './pages/AgendamentoBarbearia/AgendamentoBarbearia.jsx'
 import DataHora from './pages/DataHora/DataHora.jsx'
 
 function Rotas() {
@@ -40,15 +39,15 @@ function Rotas() {
           <Route path="/cadastro-barbearia" element={<CadastroBarbearia /> } />
           <Route path="/confirmacao-barbearia" element={<ConfirmacaoBarbearia />} />
 
-          <Route path="/perfil/meus-agendamentos" element={<Perfil />}/>
-          <Route path="/perfil/historico" element={<Historico />} />
+          <Route path="/perfil/agendamentos" element={<AgendamentoUsuario />}/>
+          <Route path="/perfil/galeria" element={<Galeria />} />
 
-          <Route path="/agenda" element={<AgendamentosBarbearia />}/>
+          <Route path="/agenda" element={<AgendamentoBarbearia />}/>
           <Route path="/dashboard" element={<Dashboard/>}/>
           <Route path="/servicos" element={<ServicoBarbeiro />} />
           <Route path="/fluxo-de-caixa" element={<FluxoDeCaixa />} />
           <Route path="/funcionarios" element={<Funcionarios />} />
-          <Route path="/personalizar-barbearia" element={<PersonalizarBarbearia />} />
+          <Route path="/configuracoes" element={<PersonalizarBarbearia />} />
           <Route path="/data-hora" element={<DataHora />} />
 
 

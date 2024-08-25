@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import HeaderUsuario from '../../../components/HeaderUsuario/HeaderUsuario'
-import NavbarBarbeiro from '../../../components/NavbarBarbeiro/NavbarBarbeiro'
-import { ThemeProvider, Typography } from '@mui/material'
-import { CardHorario } from '../../../components/CardHorario/CardHorario'
-import api from '../../../api'
-import { VisualizarAtendimento } from '../../../components/VisualizarAtendimento/VisualizarAtendimento'
-import { theme } from '../../../theme'
+import { CircularProgress, Pagination, Stack, ThemeProvider, Typography } from '@mui/material'
+import { CardHorario } from '../../components/CardHorario/CardHorario'
+import api from '../../api'
+import { VisualizarAtendimento } from '../../components/VisualizarAtendimento/VisualizarAtendimento'
+import { theme } from '../../theme'
+import { Sidebar } from '../../components/Sidebar'
+import { HeaderUsuario } from '../../components/Header'
+import { ModalPersonalizado } from '../../components/ModalPersonalizado/ModalPersonalizado'
 
 function AgendamentoBarbearia() {
   const token = JSON.parse(sessionStorage.getItem('user'))
@@ -13,6 +14,8 @@ function AgendamentoBarbearia() {
   const [open, setOpen] = useState(false)
   const [compromissosPendentes, setCompromissosPendentes] = useState([])
   const [compromissosAgendados, setCompromissosAgendados] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [loadingAgendados, setLoadingAgendados] = useState(false)
 
   const handleModal = (compromisso) => {
     setModal(compromisso)
@@ -23,7 +26,7 @@ function AgendamentoBarbearia() {
   useEffect(() => {
     const fetchAgendamentos = async () => {
       try {
-        const responsePendentes = await api.get(`/agendamentos/list-all-by-status/Pendente`, {
+        const responsePendentes = await api.get(`/agendamentos/list-all-by-status/none`, {
           headers: {
             Authorization: token
           }
@@ -36,7 +39,9 @@ function AgendamentoBarbearia() {
         })
 
         setCompromissosPendentes(responsePendentes.data)
+        setLoading(true)
         setCompromissosAgendados(responseAgendados.data)
+        setLoadingAgendados(true)
       } catch (error) {
         console.error('Erro ao buscar agendamentos:', error)
       }
@@ -65,10 +70,10 @@ function AgendamentoBarbearia() {
       await api.post(`/financas/lancar-valor`,
         { valor }
         , {
-        headers: {
-          Authorization: token
-        }
-      })
+          headers: {
+            Authorization: token
+          }
+        })
 
       console.log('Valor do serviço enviado com sucesso!', valor)
     } catch (error) {
@@ -88,46 +93,50 @@ function AgendamentoBarbearia() {
     return `${dia}/${mes}/${ano} às ${hora}:${minutos < 10 ? '0' + minutos : minutos}`
   }
 
+  const [page, setPage] = useState(1)
+  const rowsPerPage = 3
+  const compromissosPendentesPaginados = compromissosPendentes.slice((page - 1) * rowsPerPage, page * rowsPerPage)
+
+  const handlePageChange = (event, value) => {
+    setPage(value)
+  }
+
+  const compromissosAgendadosPaginados = compromissosAgendados.slice((page - 1) * rowsPerPage, page * rowsPerPage)
+  const [pageAgendados, setPageAgendados] = useState(1)
+
+
   return (
     <ThemeProvider theme={theme}>
-      <div style={{
-        backgroundColor: '#F4F3EE',
-      }}>
-        <HeaderUsuario />
-
-        <NavbarBarbeiro />
+      <div>
+        <Sidebar />
 
         <div style={{
+          width: '85vw',
+          marginLeft: '15vw',
+          height: '100vh',
           display: 'flex',
-          flexDirection: 'row',
-          height: '80vh',
-          width: '100%',
-          marginTop: 32,
-          justifyContent: 'space-between',
-          gap: 32
+          flexDirection: 'column',
         }}>
+          <HeaderUsuario title='Agendamentos' />
+
           <div style={{
-            padding: 32,
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
           }}>
-            <div style={{
-            }}>
-              <Typography variant='h5' style={{ marginLeft: 32, marginBottom: 32, fontWeight: 'bold' }}>
-                Pendentes
-              </Typography>
+            <Typography variant='h7' style={{ color: '#082031', marginLeft: 16, marginTop: 16 }}>Pendente</Typography>
 
-              <div style={{
-                display: 'flex',
-                flexDirection: 'row',
-                gap: 32,
-                maxWidth: 850,
-                overflowX: 'scroll'
-              }}>
-                {compromissosPendentes.length === 0 ? (
-                  <Typography variant='h6' style={{ marginLeft: 32 }}>
-                    Nenhum agendamento pendente
-                  </Typography>
-                ) : (
-                  compromissosPendentes.map((compromisso, index) => (
+            <div style={{
+              display: 'flex',
+              flexDirection: 'row',
+              gap: 16,
+              height: '100%',
+              width: '100%',
+              justifyContent: !loading || compromissosPendentesPaginados <= 0 ? 'center' : 'flex-start'
+            }}>
+              {!loading ? <CircularProgress style={{ alignSelf: 'center' }} /> : (
+                compromissosPendentesPaginados.length > 0 ? (
+                  compromissosPendentesPaginados.map((compromisso, index) => (
                     <CardHorario
                       key={index}
                       nomeCliente={compromisso.nomeCliente}
@@ -140,51 +149,73 @@ function AgendamentoBarbearia() {
                       }}
                     />
                   ))
-                )}
-              </div>
-            </div>
-
-            <div style={{
-              marginTop: 32,
-            }}>
-              <Typography variant='h5' style={{ marginLeft: 32, marginBottom: 32, fontWeight: 'bold' }}>
-                Agendados
-              </Typography>
-
-              <div style={{
-                display: 'flex',
-                flexDirection: 'row',
-                gap: 32,
-                maxWidth: 850,
-                overflowX: 'scroll'
-              }}>
-                {compromissosAgendados.length === 0 ? (
-                  <Typography variant='h6' style={{ marginLeft: 32 }}>
-                    Nenhum agendamento
-                  </Typography>
                 ) : (
-                  compromissosAgendados.map((compromisso, index) => (
-                    <CardHorario
-                      key={index}
-                      nomeCliente={compromisso.nomeCliente}
-                      horario={formatarDataHora(compromisso.dataHora)}
-                      duracao={compromisso.tempoEstimado}
-                      servico={compromisso.tipoServico}
-                      onClick={() => {
-                        handleModal(compromisso)
-                        setOpen(true)
-                      }}
-                    />
-                  ))
-                )}
-              </div>
+                  <Typography variant='h7' style={{ color: '#082031', alignSelf: 'center', display: 'flex' }}>Não há agendamentos pendentes.</Typography>
+                )
+              )}
             </div>
+            <Stack spacing={2} style={{ marginTop: 16, alignItems: 'center' }}>
+              <Pagination
+                count={Math.ceil(compromissosPendentes.length / rowsPerPage)}
+                page={page}
+                onChange={handlePageChange}
+                color="primary"
+              />
+            </Stack>
           </div>
 
           <div style={{
-            padding: 32,
+            display: 'flex',
+            flexDirection: 'column',
+            height: '40vh',
+            justifyContent: 'space-between'
           }}>
-            {open && (
+            <Typography variant='h7' style={{ color: '#082031', marginLeft: 16, marginTop: 16 }}>Agendados</Typography>
+
+            <div style={{
+              display: 'flex',
+              flexDirection: 'row',
+              gap: 16,
+              height: '100%',
+              width: '100%',
+              justifyContent: !loading || compromissosAgendadosPaginados <= 0 ? 'center' : 'flex-start'
+            }}>
+              {!loadingAgendados ? <CircularProgress style={{ alignSelf: 'center' }} /> : (
+                compromissosAgendadosPaginados.length > 0 ? (
+                  compromissosAgendadosPaginados.map((compromisso, index) => (
+                    <CardHorario
+                      key={index}
+                      nomeCliente={compromisso.nomeCliente}
+                      horario={formatarDataHora(compromisso.dataHora)}
+                      duracao={compromisso.tempoEstimado}
+                      servico={compromisso.tipoServico}
+                      onClick={() => {
+                        handleModal(compromisso)
+                        setOpen(true)
+                      }}
+                    />
+                  ))
+                ) : (
+                  <Typography variant='h7' style={{ color: '#082031', alignSelf: 'center', display: 'flex' }}>Não há agendamentos confirmados.</Typography>
+                )
+              )}
+            </div>
+            <Stack spacing={2} style={{ marginTop: 16, alignItems: 'center' }}>
+              <Pagination
+                count={Math.ceil(compromissosAgendados.length / rowsPerPage)}
+                page={pageAgendados}
+                onChange={handlePageChange}
+                color="primary"
+              />
+            </Stack>
+          </div>
+
+          {open && (
+            <ModalPersonalizado
+              open={open}
+              setOpen={() => setOpen}
+              handleClose={() => setOpen(false)}
+            >
               <VisualizarAtendimento
                 nomeCliente={modal.nomeCliente}
                 data={formatarDataHora(modal.dataHora)}
@@ -210,8 +241,8 @@ function AgendamentoBarbearia() {
                 }}
                 titleButton={modal.status === 'Pendente' ? 'Confirmar' : 'Concluir'}
               />
-            )}
-          </div>
+            </ModalPersonalizado>
+          )}
         </div>
       </div>
     </ThemeProvider>

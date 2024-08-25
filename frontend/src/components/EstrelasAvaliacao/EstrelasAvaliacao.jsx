@@ -1,13 +1,10 @@
-import * as React from 'react';
+import React from 'react';
 import Rating from '@mui/material/Rating';
 import Stack from '@mui/material/Stack';
 
 export default function EstrelasAvaliacao({ value }) {
-  const [rating, setRating] = React.useState(value);
-
-  const handleChange = (event) => {
-    setRating(event.target.value);
-  };
+  // O estado 'rating' é removido porque não é necessário
+  // Uma vez que você está apenas exibindo a avaliação e não a alterando
 
   return (
     <Stack spacing={1}>

@@ -1,5 +1,9 @@
 .fluxoCaixaTodo{
-    background-color: #F4F3EE;
+    width: 85vw;
+    margin-left: 15vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 .modalAdicionarValorDespesa {
@@ -25,20 +29,20 @@
 }
 
 .conteudoModal {
-    position: relative; 
-    z-index: 1000; 
+    position: relative;
+    z-index: 1000;
 }
 
 .containerFluxoCaixa {
-    width: 85%;
-    margin: auto;
+    width: 100%;
+    height: 100vh;
 }
 
 .cardFluxoCaixa {
-    padding-top: 2.5%;
     display: flex;
-    width: 100%;
-    justify-content: space-between;
+    flex-grow: 1;
+    justify-content: center;
+    gap: 32px;
 }
 
 .graficos {
@@ -56,6 +60,7 @@
     width: 67.5%;
     border-radius: 15px;
     padding: 1%;
+    margin-left: 16px;
 }
 
 .titulosGraficoLinha {
@@ -89,6 +94,7 @@
     flex-direction: column;
     border-radius: 15px;
     width: 27.5%;
+    margin-right: 16px;
 }
 
 .tituloGraficoLucratividade{
