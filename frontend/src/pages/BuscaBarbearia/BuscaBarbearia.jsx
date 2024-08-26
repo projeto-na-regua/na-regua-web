@@ -7,10 +7,10 @@ import logo from '../../utils/assets/logo-scale0.svg';
 import Header from "../../components/Header/Header";
 import { theme } from '../../theme';
 import { ThemeProvider } from '@emotion/react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import MenuLateralUsuario from '../../components/MenuLateralUsuario/MenuLateralUsuario.jsx';
-import imgBarbeariaPadrao from '../../utils/assets/barbeariaPadrao.png'
-import { Button } from '@mui/material';
+import imgBarbeariaPadrao from '../../utils/assets/barbeariaPadrao.png';
+import { Button, CircularProgress } from '@mui/material';
 import api from '../../api.js';
 
 export function BuscaBarbearia() {
@@ -20,18 +20,8 @@ export function BuscaBarbearia() {
     const token = JSON.parse(sessionStorage.getItem('user'));
     const [open, setOpen] = useState(false);
     const [barbearias, setBarbearias] = useState([]);
-    /* const [idsBarbearias, setIdsBarbearias] = useState([]); */
     const [imgPerfil, setImgPerfil] = useState([]);
-    const [latitude, setLatitude] = useState(0);
-    const [longitude, setLongitude] = useState(0);
-    const [servico, setServico] = useState('');
-    const [data, setData] = useState('');
-    const [horario, setHorario] = useState('');
-    const location = useLocation();
-    /* const [avaliacoes, setAvaliacoes] = useState([]);
-    const [avaliacoesCarregadas, setAvaliacoesCarregadas] = useState(false);
-    const [mediaAvaliacao, setMediaAvaliacao] = useState(null); // Inicialmente null
-    const [carregandoAvaliacoes, setCarregandoAvaliacoes] = useState(true); // Estado de carregamento */
+    const [loading, setLoading] = useState(false); // Estado para indicar carregamento
 
     useEffect(() => {
         if (!token) {
@@ -43,85 +33,45 @@ export function BuscaBarbearia() {
 
     useEffect(() => {
         fetchBarbearias();
-        fetchImage();
     }, []);
-
-    /* useEffect(() => {
-        if (idsBarbearias.length > 0) {
-            fetchAvaliacoes();
-        }
-    }, [idsBarbearias]); // Chama fetchAvaliacoes quando idsBarbearias muda */
 
     const fetchBarbearias = async () => {
         try {
+            setLoading(true); // Inicia o estado de carregamento
             console.log('Fetching barbearias (cliente):');
-            const response = await api.get('barbearias/client-side/pesquisa', {
+            
+            const searchParams = new URLSearchParams(window.location.search);
+            const servico = searchParams.get('servico');
+            const localizacao = searchParams.get('localizacao');
+            const data = searchParams.get('data');
+            const horario = searchParams.get('horario');
+            
+            const response = await api.get('pesquisa/client-side', {
                 headers: {
                     Authorization: token,
-                }
-            });
-            console.log('Response fetch barbearias:', response.data);
-            setBarbearias(response.data);
-            /* setIdsBarbearias(response.data.map(barbearia => barbearia.id)); // Atualiza idsBarbearias */
-        } catch (error) {
-            console.error('Erro ao buscar as barbearias:', error);
-        }
-    };
-
-    const fetchImage = async () => {
-        try {
-            console.log('Fetching imagens de perfil das barbearias (cliente)');
-            const response = await api.get('barbearias/client-side/get-image-perfil', {
-                headers: {
-                    Authorization: token
-                }
-            });
-            console.log(response.data);
-            setImgPerfil(response.data);
-        } catch (error) {
-            console.log('Erro ao buscar a imagem de capa: ' + error);
-        }
-    };
-
-    /* const fetchAvaliacoes = async () => {
-        try {
-            console.log('Fetching avaliacoes (cliente)');
-            setCarregandoAvaliacoes(true); // Inicia o carregamento
-            const response = await api.get('/agendamentos/cliente-side/all-ultimas-avaliacoes', {
-                headers: {
-                    Authorization: token
                 },
                 params: {
-                    qtd: 1000,
-                    idBarbearias: idsBarbearias.join(',')
+                    servico,
+                    localizacao,
+                    data,
+                    horario
                 }
             });
-
-            const valoresAvaliacoes = [];
-            const avaliacoesFiltradas = [];
-
-            for (let i = 0; i < response.data.length; i++) {
-                if (response.data[i].resultadoAvaliacao != null) {
-                    valoresAvaliacoes.push(response.data[i].resultadoAvaliacao);
-                    avaliacoesFiltradas.push(response.data[i]);
-                }
+            
+            console.log('Response fetch barbearias:', response.data);
+            setBarbearias(response.data);
+            var imagens = [];
+            for(var i = 0; i < response.data.length; i++){
+                imagens[i] = response.data[i].imgPerfil
+                console.log(imagens)
             }
-
-            setMediaAvaliacao(mediaAvaliacaoBarbearia(valoresAvaliacoes));
-            setAvaliacoes(avaliacoesFiltradas);
-            setAvaliacoesCarregadas(true);
-            setCarregandoAvaliacoes(false); // Atualiza o estado de carregamento
+            setImgPerfil(imagens)
         } catch (error) {
-            console.error('Erro ao buscar avaliações da barbearia:', error.response ? error.response.data : error.message);
-            setCarregandoAvaliacoes(false); // Atualiza o estado de carregamento mesmo em erro
+            console.error('Erro ao buscar as barbearias:', error);
+        } finally {
+            setLoading(false); // Finaliza o estado de carregamento
         }
     };
-
-    function mediaAvaliacaoBarbearia(vetor) {
-        if (vetor.length === 0) return 0; // Evita divisão por zero
-        const soma = vetor.reduce((acc, valor) => acc + valor, 0);
-        return soma / vetor.length;
-    } */
 
     return (
         <ThemeProvider theme={theme}>
@@ -163,18 +113,28 @@ export function BuscaBarbearia() {
                             <LinhaFiltroBuscarBarbearia />
                         </div>
 
-                        <div className={styles.CardsBarbeariaEncontrada}>
-                            {barbearias.map((barbearia, index) => (
-                                <CardBarbeariaEncontrada
-                                    valor={barbearia.id}
-                                    key={barbearia.id} // Use o id como chave
-                                    nomeBarbearia={barbearia.nomeNegocio}
-                                    endereco={`${barbearia.logradouro}, ${barbearia.numero}`}
-                                    foto={imgPerfil[index] && /^https:\/\/upload0naregua\.blob\.core\.windows\.net\/upload\/.+/.test(imgPerfil[index]) ? imgPerfil[index] : imgBarbeariaPadrao }
-                                    /* avaliacao={avaliacoes.find(av => av.barbeariaId === barbearia.id)?.resultadoAvaliacao || 0} // Forneça uma avaliação padrão */
-                                />
-                            ))}
-                        </div>
+                        {loading ? (
+                            <div className={styles.loadingContainer}>
+                                <CircularProgress />
+                                <span>Carregando barbearias...</span>
+                            </div>
+                        ) : barbearias.length === 0 ? (
+                            <div className={styles.nenhumaBarbeariaEncontrada}>
+                                <span>Nenhuma barbearia encontrada de acordo com sua pesquisa</span>
+                            </div>
+                        ) : (
+                            <div className={styles.CardsBarbeariaEncontrada}>
+                                {barbearias.map((barbearia, index) => (
+                                    <CardBarbeariaEncontrada
+                                        valor={barbearia.id}
+                                        key={barbearia.id}
+                                        nomeBarbearia={barbearia.nomeNegocio}
+                                        endereco={`${barbearia.logradouro}, ${barbearia.numero}`}
+                                        foto={imgPerfil[index] && /^https:\/\/upload0naregua\.blob\.core\.windows\.net\/upload\/.+/.test(imgPerfil[index]) ? imgPerfil[index] : imgBarbeariaPadrao }
+                                    />
+                                ))}
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

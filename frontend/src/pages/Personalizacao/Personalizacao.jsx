@@ -136,6 +136,10 @@ export function Personalizacao() {
         setHorarios(barbeariaData.diaSemanas)
         setDiaSelecionado(barbeariaData.diaSemanas[0]?.id || null)
         setIsInitialLoad(false)
+        const imagemPerfil = response.data.imgPerfil
+        const imagemBanner = response.data.imgBanner
+        setImgCapa(imagemBanner)
+        setImgPerfil(imagemPerfil)
       } catch (error) {
         console.error("Erro ao obter dados da barbearia", error)
       }
@@ -150,15 +154,12 @@ export function Personalizacao() {
     const fetchImage = async () => {
       try {
         setLoadingPerfil(true)
-        const response = await api.get("/barbearias/get-image-perfil", {
+        const response = await api.get("/barbearias/perfil", {
           headers: {
             Authorization: token,
-          },
-          responseType: "arraybuffer",
+          }
         })
-
-        const blob = new Blob([response.data], { type: "image/png" })
-        const imageUrl = URL.createObjectURL(blob)
+        const imageUrl = response.data.imgPerfil
         setImgPerfil(imageUrl)
       } catch (error) {
         console.log("Erro ao buscar a imagem de perfil: " + error)
@@ -177,13 +178,11 @@ export function Personalizacao() {
         const response = await api.get("/barbearias/get-image-banner", {
           headers: {
             Authorization: token,
-          },
-          responseType: "arraybuffer",
+          }
         })
 
-        const blob = new Blob([response.data], { type: "image/png" })
-        const imageUrl = URL.createObjectURL(blob)
-        setImgCapa(imageUrl)
+        const imageUrl = response.data.imgBanner
+        setImgPerfil(imageUrl)
       } catch (error) {
         console.log("Erro ao buscar a imagem de capa: " + error)
       } finally {

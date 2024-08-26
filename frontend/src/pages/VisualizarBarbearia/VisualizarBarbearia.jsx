@@ -58,23 +58,6 @@ export function VisualizarBarbearia() {
         navigate(`/selecionar-data-hora?valor=${valor}`);
     };
 
-    const fetchImagePerfil = async () => {
-        try {
-            console.log('Fetching imagens de perfil da barbearia (cliente)');
-            const response = await api.get(`barbearias/client-side/get-one-image-perfil/${valor}`, {
-                headers: {
-                    Authorization: token
-                }
-            });
-            console.log(response.data)
-            const imageBytesList = response.data;
-            setImgPerfil(imageBytesList);
-
-        } catch (error) {
-            console.log('Erro ao buscar a imagem de perfil: ' + error);
-        }
-    };
-
     const fetchAvaliacoes = async () => {
         try {
             console.log('Fetching avaliacoes (cliente)');
@@ -129,23 +112,6 @@ export function VisualizarBarbearia() {
         }
     };
 
-    const fetchImageBanner = async () => {
-        try {
-            console.log('Fetching imagens banner da barbearia (cliente)');
-            const response = await api.get(`barbearias/client-side/get-image-banner/${valor}`, {
-                headers: {
-                    Authorization: token
-                }
-            });
-            console.log(response.data)
-            const imageBytesList = response.data;
-            setImgBanner(imageBytesList);
-
-        } catch (error) {
-            console.log('Erro ao buscar a imagem de capa: ' + error);
-        }
-    };
-
     const fetchMapaGoogle = async (endereco) => {
         try {
             const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${endereco}&key=AIzaSyB_bpX4vjXwCdDSo5xd0E4tqIWOJexOJYQ`);
@@ -183,6 +149,9 @@ export function VisualizarBarbearia() {
                 setContatos([{ telefone: '(11) 98080-8080' }]);
             }
             setLoading(false);
+            setImgBanner(response.data.imgBanner)
+            setImgPerfil(response.data.imgPerfil)
+            console.log(imgBanner)
         } catch (error) {
             console.error('Erro ao buscar o perfil da barbearia:', error);
             setLoading(false);
@@ -223,8 +192,6 @@ export function VisualizarBarbearia() {
         fetchPerfilBarbearia();
         fetchServicosBarbearia();
         fetchFuncionariosBarbearia();
-        fetchImagePerfil();
-        fetchImageBanner();
         fetchImagePerfilFuncionarios();
         fetchAvaliacoes();
     }, []);

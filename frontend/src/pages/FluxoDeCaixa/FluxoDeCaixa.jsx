@@ -188,7 +188,10 @@ export function FluxoDeCaixa() {
                             <path d="M43.7969 7.00781H54.6689V17.8798" stroke="#082031" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>
                         } spanValue={"Despesas"} valor={formatarNumero(despesa)} />
-                        {/* <CardLancarValores setMostrarModal={setMostrarModal} setScrollHabilitado={setScrollHabilitado} /> */}
+                    </div>
+
+                    <div className={styles.botaoLancarValores}>
+                        {<CardLancarValores setMostrarModal={setMostrarModal} setScrollHabilitado={setScrollHabilitado} />}
                     </div>
 
                     <div className={styles.graficos}>
