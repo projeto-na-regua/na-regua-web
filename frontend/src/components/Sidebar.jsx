@@ -11,37 +11,42 @@ import funcionarios from "../utils/assets/funcionarios.svg";
 import chart from "../utils/assets/chart.svg";
 import config from "../utils/assets/config.svg";
 import api from "../../src/api.js";
-import iconVoltar from '../utils/assets/icon voltar branco.svg'
+import iconVoltar from '../utils/assets/icon voltar branco.svg';
 
 export function Sidebar() {
   const [isAdm, setIsAdm] = useState(false);
-  const barbeariaInfo = useState(
-    JSON.parse(sessionStorage.getItem("barbearia"))
-  );
+  const barbeariaInfo = JSON.parse(sessionStorage.getItem("barbearia"));
   const token = JSON.parse(sessionStorage.getItem("user"));
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchUserInfo = async () => {
-      try {
-        const response = await api.get("/usuarios/user", {
-          headers: {
-            Authorization: token,
-          },
-        });
+    const cachedUserInfo = sessionStorage.getItem("tipo");
 
-        if (response.status === 200) {
-          const userInfo = response.data;
-          sessionStorage.setItem("tipo", JSON.stringify(userInfo));
-          setIsAdm(userInfo.adm || false);
+    if (cachedUserInfo) {
+      const userInfo = JSON.parse(cachedUserInfo);
+      setIsAdm(userInfo.adm || false);
+    } else {
+      const fetchUserInfo = async () => {
+        try {
+          const response = await api.get("/usuarios/user", {
+            headers: {
+              Authorization: token,
+            },
+          });
+
+          if (response.status === 200) {
+            const userInfo = response.data;
+            sessionStorage.setItem("tipo", JSON.stringify(userInfo));
+            setIsAdm(userInfo.adm || false);
+          }
+        } catch (error) {
+          console.error("Erro ao buscar informações do usuário", error);
         }
-      } catch (error) {
-        console.error("Erro ao buscar informações do usuário", error);
-      }
-    };
+      };
 
-    fetchUserInfo();
-  }, []);
+      fetchUserInfo();
+    }
+  }, [token]);
 
   return (
     <ThemeProvider theme={theme}>
@@ -66,19 +71,22 @@ export function Sidebar() {
             marginLeft: 16,
           }}
         >
-          <Typography variant="h7" style={{ color: "white" }}>
-            Perfil
-          </Typography>
+          {/* Opções visíveis para Clientes */}
+          {!barbeariaInfo && (
+            <>
+              <Typography variant="h7" style={{ color: "white" }}>
+                Perfil
+              </Typography>
 
-          {/* Opções visíveis para todos */}
-          <OptionsSidebar text="Agendamentos" icon={calendario} />
-          <OptionsSidebar text="Galeria" icon={galeria} />
+              <OptionsSidebar text="Agendamentos" icon={calendario} />
+              <OptionsSidebar text="Galeria" icon={galeria} />
+            </>
+          )}
 
           {/* Opções para barbeiros comuns */}
           {!isAdm && barbeariaInfo && (
             <div
               style={{
-                marginTop: 32,
                 display: "flex",
                 flexDirection: "column",
                 gap: 8,
@@ -87,6 +95,7 @@ export function Sidebar() {
               <Typography variant="h7" style={{ color: "white" }}>
                 {barbeariaInfo.nomeNegocio}
               </Typography>
+
               <OptionsSidebar text="Agenda" icon={calendario} />
               <OptionsSidebar text="Serviços" icon={servicos} />
             </div>
@@ -96,7 +105,6 @@ export function Sidebar() {
           {isAdm && barbeariaInfo && (
             <div
               style={{
-                marginTop: 32,
                 display: "flex",
                 flexDirection: "column",
                 gap: 8,
@@ -124,6 +132,9 @@ export function Sidebar() {
             marginBottom: 32,
           }}
         >
+          <OptionsSidebar text="Voltar" icon={iconVoltar} />
+          <OptionsSidebar text="Configurações" icon={config} />
+
           {/* Botão para cadastro de barbearia (visível apenas se não houver barbearia logada ou se não fizer parte de uma barbearia) */}
           {!barbeariaInfo && (
             <Button
@@ -133,15 +144,6 @@ export function Sidebar() {
             >
               Possui barbearia?
             </Button>
-          )}
-
-          <OptionsSidebar text='Voltar' icon={iconVoltar} />
-
-          {/* Opção de configurações (visível apenas se houver barbearia logada e se for admin) */}
-          {barbeariaInfo && isAdm && (
-            <>
-              <OptionsSidebar text='Configurações' icon={config} />
-            </>
           )}
         </div>
       </div>

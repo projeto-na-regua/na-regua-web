@@ -22,7 +22,7 @@ function ConfirmacaoBarbearia() {
       )
 
       toast.success('Cadastro realizado com sucesso!', { autoClose: 2000 })
-      navigate('/funcionarios')
+      navigate('/agenda')
 
     } catch (error) {
       toast.error('Erro ao cadastrar', { autoClose: 2000 })
