@@ -2,8 +2,6 @@ import React, { useEffect, useState } from "react";
 import CardDataHora from "../../components/CardDataHora/CardDataHora";
 import CardDataHoraClosed from "../../components/CardDataHora/CardDataHoraClosed";
 import styles from "./DataHora.module.css";
-import NavbarBarbeiro from "../../components/NavbarBarbeiro/NavbarBarbeiro";
-import HeaderUsuario from "../../components/HeaderUsuario/HeaderUsuario";
 import {
   Button,
   TextField,
@@ -138,8 +136,6 @@ export function DataHora() {
 
   return (
     <ThemeProvider theme={theme}>
-      <HeaderUsuario />
-      <NavbarBarbeiro />
       <main>
         <div className={styles.container}>
           <label

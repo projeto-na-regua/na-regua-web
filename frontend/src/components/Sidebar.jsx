@@ -1,104 +1,143 @@
-import { Button, ThemeProvider, Typography } from '@mui/material'
-import { theme } from '../theme.js'
-import { OptionsSidebar } from './OptionsSidebar/OptionsSidebar.jsx'
-import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import calendario from '../utils/assets/calendario.svg'
-import galeria from '../utils/assets/galeria.svg'
-import dashboard from '../utils/assets/dashboard.svg'
-import servicos from '../utils/assets/servicos.svg'
-import funcionarios from '../utils/assets/funcionarios.svg'
-import chart from '../utils/assets/chart.svg'
-import config from '../utils/assets/config.svg'
+import { Button, ThemeProvider, Typography } from "@mui/material";
+import { theme } from "../theme.js";
+import { OptionsSidebar } from "./OptionsSidebar/OptionsSidebar.jsx";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import calendario from "../utils/assets/calendario.svg";
+import galeria from "../utils/assets/galeria.svg";
+import dashboard from "../utils/assets/dashboard.svg";
+import servicos from "../utils/assets/servicos.svg";
+import funcionarios from "../utils/assets/funcionarios.svg";
+import chart from "../utils/assets/chart.svg";
+import config from "../utils/assets/config.svg";
+import api from "../../src/api.js";
 
 export function Sidebar() {
-  const [isAuth, setIsAuth] = useState(false)
-  const barbeariaInfo = JSON.parse(sessionStorage.getItem('barbearia'))
-  const navigate = useNavigate()
+  const [isAdm, setIsAdm] = useState(false);
+  const [barbeariaInfo, setBarbeariaInfo] = useState(
+    JSON.parse(sessionStorage.getItem("barbearia"))
+  );
+  const token = JSON.parse(sessionStorage.getItem("user"));
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const validarTipoUsuario = async () => {
+    const fetchUserInfo = async () => {
       try {
-        if (barbeariaInfo !== null) {
-          setIsAuth(true)
-        } else {
-          setIsAuth(false)
+        const response = await api.get("/usuarios/user", {
+          headers: {
+            Authorization: token,
+          },
+        });
+
+        if (response.status === 200) {
+          const userInfo = response.data;
+          sessionStorage.setItem("tipo", JSON.stringify(userInfo));
+          setIsAdm(userInfo.adm || false);
         }
       } catch (error) {
-        console.error('Erro ao validar o funcionário', error)
+        console.error("Erro ao buscar informações do usuário", error);
       }
-    }
+    };
 
-    validarTipoUsuario()
-  }, [barbeariaInfo])
+    fetchUserInfo();
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>
-      <div style={{
-        backgroundColor: '#082031',
-        width: '15vw',
-        height: '100vh',
-        position: 'fixed',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between'
-      }}>
-        <div style={{
-          width: '100%',
-          gap: 8,
-          marginTop: 32,
-          display: 'flex',
-          flexDirection: 'column',
-          marginLeft: 16
-        }}>
-          <Typography variant='h7' style={{ color: 'white' }}>Perfil</Typography>
+      <div
+        style={{
+          backgroundColor: "#082031",
+          width: "15vw",
+          height: "100vh",
+          position: "fixed",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+        }}
+      >
+        <div
+          style={{
+            width: "100%",
+            gap: 8,
+            marginTop: 32,
+            display: "flex",
+            flexDirection: "column",
+            marginLeft: 16,
+          }}
+        >
+          <Typography variant="h7" style={{ color: "white" }}>
+            Perfil
+          </Typography>
 
-          <OptionsSidebar text='Agendamentos' icon={calendario} />
+          {/* Opções visíveis para todos */}
+          <OptionsSidebar text="Agendamentos" icon={calendario} />
+          <OptionsSidebar text="Galeria" icon={galeria} />
 
-          <OptionsSidebar text='Galeria' icon={galeria} />
-
-          {isAuth && (
-            <div style={{
-              marginTop: 32,
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 8,
-            }}>
-              <Typography variant='h7' style={{ color: 'white' }}>{barbeariaInfo.nomeNegocio}</Typography>
-
-              <OptionsSidebar text='Agenda' icon={calendario} />
-
-              <OptionsSidebar text='Dashboard' icon={chart} />
-
-              <OptionsSidebar text='Serviços' icon={servicos} />
-
-              <OptionsSidebar text='Fluxo de Caixa' icon={dashboard} />
-
-              <OptionsSidebar text='Funcionários' icon={funcionarios} />
+          {/* Opções para barbeiros comuns */}
+          {!isAdm && barbeariaInfo && (
+            <div
+              style={{
+                marginTop: 32,
+                display: "flex",
+                flexDirection: "column",
+                gap: 8,
+              }}
+            >
+              <Typography variant="h7" style={{ color: "white" }}>
+                {barbeariaInfo.nomeNegocio}
+              </Typography>
+              <OptionsSidebar text="Agenda" icon={calendario} />
+              <OptionsSidebar text="Serviços" icon={servicos} />
             </div>
           )}
 
+          {/* Opções adicionais para barbeiros admin */}
+          {isAdm && barbeariaInfo && (
+            <div
+              style={{
+                marginTop: 32,
+                display: "flex",
+                flexDirection: "column",
+                gap: 8,
+              }}
+            >
+              <Typography variant="h7" style={{ color: "white" }}>
+                {barbeariaInfo.nomeNegocio}
+              </Typography>
+              <OptionsSidebar text="Agenda" icon={calendario} />
+              <OptionsSidebar text="Dashboard" icon={chart} />
+              <OptionsSidebar text="Serviços" icon={servicos} />
+              <OptionsSidebar text="Fluxo de Caixa" icon={dashboard} />
+              <OptionsSidebar text="Funcionários" icon={funcionarios} />
+            </div>
+          )}
         </div>
 
-        <div style={{
-          width: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 16,
-          marginLeft: 16,
-          marginBottom: 32
-        }}>
-          <Button
-            variant='contained'
-            onClick={() => navigate('/cadastro-barbearia')}
-            style={{
-              display: isAuth ? 'none' : 'flex',
-              width: 180
-            }}>Possui barbearia?</Button>
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+            gap: 16,
+            marginLeft: 16,
+            marginBottom: 32,
+          }}
+        >
+          {/* Botão para cadastro de barbearia (visível apenas se não houver barbearia logada ou se não fizer parte de uma barbearia) */}
+          {!barbeariaInfo && (
+            <Button
+              variant="contained"
+              onClick={() => navigate("/cadastro-barbearia")}
+              style={{ width: 180 }}
+            >
+              Possui barbearia?
+            </Button>
+          )}
 
-          <OptionsSidebar text='Configurações' icon={config} />
+          {/* Opção de configurações (visível apenas se houver barbearia logada e se for admin) */}
+          {barbeariaInfo && isAdm && <OptionsSidebar text="Configurações" icon={config} />}
         </div>
       </div>
     </ThemeProvider>
-  )
+  );
 }
