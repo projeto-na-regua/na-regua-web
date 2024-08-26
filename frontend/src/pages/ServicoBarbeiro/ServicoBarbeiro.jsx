@@ -279,6 +279,7 @@ export function ServicoBarbeiro() {
       <Dialog open={aberto} onClose={fecharDialogo}>
         <DialogTitle>{servicoEditando ? 'Editar Serviço' : 'Cadastrar Serviço'}</DialogTitle>
         <DialogContent>
+          {/* Campos de texto para nome, descrição e valor do serviço */}
           <TextField
             autoFocus
             margin="dense"
@@ -304,6 +305,8 @@ export function ServicoBarbeiro() {
             value={valorServico}
             onChange={(e) => setValorServico(e.target.value)}
           />
+
+          {/* Botão para abrir o diálogo de seleção de duração */}
           <Button variant="outlined" onClick={abrirDuracao}>
             Selecionar Duração
           </Button>
@@ -315,6 +318,8 @@ export function ServicoBarbeiro() {
             value={formatarDuracao(duracaoServico)}
             disabled
           />
+
+          {/* Campo para selecionar responsáveis */}
           <FormControl fullWidth margin="dense">
             <InputLabel>Responsáveis</InputLabel>
             <Select
@@ -324,7 +329,7 @@ export function ServicoBarbeiro() {
               renderValue={(selected) => selected.join(', ')}
             >
               {funcionarios.map((funcionario) => (
-                <MenuItem key={funcionario.email} value={funcionario.nome}>
+                <MenuItem key={funcionario.nome} value={funcionario.nome}>
                   <Checkbox checked={responsaveis.indexOf(funcionario.nome) > -1} />
                   <ListItemText primary={funcionario.nome} />
                 </MenuItem>
@@ -339,6 +344,27 @@ export function ServicoBarbeiro() {
           </Button>
         </DialogActions>
       </Dialog>
+      <Dialog open={duracaoAberta} onClose={fecharDuracao}>
+        <DialogTitle>Selecionar Duração</DialogTitle>
+        <DialogContent>
+          <Select
+            value={duracaoServico}
+            onChange={selecionarDuracao}
+            fullWidth
+          >
+            {duracoes.map((duracao) => (
+              <MenuItem key={duracao} value={duracao}>
+                {formatarDuracao(duracao)}
+              </MenuItem>
+            ))}
+          </Select>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={fecharDuracao}>Cancelar</Button>
+        </DialogActions>
+      </Dialog>
+
+
     </ThemeProvider>
   )
 }
