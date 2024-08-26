@@ -26,7 +26,7 @@ function AgendamentoBarbearia() {
   useEffect(() => {
     const fetchAgendamentos = async () => {
       try {
-        const responsePendentes = await api.get(`/agendamentos/list-all-by-status/none`, {
+        const responsePendentes = await api.get(`/agendamentos/list-all-by-status/Pendente`, {
           headers: {
             Authorization: token
           }
@@ -131,8 +131,9 @@ function AgendamentoBarbearia() {
               flexDirection: 'row',
               gap: 16,
               height: '100%',
-              width: '100%',
-              justifyContent: !loading || compromissosPendentesPaginados <= 0 ? 'center' : 'flex-start'
+              minHeight: '30vh',
+              justifyContent: !loading || compromissosPendentesPaginados <= 0 ? 'center' : 'flex-start',
+              marginLeft: 16
             }}>
               {!loading ? <CircularProgress style={{ alignSelf: 'center' }} /> : (
                 compromissosPendentesPaginados.length > 0 ? (
@@ -167,7 +168,7 @@ function AgendamentoBarbearia() {
           <div style={{
             display: 'flex',
             flexDirection: 'column',
-            height: '40vh',
+            height: '45vh',
             justifyContent: 'space-between'
           }}>
             <Typography variant='h7' style={{ color: '#082031', marginLeft: 16, marginTop: 16 }}>Agendados</Typography>
