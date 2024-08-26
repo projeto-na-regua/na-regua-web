@@ -135,10 +135,11 @@ export function Sidebar() {
             </Button>
           )}
 
+          <OptionsSidebar text='Voltar' icon={iconVoltar} />
+
           {/* Opção de configurações (visível apenas se houver barbearia logada e se for admin) */}
           {barbeariaInfo && isAdm && (
             <>
-              <OptionsSidebar text='Voltar' icon={iconVoltar} />
               <OptionsSidebar text='Configurações' icon={config} />
             </>
           )}
