@@ -11,10 +11,11 @@ import funcionarios from "../utils/assets/funcionarios.svg";
 import chart from "../utils/assets/chart.svg";
 import config from "../utils/assets/config.svg";
 import api from "../../src/api.js";
+import iconVoltar from '../utils/assets/icon voltar branco.svg'
 
 export function Sidebar() {
   const [isAdm, setIsAdm] = useState(false);
-  const [barbeariaInfo, setBarbeariaInfo] = useState(
+  const barbeariaInfo = useState(
     JSON.parse(sessionStorage.getItem("barbearia"))
   );
   const token = JSON.parse(sessionStorage.getItem("user"));
@@ -135,7 +136,12 @@ export function Sidebar() {
           )}
 
           {/* Opção de configurações (visível apenas se houver barbearia logada e se for admin) */}
-          {barbeariaInfo && isAdm && <OptionsSidebar text="Configurações" icon={config} />}
+          {barbeariaInfo && isAdm && (
+            <>
+              <OptionsSidebar text='Voltar' icon={iconVoltar} />
+              <OptionsSidebar text='Configurações' icon={config} />
+            </>
+          )}
         </div>
       </div>
     </ThemeProvider>
