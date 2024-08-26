@@ -23,7 +23,8 @@ function BoxBarbeariaHistorico() {
       try {
         const response = await api.get('/agendamentos/historico', {
           headers: {
-            Authorization: token
+            'Content-Type': 'application/json',
+            Authorization: token,
           },
         });
         if (response.status !== 200) {

@@ -20,6 +20,7 @@ import SelecionarDataHora from "./pages/SelecionarDataHora/SelecionarDataHora.js
 import AgendamentoUsuario from './pages/AgendamentoUsuario/AgendamentosUsuario.jsx'
 import { Galeria } from './pages/Galeria/Galeria.jsx'
 import AgendamentoBarbearia from './pages/AgendamentoBarbearia/AgendamentoBarbearia.jsx'
+import DataHora from './pages/DataHora/DataHora.jsx'
 
 function Rotas() {
   return (
@@ -47,6 +48,8 @@ function Rotas() {
           <Route path="/fluxo-de-caixa" element={<FluxoDeCaixa />} />
           <Route path="/funcionarios" element={<Funcionarios />} />
           <Route path="/configuracoes" element={<PersonalizarBarbearia />} />
+          <Route path="/data-hora" element={<DataHora />} />
+
 
           <Route path="/busca-barbearias" element={<BuscaBarbearia />} />
           <Route path="/imagem-perfil" element={<ImagePerfil />} />

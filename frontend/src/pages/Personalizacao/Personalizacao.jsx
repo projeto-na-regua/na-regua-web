@@ -98,8 +98,10 @@ export function Personalizacao() {
           },
         })
 
-        toast.success("Informações atualizadas com sucesso!")
-        setModalEditarOpen(false)
+        sessionStorage.setItem('barbearia', JSON.stringify(values))
+
+        toast.success("Informações atualizadas com sucesso!");
+        setModalEditarOpen(false);
 
         await handleCapaChange()
         await handlePerfilChange()
@@ -670,25 +672,192 @@ export function Personalizacao() {
               </div>
             </div>
 
-            <div className={styles.botoesFormulario}>
-              <Button
-                variant='outlined'
-                type='button'
-                onClick={() => setModalDescartarOpen(true)}
-                style={{
-                  height: '100%'
-                }}
-              >
-                Descartar informações
-              </Button>
+            <input
+              type="file"
+              id="fileInputCapa"
+              style={{ display: "none" }}
+              onChange={(e) =>
+                setImgCapa(URL.createObjectURL(e.target.files[0]))
+              }
+            />
+            <input
+              type="file"
+              id="fileInputPerfil"
+              style={{ display: "none" }}
+              onChange={(e) =>
+                setImgPerfil(URL.createObjectURL(e.target.files[0]))
+              }
+            />
 
-              <Button
-                variant='contained'
-                type='button'
-                onClick={() => setModalEditarOpen(true)}
-              >
-                Editar informações
-              </Button>
+            <div className={styles.formularioEditarBarbearia}>
+              <h2 style={{ fontSize: 26, fontWeight: 600, color: "#082031" }}>
+                Informações
+              </h2>
+              <div className={styles.formularioInformacoes}>
+                <TextField
+                  className={styles.input}
+                  type="text"
+                  name="nomeNegocio"
+                  value={formik.values.nomeNegocio || ""}
+                  label="Nome do negócio"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={
+                    formik.touched.nomeNegocio &&
+                    Boolean(formik.errors.nomeNegocio)
+                  }
+                  helperText={
+                    formik.touched.nomeNegocio ? formik.errors.nomeNegocio : ""
+                  }
+                  fullWidth
+                />
+
+                <TextField
+                  className={styles.input}
+                  type="text"
+                  name="descricao"
+                  value={formik.values.descricao || ""}
+                  label="Descrição"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={
+                    formik.touched.descricao && Boolean(formik.errors.descricao)
+                  }
+                  helperText={
+                    formik.touched.descricao ? formik.errors.descricao : ""
+                  }
+                  fullWidth
+                />
+
+                <TextField
+                  className={styles.input}
+                  type="tel"
+                  name="celularNegocio"
+                  value={formik.values.celularNegocio || ""}
+                  label="Celular"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={
+                    formik.touched.celularNegocio &&
+                    Boolean(formik.errors.celularNegocio)
+                  }
+                  helperText={
+                    formik.touched.celularNegocio
+                      ? formik.errors.celularNegocio
+                      : ""
+                  }
+                  fullWidth
+                />
+
+                <TextField
+                  className={styles.input}
+                  type="text"
+                  name="cep"
+                  value={formik.values.cep || ""}
+                  label="CEP"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={formik.touched.cep && Boolean(formik.errors.cep)}
+                  helperText={formik.touched.cep ? formik.errors.cep : ""}
+                  fullWidth
+                />
+
+                <TextField
+                  className={styles.input}
+                  type="text"
+                  name="estado"
+                  value={formik.values.estado || ""}
+                  label="Estado"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={formik.touched.estado && Boolean(formik.errors.estado)}
+                  helperText={formik.touched.estado ? formik.errors.estado : ""}
+                  fullWidth
+                />
+
+                <TextField
+                  className={styles.input}
+                  type="text"
+                  name="cidade"
+                  value={formik.values.cidade || ""}
+                  label="Cidade"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={formik.touched.cidade && Boolean(formik.errors.cidade)}
+                  helperText={formik.touched.cidade ? formik.errors.cidade : ""}
+                  fullWidth
+                />
+
+                <TextField
+                  className={styles.input}
+                  type="text"
+                  name="logradouro"
+                  value={formik.values.logradouro || ""}
+                  label="Logradouro"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={
+                    formik.touched.logradouro &&
+                    Boolean(formik.errors.logradouro)
+                  }
+                  helperText={
+                    formik.touched.logradouro ? formik.errors.logradouro : ""
+                  }
+                  fullWidth
+                />
+
+                <TextField
+                  className={styles.input}
+                  type="text"
+                  name="numero"
+                  value={formik.values.numero || ""}
+                  label="Número"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={formik.touched.numero && Boolean(formik.errors.numero)}
+                  helperText={formik.touched.numero ? formik.errors.numero : ""}
+                  fullWidth
+                />
+
+                <TextField
+                  className={styles.input}
+                  type="text"
+                  name="complemento"
+                  value={formik.values.complemento || ""}
+                  label="Complemento"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  error={
+                    formik.touched.complemento &&
+                    Boolean(formik.errors.complemento)
+                  }
+                  helperText={
+                    formik.touched.complemento ? formik.errors.complemento : ""
+                  }
+                  fullWidth
+                />
+              </div>
+
+              <div className={styles.botoesFormulario}>
+                <Button
+                  variant='outlined'
+                  type='button'
+                  onClick={() => setModalDescartarOpen(true)}
+                  style={{
+                    height: '100%'
+                  }}
+                >
+                  Descartar informações
+                </Button>
+
+                <Button
+                  variant='contained'
+                  type='button'
+                  onClick={() => setModalEditarOpen(true)}
+                >
+                  Editar informações
+                </Button>
+              </div>
             </div>
           </div>
         </div>
