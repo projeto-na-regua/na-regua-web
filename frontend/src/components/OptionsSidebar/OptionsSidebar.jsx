@@ -29,9 +29,12 @@ export function OptionsSidebar(props) {
           case 'Funcionários':
             navigate('/funcionarios')
             break
-            case 'Configurações':
-              navigate('/configuracoes')
-              break
+          case 'Configurações':
+            navigate('/configuracoes')
+            break
+          case 'Voltar':
+            navigate('/')
+            break
           default:
             break
         }

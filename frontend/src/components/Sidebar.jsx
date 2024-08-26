@@ -10,6 +10,7 @@ import servicos from '../utils/assets/servicos.svg'
 import funcionarios from '../utils/assets/funcionarios.svg'
 import chart from '../utils/assets/chart.svg'
 import config from '../utils/assets/config.svg'
+import iconVoltar from '../utils/assets/icon voltar branco.svg'
 
 export function Sidebar() {
   const [isAuth, setIsAuth] = useState(false)
@@ -96,6 +97,7 @@ export function Sidebar() {
               width: 180
             }}>Possui barbearia?</Button>
 
+          <OptionsSidebar text='Voltar' icon={iconVoltar} />
           <OptionsSidebar text='Configurações' icon={config} />
         </div>
       </div>
