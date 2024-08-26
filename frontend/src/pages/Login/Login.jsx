@@ -26,71 +26,52 @@ function Login() {
           senha: values.password
         })
 
-        const data = response.data
+        const userToken = response.data
+        sessionStorage.setItem('user', JSON.stringify(userToken))
 
-        setIsLoading(false)
-
-        sessionStorage.setItem('user', JSON.stringify(data))
         toast.success("Login realizado com sucesso!", {
           autoClose: 2000
         })
 
-        const user = JSON.parse(sessionStorage.getItem('user'))
+        // Aguarda a conclusão de ambos os fetches
+        const fetchUser = api.get('/usuarios/perfil', {
+          headers: { Authorization: userToken }
+        })
 
-        const fetchUser = async () => {
-          try {
-            const response = await api.get('/usuarios/perfil', {
-              headers: {
-                Authorization: user
-              }
-            })
+        const fetchUserAdm = api.get('/usuarios/user', {
+          headers: { Authorization: userToken }
+        })
+        
+        const fetchBarbearia = api.get('/barbearias/perfil', {
+          headers: { Authorization: userToken }
+        })
 
-            const data = response.data
-            sessionStorage.setItem('userInfo', JSON.stringify(data))
+        const [userResponse, userAdmResponse, barbeariaResponse] = await Promise.all([fetchUser, fetchUserAdm, fetchBarbearia])
 
-          } catch (error) {
-            console.error(error)
-          }
+        sessionStorage.setItem('userInfo', JSON.stringify(userResponse.data))
+        
+        if (barbeariaResponse.data) {
+          sessionStorage.setItem('barbearia', JSON.stringify(barbeariaResponse.data))
         }
 
-        const fetchBarbearia = async () => {
-          try {
-            const response = await api.get('/barbearias/perfil', {
-              headers: {
-                Authorization: user
-              }
-            })
-
-            const data = response.data
-            sessionStorage.setItem('barbearia', JSON.stringify(data))
-
-          } catch (error) {
-            console.error(error)
-          }
+        if (userAdmResponse.data.dtype === 'Barbeiro') {
+          navigate('/agenda')
+        } else {
+          navigate('/perfil/agendamentos')
         }
 
-        fetchUser()
-        fetchBarbearia()
-
-        setTimeout(() => {
-          if (user) {
-            navigate('/perfil/agendamentos')
-          }
-        }, 4000)
       } catch (error) {
+        setIsLoading(false)
         if (error.response) {
           toast.error("Email ou senha inválidos!")
         }
+      } finally {
+        setIsLoading(false)
       }
     },
     validationSchema: yup.object().shape({
-      email: yup
-        .string()
-        .email("Email Inválido!")
-        .required('Insira seu e-mail'),
-      password: yup
-        .string()
-        .required('Insira sua senha')
+      email: yup.string().email("Email Inválido!").required('Insira seu e-mail'),
+      password: yup.string().required('Insira sua senha')
     })
   })
 
@@ -140,7 +121,6 @@ function Login() {
                   helperText={formik.touched.email ? formik.errors.email : ''}
                 />
 
-
                 <TextField
                   type="password"
                   name="password"
@@ -168,7 +148,6 @@ function Login() {
 
                 <div style={{ display: 'flex', gap: 8, alignSelf: 'center' }}>
                   <span>Não tem uma conta?</span>
-
                   <Link href='/cadastro' style={{ cursor: 'pointer' }}>Cadastre-se</Link>
                 </div>
               </div>

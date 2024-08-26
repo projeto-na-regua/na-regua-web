@@ -34,7 +34,7 @@ function Confirmacao() {
       sessionStorage.setItem('user', JSON.stringify(token))
 
       toast.success('Cadastro realizado com sucesso!', { autoClose: 2000 })
-      navigate('/perfil/meus-agendamentos')
+      navigate('/perfil/agendamentos')
 
     } catch (error) {
       toast.error('Erro ao cadastrar', { autoClose: 2000 })
