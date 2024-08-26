@@ -1,28 +1,28 @@
 .cardTodo{
     display: flex;
-    width: 300px;
+    width: 200px;
+    cursor: pointer;
 }
 
 .conteudoCard{
     display: flex;
-    flex-direction: column;
     background-color: #082031;
     width: 100%;
-    padding: 5% 7.5%;
+    padding: .5%;
+    padding-left: 10%;
     border-radius: 15px;
-    justify-content: space-evenly;
+    align-items: center;
+    font-weight: 600;
 }
 
 .divIcon{
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    width: 25%;
-    cursor: pointer;
+    width: 15%;
 }
 
 .icone{
-    background-color: #E3A74F;
     width: 50px;
     height: 50px;
     display: flex;
@@ -32,14 +32,14 @@
 }
 
 .divInformacoes{
-    width: 75%;
+    width: 85%;
     display: flex;
-    flex-direction: column;
 }
 
 .labelCard{
-    color: white;
+    color: #E3A74F;
     margin-left: 7.5%;
+    letter-spacing: 1px;
 }
 
 
