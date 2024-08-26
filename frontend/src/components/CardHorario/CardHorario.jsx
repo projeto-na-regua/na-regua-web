@@ -8,7 +8,6 @@ export function CardHorario(props) {
         display: 'flex',
         flexDirection: 'row',
         padding: 32,
-        backgroundColor: '#F4F3EE',
         height: '70%',
         minWidth: 300,
         borderRadius: 16,

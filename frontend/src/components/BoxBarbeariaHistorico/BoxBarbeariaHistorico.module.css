@@ -5,7 +5,6 @@
   width: 100%;
   justify-content: center;
   align-items: center;
-  background-color: #F4F3EE;
 }
 
 .container {
@@ -51,7 +50,7 @@
 }
 
 .titulo {
-  margin-top: 2% !important; 
+  margin-top: 2% !important;
 }
 
 .tituloInformacoes {
@@ -74,7 +73,7 @@
   align-items: flex-start;
   justify-content: flex-start;
   margin: 5% 10%;
-  
+
 }
 
 .dados {
@@ -100,8 +99,8 @@
   border-radius: 50%;
   border: 6px solid #E3A74F;
   overflow: hidden;
-  position: relative; 
-  margin: 10% 0; 
+  position: relative;
+  margin: 10% 0;
 }
 
 .imagem img {
