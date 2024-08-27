@@ -23,51 +23,59 @@ function Login() {
       try {
         const response = await api.post('/usuarios', {
           email: values.email,
-          senha: values.password
-        })
-
-        const userToken = response.data
-        sessionStorage.setItem('user', JSON.stringify(userToken))
-
-        toast.success("Login realizado com sucesso!", {
-          autoClose: 2000
-        })
-
-        // Aguarda a conclusão de ambos os fetches
-        const fetchUser = api.get('/usuarios/perfil', {
-          headers: { Authorization: userToken }
-        })
-
-        const fetchUserAdm = api.get('/usuarios/user', {
-          headers: { Authorization: userToken }
-        })
-        
-        const fetchBarbearia = api.get('/barbearias/perfil', {
-          headers: { Authorization: userToken }
-        })
-
-        const [userResponse, userAdmResponse, barbeariaResponse] = await Promise.all([fetchUser, fetchUserAdm, fetchBarbearia])
-
-        sessionStorage.setItem('userInfo', JSON.stringify(userResponse.data))
-        
-        if (barbeariaResponse.data) {
-          sessionStorage.setItem('barbearia', JSON.stringify(barbeariaResponse.data))
+          senha: values.password,
+        });
+      
+        const userToken = response.data;
+        sessionStorage.setItem('user', JSON.stringify(userToken));
+      
+        toast.success("Login realizado com sucesso!", { autoClose: 2000 });
+      
+        // Fazer as requisições para os dados do usuário e barbearia
+        const fetchUser = api.get('/usuarios/perfil', { headers: { Authorization: userToken } });
+        const fetchUserAdm = api.get('/usuarios/user', { headers: { Authorization: userToken } });
+      
+        let fetchBarbearia;
+        try {
+          fetchBarbearia = await api.get('/barbearias/perfil', {
+            headers: { Authorization: userToken },
+          });
+        } catch (error) {
+          // Caso a barbearia não exista, apenas continuar o fluxo
+          console.warn("Nenhuma barbearia encontrada para este usuário.");
+          fetchBarbearia = null;
         }
-
+      
+        // Aguarda a resolução das promessas para obter os dados do usuário e possivelmente da barbearia
+        const [userResponse, userAdmResponse] = await Promise.all([fetchUser, fetchUserAdm]);
+      
+        sessionStorage.setItem('userInfo', JSON.stringify(userResponse.data));
+      
+        // Verifica se existem dados da barbearia e armazena, caso existam
+        if (fetchBarbearia && fetchBarbearia.data) {
+          sessionStorage.setItem('barbearia', JSON.stringify(fetchBarbearia.data));
+        }
+      
+        // Redireciona o usuário de acordo com seu tipo
         if (userAdmResponse.data.dtype === 'Barbeiro') {
-          navigate('/agenda')
-        } else {
-          navigate('/perfil/agendamentos')
+          navigate('/agenda');
+        } else if (userAdmResponse.data.dtype === 'Cliente') {
+          navigate('/perfil/agendamentos');
         }
-
+        
       } catch (error) {
-        setIsLoading(false)
+        setIsLoading(false);
         if (error.response) {
-          toast.error("Email ou senha inválidos!")
+          console.error("Erro da API:", error.response);
+          toast.error("Email ou senha inválidos!");
+        } else {
+          console.error("Erro desconhecido:", error);
+          toast.error("Ocorreu um erro inesperado!");
         }
       } finally {
-        setIsLoading(false)
+        setIsLoading(false);
       }
+      
     },
     validationSchema: yup.object().shape({
       email: yup.string().email("Email Inválido!").required('Insira seu e-mail'),
