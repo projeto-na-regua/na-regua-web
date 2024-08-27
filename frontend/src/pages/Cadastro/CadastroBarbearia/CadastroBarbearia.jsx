@@ -1,12 +1,13 @@
-import { Button, TextField, ThemeProvider } from '@mui/material'
-import { Formik, useFormik } from 'formik'
-import * as yup from 'yup'
-import { theme } from '../../../theme.js'
-import { useNavigate } from 'react-router-dom'
-import { toast } from 'react-toastify'
+import { Button, TextField, ThemeProvider } from '@mui/material';
+import { Formik, useFormik } from 'formik';
+import * as yup from 'yup';
+import { theme } from '../../../theme.js';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import axios from 'axios';  // Importa o axios para fazer requisições HTTP
 
 function CadastroBarbearia() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
@@ -22,12 +23,11 @@ function CadastroBarbearia() {
     },
     onSubmit: async (values) => {
       try {
-        sessionStorage.setItem('barbearia', JSON.stringify(values))
-
-        navigate('/confirmacao-barbearia')
+        sessionStorage.setItem('barbearia', JSON.stringify(values));
+        navigate('/confirmacao-barbearia');
       } catch (error) {
         if (error.response) {
-          toast.error("Erro ao cadastrar endereço!")
+          toast.error("Erro ao cadastrar barbearia!");
         }
       }
     },
@@ -59,9 +59,38 @@ function CadastroBarbearia() {
         .string()
         .required('CPF é obrigatório')
     }),
-  })
+  });
 
-  const usuário = localStorage.getItem('usuário')
+  const fetchEnderecoPorCep = async (cep) => {
+    try {
+      const response = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
+      const data = response.data;
+
+      if (!data.erro) {
+        formik.setValues(prevValues => ({
+          ...prevValues,
+          logradouro: data.logradouro,
+          bairro: data.bairro,
+          cidade: data.localidade,
+          estado: data.uf
+        }));
+      } else {
+        toast.error("CEP não encontrado!");
+      }
+    } catch (error) {
+      console.error('Erro ao buscar CEP:', error);
+      toast.error("Erro ao buscar CEP!");
+    }
+  };
+
+  const handleCepBlur = (event) => {
+    const cep = event.target.value.replace(/\D/g, '');
+    if (cep.length === 8) {
+      fetchEnderecoPorCep(cep);
+    }
+  };
+
+  const usuário = localStorage.getItem('usuário');
 
   return (
     <ThemeProvider theme={theme}>
@@ -82,7 +111,7 @@ function CadastroBarbearia() {
           paddingRight: 80,
         }}>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <h1 style={{ fontSize: 24, color: '#082031', margin: 0 }}>Olá <span style={{ color: '#E3A74F' }}> {usuário} </span> !</h1>
+            <h1 style={{ fontSize: 24, color: '#082031', margin: 0 }}>Olá <span style={{ color: '#E3A74F' }}> {usuário} </span>!</h1>
             <h2 style={{ fontSize: 16, fontWeight: 500, color: '#E3A74F' }}>Informe seus dados para realizar seu cadastro</h2>
           </div>
 
@@ -120,7 +149,10 @@ function CadastroBarbearia() {
                 value={formik.values.cep}
                 label="CEP"
                 onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
+                onBlur={(e) => {
+                  formik.handleBlur(e);
+                  handleCepBlur(e);
+                }}
                 error={formik.touched.cep && Boolean(formik.errors.cep)}
                 helperText={formik.touched.cep ? formik.errors.cep : ''}
               />
@@ -214,6 +246,6 @@ function CadastroBarbearia() {
         </div>
       </div>
     </ThemeProvider>
-  )
+  );
 }
-export default CadastroBarbearia
+export default CadastroBarbearia;
