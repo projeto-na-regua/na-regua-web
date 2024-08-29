@@ -1,7 +1,8 @@
 import React from 'react';
 import { Box, Modal, Button } from '@mui/material';
+import { LoadingButton } from '@mui/lab'
 
-export function ModalEditar({ open, handleClose, handleConfirm }) {
+export function ModalEditar({ open, handleClose, handleConfirm, isLoading }) {
   return (
     <Modal
       open={open}
@@ -31,9 +32,17 @@ export function ModalEditar({ open, handleClose, handleConfirm }) {
           <Button style={{ width: 200, height: 52 }} variant="outlined" onClick={handleClose}>
             Cancelar
           </Button>
-          <Button style={{ width: 200, height: 52 }} variant="contained" onClick={handleConfirm}>
+          
+          <LoadingButton
+            type="submit"
+            variant="contained"
+            color="primary"
+            loading={isLoading}
+            style={{ width: 200, height: 52 }}
+            onClick={handleConfirm}
+          >
             Confirmar
-          </Button>
+          </LoadingButton>
         </div>
       </Box>
     </Modal>

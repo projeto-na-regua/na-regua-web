@@ -43,7 +43,7 @@ function CardDataHoraClosed(props) {
           variant="contained"
           type="button"
           style={{ width: '100%', height: '45%' }}
-          disable
+          disabled={true}
         >
           Fechado
         </Button>
