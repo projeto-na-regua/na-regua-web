@@ -5,6 +5,7 @@ import api from '../../api'
 import { toast } from 'react-toastify'
 import LoadingButton from '@mui/lab/LoadingButton';
 import { ModalPersonalizado } from '../ModalPersonalizado/ModalPersonalizado'
+import imgPerfilDefault from '../../utils/assets/avatar-funcionario.jpg'
 
 function CardFuncionario(props) {
   const [carregando, setCarregando] = useState(false)
@@ -36,7 +37,12 @@ function CardFuncionario(props) {
   return (
     <div className={styles.funcionario}>
       <div className={styles.fotoFuncionario}>
-        <img className={styles.fotoTeste} src={props.image} alt='imagem-barbeiro' />
+        <img
+          className={styles.fotoTeste}
+          //essa url abaixo deveria vir juntamente com a imagem no endpoint (GET /funcionarios)
+          src={props.image ? "https://upload0naregua.blob.core.windows.net/upload/" + props.image : imgPerfilDefault} 
+          alt="imagem-barbeiro"
+        />
       </div>
 
       <div className={styles.nomeFuncionario}>

@@ -34,9 +34,12 @@ export function Personalizacao() {
   const [modalDescartarOpen, setModalDescartarOpen] = useState(false)
   const [isInitialLoad, setIsInitialLoad] = useState(true)
   const [imgCapa, setImgCapa] = useState(null)
+  const [imgPerfilBarbearia, setImgPerfilBarbearia] = useState(null)
   const [imgPerfil, setImgPerfil] = useState(null)
-  const [loadingPerfil, setLoadingPerfil] = useState(true)
+  const [loadingSave, setLoadingSave] = useState(false)
+  const [loadingPerfilBarbearia, setLoadingPerfilBarbearia] = useState(true)
   const [loadingCapa, setLoadingCapa] = useState(true)
+  const [loadingPerfil, setLoadingPerfil] = useState(true)
 
   const handleDiaChange = (e) => {
     setDiaSelecionado(parseInt(e.target.value))
@@ -74,6 +77,7 @@ export function Personalizacao() {
       diaSemanas: [],
     },
     onSubmit: async (values) => {
+      setLoadingSave(true)
       try {
         const formData = {
           nomeNegocio: values.nomeNegocio,
@@ -104,10 +108,14 @@ export function Personalizacao() {
         setModalEditarOpen(false)
 
         await handleCapaChange()
+        await handlePerfilBarbeariaChange()
         await handlePerfilChange()
       } catch (error) {
+        setLoadingSave(false)
         console.error("Erro ao atualizar as informações principais:", error)
         toast.error("Erro ao atualizar as informações principais!")
+      } finally {
+        setLoadingSave(false);
       }
     },
   })
@@ -115,16 +123,29 @@ export function Personalizacao() {
   useEffect(() => {
     const fetchBarbeariaData = async () => {
       try {
-        const response = await api.get("/barbearias/perfil", {
+        //Obtendo dados da barbearia
+        const responseBarbearia = await api.get("/barbearias/perfil", {
           headers: {
             Authorization: token,
           },
         })
-        const barbeariaData = response.data
 
-        console.log(barbeariaData)
+        const barbeariaData = responseBarbearia.data
 
+        //Obtendo dados do perfil do usuário
+        const responsePerfil = await api.get("/usuarios/perfil", {
+          headers: {
+            Authorization: token,
+          },
+        })
+
+        const perfilData = responsePerfil.data
+
+        //Setando valores já existentes no formulário
         formik.setValues({
+          nome: perfilData.nome || "",
+          email: perfilData.email || "",
+          senha: perfilData.senha || "",
           nomeNegocio: barbeariaData.nomeNegocio || "",
           descricao: barbeariaData.descricao || "",
           celularNegocio: barbeariaData.celularNegocio || "",
@@ -138,10 +159,12 @@ export function Personalizacao() {
         setHorarios(barbeariaData.diaSemanas)
         setDiaSelecionado(barbeariaData.diaSemanas[0]?.id || null)
         setIsInitialLoad(false)
-        const imagemPerfil = response.data.imgPerfil
-        const imagemBanner = response.data.imgBanner
+        const imgPerfilBarbearia = responseBarbearia.data.imgPerfil
+        const imagemBanner = responseBarbearia.data.imgBanner
+        const imgPeril = responsePerfil.data.imgPerfil
         setImgCapa(imagemBanner)
-        setImgPerfil(imagemPerfil)
+        setImgPerfilBarbearia(imgPerfilBarbearia)
+        setImgPerfil(imgPeril)
       } catch (error) {
         console.error("Erro ao obter dados da barbearia", error)
       }
@@ -155,18 +178,22 @@ export function Personalizacao() {
   useEffect(() => {
     const fetchImage = async () => {
       try {
-        setLoadingPerfil(true)
+        setLoadingPerfilBarbearia(true)
+        setLoadingCapa(true)
         const response = await api.get("/barbearias/perfil", {
           headers: {
             Authorization: token,
           }
         })
-        const imageUrl = response.data.imgPerfil
-        setImgPerfil(imageUrl)
+        const imagePerilUrl = response.data.imgPerfil
+        const imageBannerUrl = response.data.imgBanner
+        setImgPerfilBarbearia(imagePerilUrl)
+        setImgCapa(imageBannerUrl)
       } catch (error) {
-        console.log("Erro ao buscar a imagem de perfil: " + error)
+        console.log("Erro ao buscar a imagens da barbearia: " + error)
       } finally {
-        setLoadingPerfil(false)
+        setLoadingPerfilBarbearia(false)
+        setLoadingCapa(false)
       }
     }
 
@@ -174,25 +201,25 @@ export function Personalizacao() {
   }, [])
 
   useEffect(() => {
-    const fetchImageCapa = async () => {
+    const fetchImagePerfil = async () => {
       try {
-        setLoadingCapa(true)
-        const response = await api.get("/barbearias/get-image-banner", {
+        setLoadingPerfil(true)
+        const response = await api.get("/usuarios/get-image", {
           headers: {
             Authorization: token,
           }
         })
 
-        const imageUrl = response.data.imgBanner
-        setImgCapa(imageUrl)
+        const imageUrl = response.data.imgPerfil
+        setImgPerfil(imageUrl)
       } catch (error) {
         console.log("Erro ao buscar a imagem de capa: " + error)
       } finally {
-        setLoadingCapa(false)
+        setLoadingPerfil(false)
       }
     }
 
-    fetchImageCapa()
+    fetchImagePerfil()
   }, [])
 
   const diaAtual = horarios.find((dia) => dia.id === diaSelecionado) || {
@@ -210,6 +237,7 @@ export function Personalizacao() {
     try {
       await formik.handleSubmit()
       await handleCapaChange()
+      await handlePerfilBarbeariaChange()
       await handlePerfilChange()
     } catch (error) {
       toast.error("Erro ao atualizar as informações!")
@@ -237,6 +265,27 @@ export function Personalizacao() {
     }
   }
 
+  const handlePerfilBarbeariaChange = async () => {
+    if (imgPerfilBarbearia && imgPerfilBarbearia !== imagemPerfilDefault) {
+      try {
+        const blobPerfilBarbearia = await fetch(imgPerfilBarbearia).then((res) => res.blob())
+        const formData = new FormData()
+        formData.append("file", blobPerfilBarbearia, "imagem.png")
+
+        const response = await api.put("/barbearias/image-perfil", formData, {
+          headers: {
+            Authorization: token,
+            "Content-Type": "multipart/form-data",
+          },
+        })
+
+        console.log("Imagem de perfil da barbearia atualizada:", response.data)
+      } catch (error) {
+        console.error("Erro ao atualizar imagem de perfil da barbearia:", error)
+      }
+    }
+  }
+
   const handlePerfilChange = async () => {
     if (imgPerfil && imgPerfil !== imagemPerfilDefault) {
       try {
@@ -244,7 +293,7 @@ export function Personalizacao() {
         const formData = new FormData()
         formData.append("file", blobPerfil, "imagem.png")
 
-        const response = await api.put("/barbearias/image-perfil", formData, {
+        const response = await api.put("/usuarios/editar-img-perfil", formData, {
           headers: {
             Authorization: token,
             "Content-Type": "multipart/form-data",
@@ -260,6 +309,10 @@ export function Personalizacao() {
 
   const handleCapaClick = () => {
     document.getElementById("fileInputCapa").click()
+  }
+
+  const handlePerfilBarbeariaClick = () => {
+    document.getElementById("fileInputPerfilBarbearia").click()
   }
 
   const handlePerfilClick = () => {
@@ -343,7 +396,7 @@ export function Personalizacao() {
                   className={styles.input}
                   type="text"
                   name="Senha"
-                  value={formik.values.senha || ""}
+                  value={""}
                   label="Senha"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -353,7 +406,7 @@ export function Personalizacao() {
                   className={styles.input}
                   type="text"
                   name="Confirmar senha"
-                  value={formik.values.senha || ""}
+                  value={""}
                   label="Confirmar senha"
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
@@ -362,35 +415,71 @@ export function Personalizacao() {
             </div>
 
             <div style={{
-              display: 'flex',
-              gap: 32,
-              marginTop: 32,
-              alignItems: 'flex-end',
-            }}>
-              <div style={{
                 display: 'flex',
-                gap: 16,
-                justifyContent: 'center',
-                alignItems: 'center',
+                gap: 32,
+                marginTop: 32,
+                alignItems: 'flex-end',
               }}>
-                <img alt='imagem-perfil' style={{
-                  height: 50,
-                  width: 50,
-                  borderRadius: '50%',
-                }}
-                  src={imgPerfil || imagemPerfilDefault}
-                />
+                <div style={{
+                  display: 'flex',
+                  gap: 16,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  position: 'relative',
+                }}>
+                  <div
+                    style={{
+                      height: 50,
+                      width: 50,
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      position: 'relative',
+                    }}
+                  >
+                    {loadingPerfil && (
+                      <CircularProgress
+                        color="secondary"
+                        size={30}
+                        thickness={4}
+                        style={{
+                          position: 'absolute',
+                          top: '20%',
+                          left: '20%',
+                        }}
+                      />
+                    )}
+                    <img
+                      alt='imagem-perfil'
+                      style={{
+                        height: 50,
+                        width: 50,
+                        borderRadius: '50%',
+                        opacity: loadingPerfil ? 0.5 : 1,
+                      }}
+                      src={imgPerfil || imagemPerfilDefault}
+                      onLoad={() => setLoadingPerfil(false)} // Remove o loading quando a imagem carregar
+                    />
+                  </div>
 
-                <Button
-                  variant='contained'
-                  onClick={handlePerfilClick}
-                  
-                >
-                  Alterar foto de perfil
-                </Button>
+                  <Button
+                    variant='contained'
+                    onClick={handlePerfilClick}
+                  >
+                    Alterar foto de perfil
+                  </Button>
+                </div>
               </div>
             </div>
-          </div>
+
+          <input
+            type="file"
+            id="fileInputPerfil"
+            style={{ display: "none" }}
+            onChange={(e) =>
+              setImgPerfil(URL.createObjectURL(e.target.files[0]))
+            }
+          />
 
           <div className={styles.conteudoFotos}>
             <div
@@ -437,9 +526,9 @@ export function Personalizacao() {
             </div>
             <div
               className={styles.containerFotoPerfil}
-              onClick={handlePerfilClick}
+              onClick={handlePerfilBarbeariaClick}
             >
-              {loadingPerfil ? (
+              {loadingPerfilBarbearia ? (
                 <div
                   style={{
                     display: "flex",
@@ -459,7 +548,7 @@ export function Personalizacao() {
                 </div>
               ) : (
                 <img
-                  src={imgPerfil || imagemPerfilDefault}
+                  src={imgPerfilBarbearia || imagemPerfilDefault}
                   alt="imagem-de-perfil-da-barbearia"
                   style={{
                     height: "100%",
@@ -489,10 +578,10 @@ export function Personalizacao() {
           />
           <input
             type="file"
-            id="fileInputPerfil"
+            id="fileInputPerfilBarbearia"
             style={{ display: "none" }}
             onChange={(e) =>
-              setImgPerfil(URL.createObjectURL(e.target.files[0]))
+              setImgPerfilBarbearia(URL.createObjectURL(e.target.files[0]))
             }
           />
 
@@ -684,7 +773,7 @@ export function Personalizacao() {
                       }}
                     >
                       {horarios.map((dia) => (
-                        <MenuItem key={dia.id} value={dia.id}>
+                        <MenuItem key={dia.id} value={dia.id || ""}>
                           {dia.nome}
                         </MenuItem>
                       ))}
@@ -695,7 +784,7 @@ export function Personalizacao() {
                     id="horaAbertura"
                     label="Hora de Abertura"
                     type="time"
-                    value={diaAtual.horaAbertura}
+                    value={diaAtual.horaAbertura || ""}
                     onChange={(e) => handleHorarioChange(e, "horaAbertura")}
                     variant="outlined"
                     fullWidth
@@ -710,7 +799,7 @@ export function Personalizacao() {
                     id="horaFechamento"
                     label="Hora de Fechamento"
                     type="time"
-                    value={diaAtual.horaFechamento}
+                    value={diaAtual.horaFechamento || ""}
                     onChange={(e) => handleHorarioChange(e, "horaFechamento")}
                     variant="outlined"
                     fullWidth
@@ -783,10 +872,10 @@ export function Personalizacao() {
             />
             <input
               type="file"
-              id="fileInputPerfil"
+              id="fileInputPerfilBarbearia"
               style={{ display: "none" }}
               onChange={(e) =>
-                setImgPerfil(URL.createObjectURL(e.target.files[0]))
+                setImgPerfilBarbearia(URL.createObjectURL(e.target.files[0]))
               }
             />
 
@@ -818,6 +907,7 @@ export function Personalizacao() {
         open={modalEditarOpen}
         handleClose={() => setModalEditarOpen(false)}
         handleConfirm={handleEditarConfirm}
+        isLoading={loadingSave}
       />
 
       <ModalDescartar
