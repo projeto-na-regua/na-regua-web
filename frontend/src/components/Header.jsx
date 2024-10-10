@@ -1,16 +1,7 @@
-import { Button, Typography } from '@mui/material'
-import imagemPerfil from '../utils/assets/imagem-perfil-teste.jpg'
-import { useState } from 'react'
+import { Typography } from '@mui/material'
 import AccountMenu from './AccountMenu/AccountMenu'
 
 export function HeaderUsuario(props) {
-  const userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
-  const [open, setOpen] = useState(false)
-
-  const handleModal = () => {
-    setOpen(!open)
-  }
-
   return (
     <div style={{
       width: '100%',
