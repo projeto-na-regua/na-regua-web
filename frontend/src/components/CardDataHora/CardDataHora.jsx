@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box } from '@mui/material';
+import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 
 function CardDataHora(props) {
   const { nome, horaInicio, horaFim } = props;
@@ -20,7 +21,7 @@ function CardDataHora(props) {
       marginBottom: '25px',
       marginRight: '0px',
       ...props.style
-    }}> 
+    }}>
       <div className="labelDiaSemana" style={{
         position: 'absolute',
         top: '-12px',
@@ -34,7 +35,12 @@ function CardDataHora(props) {
         borderRadius: '6px',
         width: '60%',
         zIndex: 1,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
       }}>
+        <EventAvailableIcon style={{ fontSize: '20px', marginRight: '8px' }} color='success' />
+
         {nome}
       </div>
       <label style={{ marginTop: '8px', marginBottom: '8px', fontSize: '12px', fontWeight: 600 }}>Horário de Abertura:</label>
