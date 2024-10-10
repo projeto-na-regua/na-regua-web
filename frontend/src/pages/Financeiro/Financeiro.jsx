@@ -1,14 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react'
-import styles from './FluxoDeCaixa.module.css'
 import { theme } from '../../theme.js'
 import { ThemeProvider } from '@emotion/react'
-import chartConfig from './FluxoDeCaixa.js'
+import chartConfig from './Financeiro.js'
 import CardFluxoCaixa from '../../components/CardFluxoCaixa/CardFluxoCaixa.jsx'
 import CardLancarValores from '../../components/CardLancarValores/CardLancarValores.jsx'
 import CardLancarReceitaDespesa from '../../components/CardLancarReceitaDespesa/CardLancarReceitaDespesa.jsx'
 import api from '../../api.js'
 import { Sidebar } from '../../components/Sidebar.jsx'
 import { HeaderUsuario } from '../../components/Header.jsx'
+import styles from './Financeiro.module.css'
 
 export function Financeiro() {
     const graficoFluxoCaixaRef = useRef(null)
@@ -224,4 +224,4 @@ export function Financeiro() {
     )
 }
 
-export default FluxoDeCaixa
+export default Financeiro
