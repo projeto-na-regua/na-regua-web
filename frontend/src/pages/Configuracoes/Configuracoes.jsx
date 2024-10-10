@@ -7,8 +7,8 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'
 import LogoutIcon from '@mui/icons-material/Logout'
-import { Profile } from '../Profile/Profile'
 import DeleteIcon from '@mui/icons-material/Delete'
+import { Perfil } from '../../components/Perfil/Perfil'
 
 
 function Configuracoes() {
@@ -125,7 +125,7 @@ function Configuracoes() {
               height: '100%',
             }}>
               {page === 'profile' ? (
-                <Profile />
+                <Perfil />
               ) : (
                 <div>
                   <h1>oi</h1>
