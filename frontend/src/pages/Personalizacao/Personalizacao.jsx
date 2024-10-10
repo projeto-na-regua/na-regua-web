@@ -28,6 +28,8 @@ import { HeaderUsuario } from '../../components/Header'
 
 export function Personalizacao() {
   const token = JSON.parse(sessionStorage.getItem("user"))
+  const cachedUserInfo = JSON.parse(sessionStorage.getItem("tipo"));
+  const barbeariaInfo = JSON.parse(sessionStorage.getItem("barbearia"));
   const [diaSelecionado, setDiaSelecionado] = useState(null)
   const [horarios, setHorarios] = useState([])
   const [modalEditarOpen, setModalEditarOpen] = useState(false)
@@ -347,7 +349,7 @@ export function Personalizacao() {
           <div style={{
             marginLeft: 16
           }}>
-            <Typography variant="h6" style={{ marginBottom: 8 }}>
+            <Typography variant="h6" style={{ marginBottom: 15 }}>
               Perfil
             </Typography>
 
@@ -481,384 +483,74 @@ export function Personalizacao() {
             }
           />
 
-          <div className={styles.conteudoFotos}>
-            <div
-              className={styles.containerFotoCapa}
-              onClick={handleCapaClick}
-            >
-              {loadingCapa ? (
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    height: "100%",
-                    width: "100%",
-                  }}
-                >
-                  <CircularProgress
-                    color="secondary"
+        {cachedUserInfo.adm && (
+          <div>
+            <div style={{ marginLeft: 16 }}>
+              <Typography variant="h6" style={{ marginBottom: 15, marginTop: 16 }}>
+                {barbeariaInfo.nomeNegocio}
+              </Typography>
+            </div>
+
+            <div className={styles.conteudoFotos}>
+              {/* Foto de Capa */}
+              <div className={styles.containerFotoCapa} onClick={handleCapaClick}>
+                {loadingCapa ? (
+                  <div
                     style={{
-                      alignSelf: "center",
-                      justifySelf: "center",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      height: "100%",
+                      width: "100%",
                     }}
-                  />
-                </div>
-              ) : (
-                <img
-                  src={imgCapa || imagemCapaDefault}
-                  alt="imagem-de-capa-da-barbearia"
-                  style={{
-                    height: "100%",
-                    width: "100%",
-                    objectFit: "cover",
-                    borderRadius: 24,
-                  }}
-                />
-              )}
-              <div className={styles.overlay}>
-                <img
-                  src={editIcon}
-                  alt="Editar Capa"
-                  className={styles.editIcon}
-                />
-              </div>
-            </div>
-            <div
-              className={styles.containerFotoPerfil}
-              onClick={handlePerfilBarbeariaClick}
-            >
-              {loadingPerfilBarbearia ? (
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    height: "100%",
-                    width: "100%",
-                  }}
-                >
-                  <CircularProgress
-                    color="secondary"
+                  >
+                    <CircularProgress color="secondary" />
+                  </div>
+                ) : (
+                  <img
+                    src={imgCapa || imagemCapaDefault}
+                    alt="imagem-de-capa-da-barbearia"
                     style={{
-                      alignSelf: "center",
-                      justifySelf: "center",
+                      height: "100%",
+                      width: "100%",
+                      objectFit: "cover",
+                      borderRadius: 24,
                     }}
                   />
+                )}
+                <div className={styles.overlay}>
+                  <img src={editIcon} alt="Editar Capa" className={styles.editIcon} />
                 </div>
-              ) : (
-                <img
-                  src={imgPerfilBarbearia || imagemPerfilDefault}
-                  alt="imagem-de-perfil-da-barbearia"
-                  style={{
-                    height: "100%",
-                    width: "100%",
-                    objectFit: "cover",
-                    borderRadius: 24,
-                  }}
-                />
-              )}
-              <div className={styles.overlay}>
-                <img
-                  src={editIcon}
-                  alt="Editar Perfil"
-                  className={styles.editIcon}
-                />
               </div>
-            </div>
-          </div>
 
-          <input
-            type="file"
-            id="fileInputCapa"
-            style={{ display: "none" }}
-            onChange={(e) =>
-              setImgCapa(URL.createObjectURL(e.target.files[0]))
-            }
-          />
-          <input
-            type="file"
-            id="fileInputPerfilBarbearia"
-            style={{ display: "none" }}
-            onChange={(e) =>
-              setImgPerfilBarbearia(URL.createObjectURL(e.target.files[0]))
-            }
-          />
-
-          <div className={styles.formularioEditarBarbearia}>
-            <Typography variant="h6" style={{ marginLeft: 16, marginBottom: 16 }}>
-              Informações principais
-            </Typography>
-
-            <div className={styles.formularioInformacoes}>
-              <TextField
-                className={styles.input}
-                type="text"
-                name="nomeNegocio"
-                value={formik.values.nomeNegocio || ""}
-                label="Nome do negócio"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={
-                  formik.touched.nomeNegocio &&
-                  Boolean(formik.errors.nomeNegocio)
-                }
-                helperText={
-                  formik.touched.nomeNegocio ? formik.errors.nomeNegocio : ""
-                }
-                fullWidth
-              />
-
-              <TextField
-                className={styles.input}
-                type="text"
-                name="descricao"
-                value={formik.values.descricao || ""}
-                label="Descrição"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={
-                  formik.touched.descricao && Boolean(formik.errors.descricao)
-                }
-                helperText={
-                  formik.touched.descricao ? formik.errors.descricao : ""
-                }
-                fullWidth
-              />
-
-              <TextField
-                className={styles.input}
-                type="tel"
-                name="celularNegocio"
-                value={formik.values.celularNegocio || ""}
-                label="Celular"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={
-                  formik.touched.celularNegocio &&
-                  Boolean(formik.errors.celularNegocio)
-                }
-                helperText={
-                  formik.touched.celularNegocio
-                    ? formik.errors.celularNegocio
-                    : ""
-                }
-                fullWidth
-              />
-
-              <TextField
-                className={styles.input}
-                type="text"
-                name="cep"
-                value={formik.values.cep || ""}
-                label="CEP"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={formik.touched.cep && Boolean(formik.errors.cep)}
-                helperText={formik.touched.cep ? formik.errors.cep : ""}
-                fullWidth
-              />
-
-              <TextField
-                className={styles.input}
-                type="text"
-                name="estado"
-                value={formik.values.estado || ""}
-                label="Estado"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={formik.touched.estado && Boolean(formik.errors.estado)}
-                helperText={formik.touched.estado ? formik.errors.estado : ""}
-                fullWidth
-              />
-
-              <TextField
-                className={styles.input}
-                type="text"
-                name="cidade"
-                value={formik.values.cidade || ""}
-                label="Cidade"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={formik.touched.cidade && Boolean(formik.errors.cidade)}
-                helperText={formik.touched.cidade ? formik.errors.cidade : ""}
-                fullWidth
-              />
-
-              <TextField
-                className={styles.input}
-                type="text"
-                name="logradouro"
-                value={formik.values.logradouro || ""}
-                label="Logradouro"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={
-                  formik.touched.logradouro &&
-                  Boolean(formik.errors.logradouro)
-                }
-                helperText={
-                  formik.touched.logradouro ? formik.errors.logradouro : ""
-                }
-                fullWidth
-              />
-
-              <TextField
-                className={styles.input}
-                type="text"
-                name="numero"
-                value={formik.values.numero || ""}
-                label="Número"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={formik.touched.numero && Boolean(formik.errors.numero)}
-                helperText={formik.touched.numero ? formik.errors.numero : ""}
-                fullWidth
-              />
-
-              <TextField
-                className={styles.input}
-                type="text"
-                name="complemento"
-                value={formik.values.complemento || ""}
-                label="Complemento"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                error={
-                  formik.touched.complemento &&
-                  Boolean(formik.errors.complemento)
-                }
-                helperText={
-                  formik.touched.complemento ? formik.errors.complemento : ""
-                }
-                fullWidth
-              />
-            </div>
-
-            <Typography variant="h6" style={{ marginLeft: 16 }}>
-              Informações adicionais
-            </Typography>
-            <label
-              htmlFor="inputId"
-              style={{ color: "#082031" }}
-              className={styles.labelHorario}
-            >
-              Horário de funcionamento
-            </label>
-            <div className={styles.bordaInformacoesAdicionais}>
-              <div className={styles.ContainerInformacoesAdicionais}>
-                <div className={styles.ContainerDiasHorarios}>
-                  <FormControl
-                    variant="outlined"
-                    fullWidth
-                    style={{ marginBottom: "16px" }}
-                  >
-                    <InputLabel
-                      id="diaSemana-label"
-                      className={styles.labelDefinirDiaHorario}
-                    >
-                      Dia da Semana
-                    </InputLabel>
-                    <Select
-                      labelId="diaSemana-label"
-                      id="diaSemana"
-                      value={diaSelecionado || ""}
-                      onChange={handleDiaChange}
-                      label="Dia da Semana"
-                      className={styles.selectBox}
-                      style={{
-                        borderRadius: "10px",
-                        fontWeigth: 500,
-                        color: "#082031",
-                      }}
-                    >
-                      {horarios.map((dia) => (
-                        <MenuItem key={dia.id} value={dia.id || ""}>
-                          {dia.nome}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-
-                  <TextField
-                    id="horaAbertura"
-                    label="Hora de Abertura"
-                    type="time"
-                    value={diaAtual.horaAbertura || ""}
-                    onChange={(e) => handleHorarioChange(e, "horaAbertura")}
-                    variant="outlined"
-                    fullWidth
-                    className={styles.inputHora}
-                    inputProps={{
-                      step: 1,
+              <div className={styles.containerFotoPerfil} onClick={handlePerfilBarbeariaClick}>
+                {loadingPerfilBarbearia ? (
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      height: "100%",
+                      width: "100%",
                     }}
-                    style={{ marginBottom: "16px" }}
-                  />
-
-                  <TextField
-                    id="horaFechamento"
-                    label="Hora de Fechamento"
-                    type="time"
-                    value={diaAtual.horaFechamento || ""}
-                    onChange={(e) => handleHorarioChange(e, "horaFechamento")}
-                    variant="outlined"
-                    fullWidth
-                    className={styles.inputHora}
-                    inputProps={{
-                      step: 1,
+                  >
+                    <CircularProgress color="secondary" />
+                  </div>
+                ) : (
+                  <img
+                    src={imgPerfilBarbearia || imagemPerfilDefault}
+                    alt="imagem-de-perfil-da-barbearia"
+                    style={{
+                      height: "100%",
+                      width: "100%",
+                      objectFit: "cover",
+                      borderRadius: 24,
                     }}
-                    style={{ marginBottom: "16px" }}
                   />
-
-                  <Button
-                    className={styles.botaoFecharDia}
-                    variant="outlinedBlue"
-                    type="button"
-                    onClick={handleFecharDia}
-                    style={{ marginBottom: "16px" }}
-                  >
-                    {diaAtual.fechado || diaAtual.horaAbertura === null || diaAtual.horaFechamento === null ? "Abrir Este Dia" : "Fechar Este Dia"}
-                  </Button>
-
-                  <Button
-                    className={styles.botaoDefinirHorario}
-                    variant="contained"
-                    type="button"
-                    onClick={handleDefinirHorario}
-                    style={{ marginBottom: "16px" }}
-                  >
-                    Definir Horário
-                  </Button>
+                )}
+                <div className={styles.overlay}>
+                  <img src={editIcon} alt="Editar Perfil" className={styles.editIcon} />
                 </div>
-
-                <Grid
-                  container
-                  className={styles.ContainerCardsDiasFuncionamento}
-                  spacing={1}
-                >
-                  {horarios.map((horario) => (
-                    <Grid
-                      item
-                      key={horario.id}
-                      xs={8}
-                      sm={6}
-                      md={3}
-                      style={{ padding: "-2px" }}
-                    >
-                      {horario.fechado || horario.horaAbertura === null || horario.horaFechamento === null ? (
-                        <CardDataHoraClosed nome={horario.nome} />
-                      ) : (
-                        <>
-                          <CardDataHora
-                            nome={horario.nome}
-                            horaInicio={horario.horaAbertura}
-                            horaFim={horario.horaFechamento}
-                          />
-                        </>
-                      )}
-                    </Grid>
-                  ))}
-                </Grid>
               </div>
             </div>
 
@@ -866,55 +558,185 @@ export function Personalizacao() {
               type="file"
               id="fileInputCapa"
               style={{ display: "none" }}
-              onChange={(e) =>
-                setImgCapa(URL.createObjectURL(e.target.files[0]))
-              }
+              onChange={(e) => setImgCapa(URL.createObjectURL(e.target.files[0]))}
             />
             <input
               type="file"
               id="fileInputPerfilBarbearia"
               style={{ display: "none" }}
-              onChange={(e) =>
-                setImgPerfilBarbearia(URL.createObjectURL(e.target.files[0]))
-              }
+              onChange={(e) => setImgPerfilBarbearia(URL.createObjectURL(e.target.files[0]))}
             />
 
-            <div className={styles.botoesFormulario}>
-              <Button
-                variant='outlined'
-                type='button'
-                onClick={() => setModalDescartarOpen(true)}
-                style={{
-                  height: '100%'
-                }}
-              >
-                Descartar informações
-              </Button>
+            <div className={styles.formularioEditarBarbearia}>
+              <Typography variant="h6" style={{ marginLeft: 16, marginBottom: 16 }}>
+                Informações principais
+              </Typography>
 
-              <Button
-                variant='contained'
-                type='button'
-                onClick={() => setModalEditarOpen(true)}
-              >
-                Editar informações
-              </Button>
+              <div className={styles.formularioInformacoes}>
+                {[
+                  { name: "nomeNegocio", label: "Nome do negócio", type: "text" },
+                  { name: "descricao", label: "Descrição", type: "text" },
+                  { name: "celularNegocio", label: "Celular", type: "tel" },
+                  { name: "cep", label: "CEP", type: "text" },
+                  { name: "estado", label: "Estado", type: "text" },
+                  { name: "cidade", label: "Cidade", type: "text" },
+                  { name: "logradouro", label: "Logradouro", type: "text" },
+                  { name: "numero", label: "Número", type: "text" },
+                  { name: "complemento", label: "Complemento", type: "text" },
+                ].map((field) => (
+                  <TextField
+                    key={field.name}
+                    className={styles.input}
+                    type={field.type}
+                    name={field.name}
+                    value={formik.values[field.name] || ""}
+                    label={field.label}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                    error={formik.touched[field.name] && Boolean(formik.errors[field.name])}
+                    helperText={formik.touched[field.name] ? formik.errors[field.name] : ""}
+                    fullWidth
+                  />
+                ))}
+              </div>
+
+              <Typography variant="h6" style={{ marginLeft: 16 }}>
+                Informações adicionais
+              </Typography>
+              
+              {/* Horário de funcionamento */}
+              <label htmlFor="inputId" style={{ color: "#082031" }} className={styles.labelHorario}>
+                Horário de funcionamento
+              </label>
+              
+              <div className={styles.bordaInformacoesAdicionais}>
+                <div className={styles.ContainerInformacoesAdicionais}>
+                  <div className={styles.ContainerDiasHorarios}>
+                    <FormControl variant="outlined" fullWidth style={{ marginBottom: "16px" }}>
+                      <InputLabel id="diaSemana-label" className={styles.labelDefinirDiaHorario}>
+                        Dia da Semana
+                      </InputLabel>
+                      <Select
+                        labelId="diaSemana-label"
+                        id="diaSemana"
+                        value={diaSelecionado || ""}
+                        onChange={handleDiaChange}
+                        label="Dia da Semana"
+                        className={styles.selectBox}
+                        style={{ borderRadius: "10px", fontWeight: 500, color: "#082031" }}
+                      >
+                        {horarios.map((dia) => (
+                          <MenuItem key={dia.id} value={dia.id || ""}>
+                            {dia.nome}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+
+                    <TextField
+                      id="horaAbertura"
+                      label="Hora de Abertura"
+                      type="time"
+                      value={diaAtual.horaAbertura || ""}
+                      onChange={(e) => handleHorarioChange(e, "horaAbertura")}
+                      variant="outlined"
+                      fullWidth
+                      className={styles.inputHora}
+                      inputProps={{ step: 1 }}
+                      style={{ marginBottom: "16px" }}
+                    />
+
+                    <TextField
+                      id="horaFechamento"
+                      label="Hora de Fechamento"
+                      type="time"
+                      value={diaAtual.horaFechamento || ""}
+                      onChange={(e) => handleHorarioChange(e, "horaFechamento")}
+                      variant="outlined"
+                      fullWidth
+                      className={styles.inputHora}
+                      inputProps={{ step: 1 }}
+                      style={{ marginBottom: "16px" }}
+                    />
+
+                    <Button
+                      className={styles.botaoFecharDia}
+                      variant="outlinedBlue"
+                      type="button"
+                      onClick={handleFecharDia}
+                      style={{ marginBottom: "16px" }}
+                    >
+                      {diaAtual.fechado || diaAtual.horaAbertura === null || diaAtual.horaFechamento === null
+                        ? "Abrir Este Dia"
+                        : "Fechar Este Dia"}
+                    </Button>
+
+                    <Button
+                      className={styles.botaoDefinirHorario}
+                      variant="contained"
+                      type="button"
+                      onClick={handleDefinirHorario}
+                      style={{ marginBottom: "16px" }}
+                    >
+                      Definir Horário
+                    </Button>
+                  </div>
+
+                  <Grid container className={styles.ContainerCardsDiasFuncionamento} spacing={1}>
+                    {horarios.map((horario) => (
+                      <Grid item key={horario.id} xs={8} sm={6} md={3} style={{ padding: "-2px" }}>
+                        {horario.fechado || horario.horaAbertura === null || horario.horaFechamento === null ? (
+                          <CardDataHoraClosed nome={horario.nome} />
+                        ) : (
+                          <CardDataHora
+                            nome={horario.nome}
+                            horaInicio={horario.horaAbertura}
+                            horaFim={horario.horaFechamento}
+                          />
+                        )}
+                      </Grid>
+                    ))}
+                  </Grid>
+                </div>
+              </div>
             </div>
           </div>
+        )}
+
+          <div className={styles.botoesFormulario}>
+            <Button
+              variant='outlined'
+              type='button'
+              onClick={() => setModalDescartarOpen(true)}
+              style={{ height: '100%' }}
+            >
+              Descartar informações
+            </Button>
+
+            <Button
+              variant='contained'
+              type='button'
+              onClick={() => setModalEditarOpen(true)}
+            >
+              Editar informações
+            </Button>
+          </div>
         </div>
+
+
+          <ModalEditar
+            open={modalEditarOpen}
+            handleClose={() => setModalEditarOpen(false)}
+            handleConfirm={handleEditarConfirm}
+            isLoading={loadingSave}
+          />
+
+          <ModalDescartar
+            open={modalDescartarOpen}
+            handleClose={() => setModalDescartarOpen(false)}
+            handleConfirm={handleDescartarConfirm}
+          />
       </div>
-
-      <ModalEditar
-        open={modalEditarOpen}
-        handleClose={() => setModalEditarOpen(false)}
-        handleConfirm={handleEditarConfirm}
-        isLoading={loadingSave}
-      />
-
-      <ModalDescartar
-        open={modalDescartarOpen}
-        handleClose={() => setModalDescartarOpen(false)}
-        handleConfirm={handleDescartarConfirm}
-      />
     </ThemeProvider>
   )
 }

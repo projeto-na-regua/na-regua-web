@@ -22,30 +22,44 @@ export function Sidebar() {
   useEffect(() => {
     const cachedUserInfo = sessionStorage.getItem("tipo");
 
-    if (cachedUserInfo) {
+    const fetchUserInfo = async () => {
+      try {
+        const response = await api.get("/usuarios/user", {
+          headers: {
+            Authorization: token,
+          },
+        });
+
+        if (response.status === 200) {
+          const userInfo = response.data;
+          sessionStorage.setItem("tipo", JSON.stringify(userInfo));
+          setIsAdm(userInfo.adm || false);
+        }
+      } catch (error) {
+        console.error("Erro ao buscar informações do usuário", error);
+      }
+    };
+
+    if (token) {
+      fetchUserInfo();
+    } else if (cachedUserInfo) {
       const userInfo = JSON.parse(cachedUserInfo);
       setIsAdm(userInfo.adm || false);
-    } else {
-      const fetchUserInfo = async () => {
-        try {
-          const response = await api.get("/usuarios/user", {
-            headers: {
-              Authorization: token,
-            },
-          });
-
-          if (response.status === 200) {
-            const userInfo = response.data;
-            sessionStorage.setItem("tipo", JSON.stringify(userInfo));
-            setIsAdm(userInfo.adm || false);
-          }
-        } catch (error) {
-          console.error("Erro ao buscar informações do usuário", error);
-        }
-      };
-
-      fetchUserInfo();
     }
+
+    const handleStorageChange = () => {
+      const updatedUserInfo = sessionStorage.getItem("tipo");
+      if (updatedUserInfo) {
+        const userInfo = JSON.parse(updatedUserInfo);
+        setIsAdm(userInfo.adm || false);
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
   }, [token]);
 
   return (
@@ -71,48 +85,46 @@ export function Sidebar() {
             marginLeft: 16,
           }}
         >
-          {/* Opções visíveis para Clientes */}
-          {!barbeariaInfo && (
-            <>
-              <Typography variant="h7" style={{ color: "white" }}>
-                Perfil
-              </Typography>
+          {/* Título de Perfil e opções comuns a todos os usuários */}
+          <Typography
+            variant="h7"
+            style={{
+              color: "white",
+              marginBottom: 16, // Espaçamento entre o título e os itens abaixo
+            }}
+          >
+            Perfil
+          </Typography>
 
-              <OptionsSidebar text="Agendamentos" icon={calendario} />
-              <OptionsSidebar text="Galeria" icon={galeria} />
-            </>
-          )}
+          {/* Itens de Perfil comuns a todos os usuários */}
+          <OptionsSidebar text="Agendamentos" icon={calendario} />
+          <OptionsSidebar text="Galeria" icon={galeria} />
 
-          {/* Opções para barbeiros comuns */}
-          {!isAdm && barbeariaInfo && (
-            <div
+          {/* Exibe título da barbearia se houver barbearia associada */}
+          {barbeariaInfo && (
+            <Typography
+              variant="h7"
               style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: 8,
+                color: "white",
+                marginTop: 32, // Espaçamento entre o perfil e o nome da barbearia
+                marginBottom: 16, // Espaçamento entre o título da barbearia e os itens abaixo
               }}
             >
-              <Typography variant="h7" style={{ color: "white" }}>
-                {barbeariaInfo.nomeNegocio}
-              </Typography>
+              {barbeariaInfo.nomeNegocio}
+            </Typography>
+          )}
 
+          {/* Opções para barbeiros comuns (somente se houver barbearia) */}
+          {!isAdm && barbeariaInfo && (
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
               <OptionsSidebar text="Agenda" icon={calendario} />
               <OptionsSidebar text="Serviços" icon={servicos} />
             </div>
           )}
 
-          {/* Opções adicionais para barbeiros admin */}
+          {/* Opções adicionais para barbeiros admin (somente se houver barbearia) */}
           {isAdm && barbeariaInfo && (
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: 8,
-              }}
-            >
-              <Typography variant="h7" style={{ color: "white" }}>
-                {barbeariaInfo.nomeNegocio}
-              </Typography>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
               <OptionsSidebar text="Agenda" icon={calendario} />
               <OptionsSidebar text="Dashboard" icon={chart} />
               <OptionsSidebar text="Serviços" icon={servicos} />
@@ -135,7 +147,7 @@ export function Sidebar() {
           <OptionsSidebar text="Voltar" icon={iconVoltar} />
           <OptionsSidebar text="Configurações" icon={config} />
 
-          {/* Botão para cadastro de barbearia (visível apenas se não houver barbearia logada ou se não fizer parte de uma barbearia) */}
+          {/* Botão para cadastro de barbearia (somente para usuários sem barbearia) */}
           {!barbeariaInfo && (
             <Button
               variant="contained"
@@ -150,3 +162,4 @@ export function Sidebar() {
     </ThemeProvider>
   );
 }
+
