@@ -1,7 +1,15 @@
 import { Button, Typography } from '@mui/material'
+import imagemPerfil from '../utils/assets/imagem-perfil-teste.jpg'
+import { useState } from 'react'
+import AccountMenu from './AccountMenu/AccountMenu'
 
-export function HeaderUsuario (props) {
+export function HeaderUsuario(props) {
   const userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
+  const [open, setOpen] = useState(false)
+
+  const handleModal = () => {
+    setOpen(!open)
+  }
 
   return (
     <div style={{
@@ -17,14 +25,13 @@ export function HeaderUsuario (props) {
         justifyContent: 'space-between',
         alignItems: 'center'
       }}>
-        <Typography variant='h6' style={{ color: '#082031', marginLeft: 16 }}>{props.title}</Typography>
+        <Typography variant='h6' style={{ color: '#082031', marginLeft: 16, fontWeight: 'bold' }}>{props.title}</Typography>
 
-        <Button
-          variant='outlined' style={{
-            marginRight: 16,
-          }}>
-          {userInfo.nome}
-        </Button>
+        <div style={{
+          paddingRight: 16
+        }}>
+          <AccountMenu />
+        </div>
       </div>
     </div>
   )
