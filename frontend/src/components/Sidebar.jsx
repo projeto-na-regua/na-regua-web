@@ -1,30 +1,31 @@
-import { Button, ThemeProvider, Typography } from "@mui/material";
-import { theme } from "../theme.js";
-import { OptionsSidebar } from "./OptionsSidebar/OptionsSidebar.jsx";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import calendario from "../utils/assets/calendario.svg";
-import galeria from "../utils/assets/galeria.svg";
-import dashboard from "../utils/assets/dashboard.svg";
-import servicos from "../utils/assets/servicos.svg";
-import funcionarios from "../utils/assets/funcionarios.svg";
-import chart from "../utils/assets/chart.svg";
-import config from "../utils/assets/config.svg";
-import api from "../../src/api.js";
-import iconVoltar from '../utils/assets/icon voltar branco.svg';
+import { Button, Divider, ThemeProvider, Typography } from "@mui/material"
+import { theme } from "../theme.js"
+import { OptionsSidebar } from "./OptionsSidebar/OptionsSidebar.jsx"
+import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
+import calendario from "../utils/assets/calendario.svg"
+import galeria from "../utils/assets/galeria.svg"
+import dashboard from "../utils/assets/dashboard.svg"
+import servicos from "../utils/assets/servicos.svg"
+import funcionarios from "../utils/assets/funcionarios.svg"
+import chart from "../utils/assets/chart.svg"
+import config from "../utils/assets/config.svg"
+import api from "../../src/api.js"
+import iconVoltar from '../utils/assets/home.svg'
+import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined'
 
 export function Sidebar() {
-  const [isAdm, setIsAdm] = useState(false);
-  const barbeariaInfo = JSON.parse(sessionStorage.getItem("barbearia"));
-  const token = JSON.parse(sessionStorage.getItem("user"));
-  const navigate = useNavigate();
+  const [isAdm, setIsAdm] = useState(false)
+  const barbeariaInfo = JSON.parse(sessionStorage.getItem("barbearia"))
+  const token = JSON.parse(sessionStorage.getItem("user"))
+  const navigate = useNavigate()
 
   useEffect(() => {
-    const cachedUserInfo = sessionStorage.getItem("tipo");
+    const cachedUserInfo = sessionStorage.getItem("tipo")
 
     if (cachedUserInfo) {
-      const userInfo = JSON.parse(cachedUserInfo);
-      setIsAdm(userInfo.adm || false);
+      const userInfo = JSON.parse(cachedUserInfo)
+      setIsAdm(userInfo.adm || false)
     } else {
       const fetchUserInfo = async () => {
         try {
@@ -32,21 +33,21 @@ export function Sidebar() {
             headers: {
               Authorization: token,
             },
-          });
+          })
 
           if (response.status === 200) {
-            const userInfo = response.data;
-            sessionStorage.setItem("tipo", JSON.stringify(userInfo));
-            setIsAdm(userInfo.adm || false);
+            const userInfo = response.data
+            sessionStorage.setItem("tipo", JSON.stringify(userInfo))
+            setIsAdm(userInfo.adm || false)
           }
         } catch (error) {
-          console.error("Erro ao buscar informações do usuário", error);
+          console.error("Erro ao buscar informações do usuário", error)
         }
-      };
+      }
 
-      fetchUserInfo();
+      fetchUserInfo()
     }
-  }, [token]);
+  }, [token])
 
   return (
     <ThemeProvider theme={theme}>
@@ -71,7 +72,6 @@ export function Sidebar() {
             marginLeft: 16,
           }}
         >
-          {/* Opções visíveis para Clientes */}
           {!barbeariaInfo && (
             <>
               <Typography variant="h7" style={{ color: "white" }}>
@@ -83,7 +83,6 @@ export function Sidebar() {
             </>
           )}
 
-          {/* Opções para barbeiros comuns */}
           {!isAdm && barbeariaInfo && (
             <div
               style={{
@@ -92,32 +91,28 @@ export function Sidebar() {
                 gap: 8,
               }}
             >
-              <Typography variant="h7" style={{ color: "white" }}>
+              <Typography variant="body1" style={{ color: "#E3A74F", fontWeight: 'bold' }}>
                 {barbeariaInfo.nomeNegocio}
               </Typography>
 
-              <OptionsSidebar text="Agenda" icon={calendario} />
-              <OptionsSidebar text="Serviços" icon={servicos} />
+              <OptionsSidebar text="Agenda" />
             </div>
           )}
 
-          {/* Opções adicionais para barbeiros admin */}
           {isAdm && barbeariaInfo && (
             <div
               style={{
                 display: "flex",
                 flexDirection: "column",
-                gap: 8,
+                gap: 8
               }}
             >
-              <Typography variant="h7" style={{ color: "white" }}>
-                {barbeariaInfo.nomeNegocio}
-              </Typography>
-              <OptionsSidebar text="Agenda" icon={calendario} />
-              <OptionsSidebar text="Dashboard" icon={chart} />
-              <OptionsSidebar text="Serviços" icon={servicos} />
-              <OptionsSidebar text="Fluxo de Caixa" icon={dashboard} />
-              <OptionsSidebar text="Funcionários" icon={funcionarios} />
+              <OptionsSidebar text="Agenda" />
+              <OptionsSidebar text="Dashboard" />
+              <OptionsSidebar text="Serviços" />
+              <OptionsSidebar text="Financeiro" />
+              <OptionsSidebar text="Funcionários" />
+              <OptionsSidebar text="Gerenciamento" />
             </div>
           )}
         </div>
@@ -132,21 +127,19 @@ export function Sidebar() {
             marginBottom: 32,
           }}
         >
-          <OptionsSidebar text="Voltar" icon={iconVoltar} />
-          <OptionsSidebar text="Configurações" icon={config} />
-
-          {/* Botão para cadastro de barbearia (visível apenas se não houver barbearia logada ou se não fizer parte de uma barbearia) */}
           {!barbeariaInfo && (
             <Button
               variant="contained"
               onClick={() => navigate("/cadastro-barbearia")}
-              style={{ width: 180 }}
+              style={{ width: 180, backgroundColor: "#E3A74F", color: "#082031" }}
             >
               Possui barbearia?
             </Button>
           )}
+
+          <OptionsSidebar text="Configurações" icon={config} />
         </div>
       </div>
     </ThemeProvider>
-  );
+  )
 }
