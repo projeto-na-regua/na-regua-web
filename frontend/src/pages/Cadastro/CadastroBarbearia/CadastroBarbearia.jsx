@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import axios from 'axios';  // Importa o axios para fazer requisições HTTP
 
 function CadastroBarbearia() {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   const formik = useFormik({
     initialValues: {
@@ -24,6 +24,7 @@ function CadastroBarbearia() {
     onSubmit: async (values) => {
       try {
         sessionStorage.setItem('barbearia', JSON.stringify(values));
+        // atulizar Dtype para admin
         navigate('/confirmacao-barbearia');
       } catch (error) {
         if (error.response) {
