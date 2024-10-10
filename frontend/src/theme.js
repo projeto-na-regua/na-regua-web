@@ -24,12 +24,12 @@ export const theme = createTheme({
         {
           props: { variant: 'contained' },
           style: {
-            backgroundColor: '#E3A74F',
-            color: '#082031',
+            backgroundColor: '#082031',
+            color: '#E3A74F',
             borderRadius: 10,
             height: '100%',
-            paddingTop: 12,
-            paddingBottom: 12,
+            paddingTop: 8,
+            paddingBottom: 8,
             fontFamily: 'Plus Jakarta Sans, sans-serif',
             fontSize: 14,
             fontWeight: 500,
