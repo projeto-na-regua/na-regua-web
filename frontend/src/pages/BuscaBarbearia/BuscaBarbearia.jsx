@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from "react"
 import styles from './BuscaBarbearia.module.css'
 import { Footer } from "../../components/Footer/Footer"
-import LinhaFiltroBuscarBarbearia from "../../components/LinhaFiltroBuscarBarbearia/LinhaFiltroBuscarBarbearia"
 import CardBarbeariaEncontrada from "../../components/CardBarbeariaEncontrada/CardBarbeariaEncontrada.jsx"
 import logo from '../../utils/assets/logo-scale0.svg'
 import Header from "../../components/Header/Header"
 import { theme } from '../../theme'
 import { ThemeProvider } from '@emotion/react'
 import { useNavigate } from 'react-router-dom'
-import MenuLateralUsuario from '../../components/MenuLateralUsuario/MenuLateralUsuario.jsx'
 import imgBarbeariaPadrao from '../../utils/assets/barbeariaPadrao.png'
-import { Button, CircularProgress } from '@mui/material'
+import { Box, Button, Grid, Skeleton, Typography } from '@mui/material'
 import api from '../../api.js'
 import AccountMenu from '../../components/AccountMenu/AccountMenu.jsx'
+import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 
 export function BuscaBarbearia() {
     const navigate = useNavigate()
@@ -22,7 +21,7 @@ export function BuscaBarbearia() {
     const [open, setOpen] = useState(false)
     const [barbearias, setBarbearias] = useState([])
     const [imgPerfil, setImgPerfil] = useState([])
-    const [loading, setLoading] = useState(false) // Estado para indicar carregamento
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
         if (!token) {
@@ -70,7 +69,7 @@ export function BuscaBarbearia() {
         } catch (error) {
             console.error('Erro ao buscar as barbearias:', error)
         } finally {
-            setLoading(false) // Finaliza o estado de carregamento
+            setLoading(false)
         }
     }
 
@@ -100,13 +99,28 @@ export function BuscaBarbearia() {
                     <div className={styles.containerBuscarBarbearias}>
                         <div className={styles.conteudoBuscarBarbearias}>
                             {loading ? (
-                                <div className={styles.loadingContainer}>
-                                    <CircularProgress />
-                                    <span>Carregando barbearias...</span>
+                                <div>
+                                    <Grid container spacing={2}>
+                                        {[1, 2, 3, 4, 5, 6].map((_, index) => (
+                                            <Grid item xs={12} sm={6} md={4} key={index}>
+                                                <Box display="flex" flexDirection="column" alignItems="center">
+                                                    <Skeleton variant="rectangular" width={300} height={150} />
+                                                    <Skeleton variant="text" width={200} height={30} style={{ marginTop: '16px' }} />
+                                                </Box>
+                                            </Grid>
+                                        ))}
+                                    </Grid>
                                 </div>
                             ) : barbearias.length === 0 ? (
                                 <div className={styles.nenhumaBarbeariaEncontrada}>
-                                    <span>Nenhuma barbearia encontrada de acordo com sua pesquisa.</span>
+                                    <SentimentVeryDissatisfiedIcon style={{ fontSize: 100, color: '#082031' }} />
+
+                                    <Typography variant='body1' style={{ color: '#082031', fontWeight: 600, width: 400, textAlign: 'center' }}>
+                                        Não encontramos nenhuma barbearia com os filtros selecionados.
+                                        Tente novamente com outros filtros :)
+                                    </Typography>
+
+                                    <Button onClick={() => navigate('/')} variant='contained' style={{ width: 200, marginTop: 16 }}>Voltar</Button>
                                 </div>
                             ) : (
                                 <div className={styles.CardsBarbeariaEncontrada}>
