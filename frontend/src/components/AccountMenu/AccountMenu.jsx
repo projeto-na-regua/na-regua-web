@@ -22,7 +22,6 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined'
 import CurrencyExchangeOutlinedIcon from '@mui/icons-material/CurrencyExchangeOutlined'
 import PieChartOutlinedIcon from '@mui/icons-material/PieChartOutlined'
-import globals from '../../utils/globals'
 
 export default function AccountMenu() {
   const [isAdm, setIsAdm] = React.useState(false)
