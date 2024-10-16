@@ -20,6 +20,7 @@ import AgendamentoBarbearia from './pages/AgendamentoBarbearia/AgendamentoBarbea
 import Gerenciamento from './pages/Gerenciamento/Gerenciamento.jsx'
 import Configuracoes from './pages/Configuracoes/Configuracoes.jsx'
 import Financeiro from './pages/Financeiro/Financeiro.jsx'
+import { Cadastro } from './pages/Cadastro/Cadastro.jsx'
 
 function Rotas() {
   return (
@@ -53,6 +54,9 @@ function Rotas() {
           <Route path="/busca-barbearias" element={<BuscaBarbearia />} />
           <Route path="/visualizar-barbearia" element={<VisualizarBarbearia />} />
           <Route path="/selecionar-data-hora" element={<SelecionarDataHora />} />
+
+          {/* telas teste */}
+          <Route path="/cadastro-teste" element={<Cadastro />} />
         </Routes>
       </BrowserRouter>
     </>
