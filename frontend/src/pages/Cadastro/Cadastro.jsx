@@ -1,14 +1,19 @@
-import { useState, useRef } from 'react'
-import { Stepper, Step, StepLabel, Button, Box, Typography, Divider, styled, ThemeProvider } from '@mui/material'
+import { useState, useRef, useEffect } from 'react'
+import { Stepper, Step, StepLabel, Button, Box, Typography, ThemeProvider } from '@mui/material'
 import CheckIcon from '@mui/icons-material/Check'
 import { theme } from '../../theme'
-import { FirstStep } from '../../components/BoxStepperCadastro/FirstStep/FirstStep'
-import { SecondStep } from '../../components/BoxStepperCadastro/SecondStep/SecondStep'
-import { ThirdStep } from '../../components/BoxStepperCadastro/ThirdStep/ThirdStep'
+import { styled } from '@mui/system'
+import { FirstStep } from '../../components/BoxStepperCadastro/Cliente/FirstStep/FirstStep'
+import { SecondStep } from '../../components/BoxStepperCadastro/Cliente/SecondStep/SecondStep'
+import { ThirdStep } from '../../components/BoxStepperCadastro/Cliente/ThirdStep/ThirdStep'
 
-const steps = ['Escolher seu estilo', 'Informar dados pessoais', 'Informar endereço']
 
-const CustomStepIcon = styled('div')(({ theme, active, completed }) => ({
+const allSteps = {
+  empreendedor: ['Escolher seu estilo', 'Informar dados pessoais', 'Informar endereço', 'Cadastrar barbearia'],
+  cliente: ['Escolher seu estilo', 'Informar dados pessoais', 'Informar endereço']
+}
+
+const CustomStepIcon = styled('div')(({ active, completed }) => ({
   backgroundColor: active || completed ? '#082031' : '#e0e0e0',
   color: '#fff',
   width: 30,
@@ -35,13 +40,25 @@ const StepIconComponent = ({ active, completed, icon }) => {
 
 export function Cadastro() {
   const [activeStep, setActiveStep] = useState(0)
-  const [selectedOption, setSelectedOption] = useState('')
+  const [selectedOption, setSelectedOption] = useState('') // Estado para a opção escolhida
+  const [steps, setSteps] = useState(allSteps.cliente) // Estado para os steps dinâmicos
+
   const hoverRef = useRef(null)
   const iconRef = useRef(null)
   const textRef = useRef(null)
 
+  // Atualiza os steps com base na opção selecionada
+  useEffect(() => {
+    if (selectedOption === 'empreendedor') {
+      setSteps(allSteps.empreendedor)
+    } else if (selectedOption === 'cliente') {
+      setSteps(allSteps.cliente)
+    }
+  }, [selectedOption])
+
   const handleOption = (option) => {
     setSelectedOption(option)
+    sessionStorage.setItem('selectedOption', option) // Armazena a escolha no sessionStorage
   }
 
   const handleNext = () => {
@@ -89,14 +106,13 @@ export function Cadastro() {
               <Button onClick={handleReset}>Resetar</Button>
             </Box>
           ) : activeStep === 0 ? (
-            <FirstStep />
+            <FirstStep selectedOption={selectedOption} handleOption={handleOption} />
           ) : activeStep === 1 ? (
             <SecondStep />
           ) : (
             <ThirdStep />
           )}
         </Box>
-
 
         <div style={{
           display: 'flex',
@@ -122,6 +138,6 @@ export function Cadastro() {
           </Button>
         </div>
       </Box>
-    </ThemeProvider >
+    </ThemeProvider>
   )
 }

@@ -1,17 +1,12 @@
-import { Box, Button, Divider, Typography } from '@mui/material'
-import { useRef, useState } from 'react'
+import { Box, Divider, Typography } from '@mui/material'
+import { useRef } from 'react'
 import StorefrontIcon from '@mui/icons-material/Storefront'
 import ContentCutIcon from '@mui/icons-material/ContentCut'
 
-export function FirstStep() {
-  const [selectedOption, setSelectedOption] = useState('')
+export function FirstStep({ selectedOption, handleOption }) {
   const hoverRef = useRef(null)
   const iconRef = useRef(null)
   const textRef = useRef(null)
-
-  const handleOption = (option) => {
-    setSelectedOption(option)
-  }
 
   return (
     <Box style={{
@@ -172,3 +167,16 @@ export function FirstStep() {
     </Box>
   )
 }
+
+
+{/* <Button
+              endIcon={<img src={editicon} alt="Editar" />}
+              onClick={() => {
+                setOpen(true)
+                setModal('endereco')
+              }}
+              variant='contained' style={{
+                margin: 16,
+              }}>
+              Editar
+            </Button> */}
