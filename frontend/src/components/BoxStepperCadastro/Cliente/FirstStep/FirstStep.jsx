@@ -2,8 +2,10 @@ import { Box, Divider, Typography } from '@mui/material'
 import { useRef } from 'react'
 import StorefrontIcon from '@mui/icons-material/Storefront'
 import ContentCutIcon from '@mui/icons-material/ContentCut'
+import { useNavigate } from 'react-router-dom'
 
 export function FirstStep({ selectedOption, handleOption }) {
+  const navigate = useNavigate()
   const hoverRef = useRef(null)
   const iconRef = useRef(null)
   const textRef = useRef(null)
@@ -15,7 +17,6 @@ export function FirstStep({ selectedOption, handleOption }) {
       alignItems: 'center',
       gap: 64
     }}>
-
       <Box style={{
         marginLeft: 32,
         marginRight: 32,
@@ -124,6 +125,7 @@ export function FirstStep({ selectedOption, handleOption }) {
             </Typography>
 
             <div
+              onClick={() => navigate('/login')}
               ref={hoverRef}
               style={{
                 display: 'flex',
@@ -167,16 +169,3 @@ export function FirstStep({ selectedOption, handleOption }) {
     </Box>
   )
 }
-
-
-{/* <Button
-              endIcon={<img src={editicon} alt="Editar" />}
-              onClick={() => {
-                setOpen(true)
-                setModal('endereco')
-              }}
-              variant='contained' style={{
-                margin: 16,
-              }}>
-              Editar
-            </Button> */}
