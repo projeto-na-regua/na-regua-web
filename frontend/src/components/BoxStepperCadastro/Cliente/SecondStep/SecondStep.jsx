@@ -7,7 +7,7 @@ import { theme } from '../../../../theme'
 import { useState } from 'react'
 
 export function SecondStep({ onChange }) {
-  const [profileImage, setProfileImage] = useState(null) // Estado inicial sem referência ao sessionStorage
+  const [profileImage, setProfileImage] = useState(null)
 
   const validationSchema = yup.object().shape({
     nome: yup.string().required('Insira seu nome'),
@@ -24,8 +24,8 @@ export function SecondStep({ onChange }) {
       const reader = new FileReader()
       reader.onload = () => {
         const base64Image = reader.result
-        setProfileImage(base64Image) // Exibe a imagem
-        updateSessionStorage('profileImage', base64Image) // Adiciona a imagem no userInfo
+        setProfileImage(base64Image)
+        sessionStorage.setItem('imgPerfil', base64Image)
       }
       reader.readAsDataURL(file)
     }

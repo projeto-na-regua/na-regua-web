@@ -15,7 +15,7 @@ import imagemCadastro from '../../utils/assets/imagem-cadastro.jpg'
 import api from '../../api'
 
 const allSteps = {
-  empreendedor: ['Escolher seu estilo', 'Informar dados pessoais', 'Informar endereço', 'Cadastrar barbearia'],
+  empreendedor: ['Escolher seu estilo', 'Informar dados pessoais', 'Informar endereço'],
   cliente: ['Escolher seu estilo', 'Informar dados pessoais', 'Informar endereço']
 }
 
@@ -65,6 +65,9 @@ export function Cadastro() {
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1)
+    if (activeStep === steps.length - 1) {
+      submitForm()
+    }
   }
 
   const handleBack = () => {
@@ -72,47 +75,27 @@ export function Cadastro() {
   }
 
   const userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
-  const barbeariaInfo = JSON.parse(sessionStorage.getItem('barbeariaInfo'))
-  const token = JSON.parse(sessionStorage.getItem('user'))
+  const imagemPerfil = sessionStorage.getItem('imgPerfil')
+  const enderecoInfo = JSON.parse(sessionStorage.getItem('enderecoInfo'))
 
-  const submitForm = async (values) => {
+  const formData = new FormData()
+
+  formData.append('user', JSON.stringify(userInfo))
+
+  if (imagemPerfil) {
+    formData.append('imagem', imagemPerfil)
+  }
+
+  const submitForm = async () => {
     try {
-      if (selectedOption === 'empreendedor') {
-        try {
-          await api.post('/usuarios/cadastro-barbearia', barbeariaInfo,
-          {
-            headers: {
-              'Authorization': token
-            }
-          }
-          )
-
-          navigate('/agenda')
-        } catch (error) {
-          console.error('Erro ao cadastrar:', error)
+      const response = await api.get('usuarios/cadastro', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
         }
-      } else if (selectedOption === 'cliente') {
-        try {
-          const response = await api.post('/usuarios/cadastro', {
-            nome: userInfo.nome,
-            email: userInfo.email,
-            senha: userInfo.senha,
-            celular: userInfo.celular,
-            cep: userInfo.cep,
-            logradouro: userInfo.logradouro,
-            numero: userInfo.numero,
-            complemento: userInfo.complemento,
-            cidade: userInfo.cidade,
-            estado: userInfo.estado,
-          })
+      })
 
-          const token = response.data
-          sessionStorage.setItem('user', JSON.stringify(token))
+      console.log('Cadastro realizado com sucesso:', response)
 
-        } catch (error) {
-          console.error('Erro ao cadastrar:', error)
-        }
-      }
     } catch (error) {
       console.error('Erro ao cadastrar:', error)
     }
