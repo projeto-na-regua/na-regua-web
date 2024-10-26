@@ -9,7 +9,7 @@ import { theme } from '../../../../theme'
 export function ThirdStep({ onChange }) {
   const validationSchema = yup.object().shape({
     cep: yup.string().required('Insira seu CEP'),
-    rua: yup.string().required('Insira sua rua'),
+    logradouro: yup.string().required('Insira sua rua'),
     numero: yup.string().required('Insira seu número'),
     cidade: yup.string().required('Insira sua cidade'),
     estado: yup.string().required('Insira seu estado'),
@@ -22,7 +22,7 @@ export function ThirdStep({ onChange }) {
       const data = response.data
 
       if (!data.erro) {
-        setFieldValue('rua', data.logradouro)
+        setFieldValue('logradouro', data.logradouro)
         setFieldValue('cidade', data.localidade)
         setFieldValue('estado', data.uf)
         setFieldValue('complemento', data.complemento)
@@ -40,7 +40,7 @@ export function ThirdStep({ onChange }) {
       <Formik
         initialValues={JSON.parse(sessionStorage.getItem('enderecoInfo')) || {
           cep: '',
-          rua: '',
+          logradouro: '',
           numero: '',
           cidade: '',
           estado: '',
@@ -55,6 +55,7 @@ export function ThirdStep({ onChange }) {
           const updateSessionStorage = (name, value) => {
             const updatedValues = { ...values, [name]: value }
             sessionStorage.setItem('enderecoInfo', JSON.stringify(updatedValues))
+            console.log('updatedValues:', updatedValues)
           }
 
           const handleCepBlur = (event) => {
@@ -102,16 +103,16 @@ export function ThirdStep({ onChange }) {
                       <TextField
                         type='text'
                         name='rua'
-                        value={values.rua}
+                        value={values.logradouro}
                         placeholder='Rua'
                         label='Rua'
                         onChange={(e) => {
                           handleChange(e)
-                          updateSessionStorage('rua', e.target.value)
+                          updateSessionStorage('logradouro', e.target.value)
                         }}
                         onBlur={handleBlur}
-                        error={touched.rua && Boolean(errors.rua)}
-                        helperText={touched.rua ? errors.rua : ''}
+                        error={touched.logradouro && Boolean(errors.logradouro)}
+                        helperText={touched.logradouro ? errors.logradouro : ''}
                         fullWidth
                       />
 

@@ -16,6 +16,7 @@ import Gerenciamento from './pages/Gerenciamento/Gerenciamento.jsx'
 import Configuracoes from './pages/Configuracoes/Configuracoes.jsx'
 import Financeiro from './pages/Financeiro/Financeiro.jsx'
 import { Cadastro } from './pages/Cadastro/Cadastro.jsx'
+import { CadastroBarbearia } from './pages/Cadastro/CadastroBarbearia.jsx'
 
 function Rotas() {
   return (
@@ -27,6 +28,8 @@ function Rotas() {
 
           <Route path="/login" element={<Login />} />
           <Route path="/cadastro" element={<Cadastro />} />
+          <Route path="/cadastro-barbearia" element={<CadastroBarbearia />} />
+
 
           <Route path="/perfil/agendamentos" element={<AgendamentoUsuario />} />
           <Route path="/perfil/galeria" element={<Galeria />} />

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Stepper, Step, StepLabel, Button, Box, Typography, ThemeProvider } from '@mui/material'
 import CheckIcon from '@mui/icons-material/Check'
 import { theme } from '../../theme'
-import { styled } from '@mui/system'
+import { height, styled, width } from '@mui/system'
 import { FirstStep } from '../../components/BoxStepperCadastro/Cliente/FirstStep/FirstStep'
 import { SecondStep } from '../../components/BoxStepperCadastro/Cliente/SecondStep/SecondStep'
 import { ThirdStep } from '../../components/BoxStepperCadastro/Cliente/ThirdStep/ThirdStep'
@@ -49,6 +49,7 @@ export function Cadastro() {
   const [activeStep, setActiveStep] = useState(0)
   const [selectedOption, setSelectedOption] = useState('')
   const [steps, setSteps] = useState(allSteps.cliente)
+  const imagemPerfil = sessionStorage.getItem('imgPerfil')
 
   useEffect(() => {
     if (selectedOption === 'empreendedor') {
@@ -74,28 +75,29 @@ export function Cadastro() {
     setActiveStep((prevActiveStep) => prevActiveStep - 1)
   }
 
-  const userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
-  const imagemPerfil = sessionStorage.getItem('imgPerfil')
-  const enderecoInfo = JSON.parse(sessionStorage.getItem('enderecoInfo'))
-
-  const formData = new FormData()
-
-  formData.append('user', JSON.stringify(userInfo))
-
-  if (imagemPerfil) {
-    formData.append('imagem', imagemPerfil)
-  }
-
   const submitForm = async () => {
+    const userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
+    const enderecoInfo = JSON.parse(sessionStorage.getItem('enderecoInfo'))
+
+    const formData = new FormData()
+
+    if (imagemPerfil) {
+      const blob = new Blob([imagemPerfil], { type: 'image/jpeg' })
+      formData.append('imagem', blob)
+    }
+
+    formData.append('user', JSON.stringify({ ...userInfo, ...enderecoInfo }))
+
     try {
-      const response = await api.get('usuarios/cadastro', formData, {
+      const response = await api.post('usuarios/cadastro', formData, {
         headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+          'Content-Type': 'multipart/form-data',
+        },
       })
 
       console.log('Cadastro realizado com sucesso:', response)
 
+      sessionStorage.setItem('token', response.data)
     } catch (error) {
       console.error('Erro ao cadastrar:', error)
     }
@@ -106,7 +108,6 @@ export function Cadastro() {
       <div style={{
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'space-between',
         alignItems: 'center',
         height: '100vh',
         position: 'relative',
@@ -193,20 +194,35 @@ export function Cadastro() {
 
           <Box style={{ marginLeft: 32, marginRight: 32 }}>
             {activeStep === steps.length ? (
-              <Box>
+              <Box style={{
+                height: '50vh',
+              }}>
                 <div style={{
                   display: 'flex',
                   flexDirection: 'column',
-                  gap: 16,
-                  alignItems: 'center'
+                  gap: 16
                 }}>
-                  <Typography variant='h4' style={{ color: '#082031', fontWeight: 'bold', fontSize: 24 }}>
-                    Cadastro finalizado!
-                  </Typography>
-                  <img alt='cadastro finalizado' src={finishImage} />
-                  <Button onClick={() => navigate('/login')} variant='contained'>
-                    Fazer login
-                  </Button>
+                  {selectedOption === 'cliente' ? (
+                    <div>
+                      <Typography variant='h4' style={{ color: '#082031', fontWeight: 'bold', fontSize: 24 }}>
+                        Cadastro finalizado!
+                      </Typography>
+
+                      <Button onClick={() => navigate('/login')} variant='contained' fullWidth>
+                        Fazer login
+                      </Button>
+                    </div>
+                  ) : (
+                    <div>
+                      <Typography variant='h4' style={{ color: '#082031', fontWeight: 'bold', fontSize: 24 }}>
+                        Cadastro finalizado! Insira as informações da sua barbearia.
+                      </Typography>
+
+                      <Button onClick={() => navigate('/cadastro-barbearia')} variant='contained' fullWidth>
+                        Continuar
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </Box>
             ) : activeStep === 0 ? (

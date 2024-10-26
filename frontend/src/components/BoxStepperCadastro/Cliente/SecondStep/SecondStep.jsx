@@ -11,7 +11,7 @@ export function SecondStep({ onChange }) {
 
   const validationSchema = yup.object().shape({
     nome: yup.string().required('Insira seu nome'),
-    sobrenome: yup.string().required('Insira seu sobrenome'),
+    username: yup.string().required('Insira seu nome de usuário'),
     email: yup.string().email('Insira um e-mail válido').required('Insira seu e-mail'),
     celular: yup.string().required('Insira seu telefone'),
     senha: yup.string().required('Insira sua senha'),
@@ -42,7 +42,7 @@ export function SecondStep({ onChange }) {
       <Formik
         initialValues={{
           nome: '',
-          sobrenome: '',
+          username: '',
           email: '',
           celular: '',
           senha: '',
@@ -51,9 +51,13 @@ export function SecondStep({ onChange }) {
         validationSchema={validationSchema}>
         {({ handleChange, handleBlur, values, touched, errors }) => (
           <form>
-            <Box style={{ marginLeft: 32, marginRight: 32 }}>
+            <Box style={{ marginLeft: 32, marginRight: 32, width: '100%' }}>
               <Box style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-                <div>
+                <div style={{
+                  display: 'flex',
+                  gap: 16,
+                  flexDirection: 'column',
+                }}>
                   <Typography variant='body1' style={{ color: '#082031', fontWeight: 'bold', fontSize: 12 }}>
                     IMAGEM DE PERFIL
                   </Typography>
@@ -97,6 +101,22 @@ export function SecondStep({ onChange }) {
                       />
                     </Button>
                   </div>
+
+                  <TextField
+                    type='text'
+                    name='username'
+                    value={values.username}
+                    placeholder='Nome de usuário'
+                    label='Nome de usuário'
+                    onChange={(e) => {
+                      handleChange(e)
+                      updateSessionStorage('username', e.target.value)
+                    }}
+                    onBlur={handleBlur}
+                    error={touched.username && Boolean(errors.username)}
+                    helperText={touched.username ? errors.username : ''}
+                    fullWidth
+                  />
                 </div>
 
                 <Divider />
@@ -112,37 +132,21 @@ export function SecondStep({ onChange }) {
                   justifyContent: 'space-between',
                   marginBottom: 16,
                 }}>
-                  <div style={{ display: 'flex', gap: 16 }}>
-                    <TextField
-                      type='text'
-                      name='nome'
-                      value={values.nome}
-                      placeholder='Nome'
-                      label='Nome'
-                      onChange={(e) => {
-                        handleChange(e)
-                        updateSessionStorage('nome', e.target.value)
-                      }}
-                      onBlur={handleBlur}
-                      error={touched.nome && Boolean(errors.nome)}
-                      helperText={touched.nome ? errors.nome : ''}
-                    />
-
-                    <TextField
-                      type='text'
-                      name='sobrenome'
-                      value={values.sobrenome}
-                      placeholder='Sobrenome'
-                      label='Sobrenome'
-                      onChange={(e) => {
-                        handleChange(e)
-                        updateSessionStorage('sobrenome', e.target.value)
-                      }}
-                      onBlur={handleBlur}
-                      error={touched.sobrenome && Boolean(errors.sobrenome)}
-                      helperText={touched.sobrenome ? errors.sobrenome : ''}
-                    />
-                  </div>
+                  <TextField
+                    type='text'
+                    name='nome'
+                    value={values.nome}
+                    placeholder='Nome'
+                    label='Nome'
+                    onChange={(e) => {
+                      handleChange(e)
+                      updateSessionStorage('nome', e.target.value)
+                    }}
+                    onBlur={handleBlur}
+                    error={touched.nome && Boolean(errors.nome)}
+                    helperText={touched.nome ? errors.nome : ''}
+                    fullWidth
+                  />
 
                   <TextField
                     type='email'
@@ -204,7 +208,6 @@ export function SecondStep({ onChange }) {
                     label='Confirmar senha'
                     onChange={(e) => {
                       handleChange(e)
-                      updateSessionStorage('confirmarSenha', e.target.value)
                     }}
                     onBlur={handleBlur}
                     error={touched.confirmarSenha && Boolean(errors.confirmarSenha)}
