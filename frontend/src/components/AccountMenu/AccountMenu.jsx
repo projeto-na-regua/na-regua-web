@@ -84,8 +84,15 @@ export default function AccountMenu() {
               padding: 8,
             }}
           >
-            <Avatar sx={{ width: 32, height: 32, backgroundColor: utils.randomColor(), color: '#082031' }}>
-              {!userInfo.img ? userInfo.nome.charAt(0) : <img src={userInfo.img} alt="Imagem de perfil" />}
+            <Avatar sx={{ width: 32, height: 32, backgroundColor: utils.randomColor, color: '#082031' }}>
+              {!userInfo.imgPerfil ? userInfo.nome.charAt(0) : <img src={userInfo.imgPerfil} alt="Imagem de perfil" style={{
+                objectFit: 'cover',
+                width: '100%',
+                height: '100%',
+                borderRadius: '50%',
+                overflow: 'hidden',
+
+              }} />}
             </Avatar>
 
             <Typography variant="body1" style={{ color: '#082031', fontWeight: 600, marginLeft: 8 }}>

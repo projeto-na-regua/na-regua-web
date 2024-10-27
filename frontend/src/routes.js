@@ -17,6 +17,7 @@ import Configuracoes from './pages/Configuracoes/Configuracoes.jsx'
 import Financeiro from './pages/Financeiro/Financeiro.jsx'
 import { Cadastro } from './pages/Cadastro/Cadastro.jsx'
 import { CadastroBarbearia } from './pages/Cadastro/CadastroBarbearia.jsx'
+import { Comunidade } from './pages/Comunidade/Comunidade.jsx'
 
 function Rotas() {
   return (
@@ -25,6 +26,8 @@ function Rotas() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="*" element={<NotFound />} />
+
+          <Route path="/comunidade" element={<Comunidade />} />
 
           <Route path="/login" element={<Login />} />
           <Route path="/cadastro" element={<Cadastro />} />
