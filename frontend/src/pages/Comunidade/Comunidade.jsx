@@ -232,7 +232,7 @@ export function Comunidade() {
               alignItems: 'center',
               padding: 16,
               margin: 16,
-              maxHeight: '30vh',
+              maxHeight: '40vh',
               justifyContent: 'center',
               width: '100%'
             }}>
