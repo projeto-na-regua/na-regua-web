@@ -78,17 +78,16 @@ export function Sidebar() {
                 Perfil
               </Typography>
 
-              <OptionsSidebar text="Agendamentos" icon={calendario} />
-              <OptionsSidebar text="Galeria" icon={galeria} />
-            </>
-          )}
+          {/* Itens de Perfil comuns a todos os usuários */}
+          <OptionsSidebar text="Agendamentos" icon={calendario} />
+          <OptionsSidebar text="Galeria" icon={galeria} />
 
           {!isAdm && barbeariaInfo && (
             <div
               style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: 8,
+                color: "white",
+                marginTop: 32, // Espaçamento entre o perfil e o nome da barbearia
+                marginBottom: 16, // Espaçamento entre o título da barbearia e os itens abaixo
               }}
             >
               <Typography variant="body1" style={{ color: "#E3A74F", fontWeight: 'bold' }}>
@@ -143,3 +142,4 @@ export function Sidebar() {
     </ThemeProvider>
   )
 }
+
