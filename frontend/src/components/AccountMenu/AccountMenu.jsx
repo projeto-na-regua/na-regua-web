@@ -67,6 +67,26 @@ export default function AccountMenu() {
     }
   }, [token])
 
+  const getImagePerfil = async () => {
+    try {
+      const response = await api.get('usuarios/getImage', {
+        headers: {
+          Authorization: token,
+        },
+      })
+
+      const imagemPerfil = response.data
+
+      if (imagemPerfil) {
+        sessionStorage.setItem('imgPerfil', imagemPerfil)
+      }
+    } catch (error) {
+      console.error("Erro ao buscar imagem de perfil", error)
+    }
+  }
+
+  getImagePerfil()
+
   return (
     <React.Fragment>
       <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
@@ -200,7 +220,7 @@ export default function AccountMenu() {
             <Divider />
           </div>
         ) : (
-          <>
+          <div>
             <MenuItem
               onClick={() => {
                 handleClose()
@@ -228,7 +248,7 @@ export default function AccountMenu() {
               </Typography>
             </MenuItem>
             <Divider />
-          </>
+          </div>
         )}
 
         <MenuItem onClick={() => {

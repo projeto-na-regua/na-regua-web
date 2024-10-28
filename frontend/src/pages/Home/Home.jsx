@@ -15,21 +15,11 @@ import AccountMenu from '../../components/AccountMenu/AccountMenu.jsx'
 
 function Home() {
   const navigate = useNavigate()
-  const userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
+  const userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
   const [isAuth, setIsAuth] = useState(false)
   const token = JSON.parse(sessionStorage.getItem('user'))
   const [open, setOpen] = useState(false)
   const [barbearias, setBarbearias] = useState([])
-
-  const top3Barbearias = async () => {
-    try {
-      const response = await api.get('/barbearias/top-3-barbarias-avaliacoes')
-      console.log(response.data)
-      setBarbearias(response.data)
-    } catch (error) {
-      console.error(error)
-    }
-  }
 
   useEffect(() => {
     if (!token) {
@@ -38,10 +28,6 @@ function Home() {
       setIsAuth(true)
     }
   }, [token])
-
-  useEffect(() => {
-    top3Barbearias()
-  }, [])
 
   return (
     <ThemeProvider theme={theme}>
@@ -94,57 +80,6 @@ function Home() {
 
           <GrupoDeInputs />
         </div>
-      </div>
-
-
-      <div style={{
-        display: 'flex',
-        gap: 16,
-        position: 'relative',
-        flexDirection: 'column',
-        marginTop: 64
-      }}>
-        <div style={{
-          width: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'flex-start',
-          gap: 16
-        }}>
-          <Typography variant='h1' style={{ color: '#082031', textAlign: 'center', marginRight: 80, marginLeft: 32 }}>
-            Melhores avaliações
-          </Typography>
-
-          <Typography variant='h6' style={{ color: '#082031', textAlign: 'center', marginRight: 80, marginLeft: 32 }}>
-            Veja as barbearias mais bem avaliadas do <span style={{ color: '#E3A74F' }}>cenário</span>!
-          </Typography>
-        </div>
-
-        <ImageList sx={{
-          height: '100%',
-          width: '100%',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-          {barbearias.map((item) => (
-            <ImageListItem key={item.imgPerfilBarbearia}>
-              <img
-                src={item.imgPerfilBarbearia}
-                alt='barbearia'
-                style={{ width: 300, height: 300, objectFit: 'cover', borderRadius: 24 }}
-              />
-              <ImageListItemBar
-                title={item.nomeBarbearia}
-                position="below"
-                style={{
-                  textAlign: 'center',
-                }}
-              />
-            </ImageListItem>
-          ))}
-        </ImageList>
       </div>
 
       <div style={{

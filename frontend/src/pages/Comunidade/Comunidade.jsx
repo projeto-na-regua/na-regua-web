@@ -27,6 +27,7 @@ export function Comunidade() {
   const token = JSON.parse(sessionStorage.getItem('user'))
   const userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
   const navigate = useNavigate()
+  const [liked, setLiked] = useState(false)
 
   useEffect(() => {
     if (!token) {
@@ -186,6 +187,10 @@ export function Comunidade() {
     } catch (error) {
       console.error(error)
     }
+  }
+
+  const likeMockado = (idPost) => {
+    setLiked(!liked)
   }
 
   useEffect(() => {
@@ -407,6 +412,7 @@ export function Comunidade() {
                       isOwner={post.username === userInfo.username}
                       onDelete={() => handleDeletePost(post.id)}
                     />
+
                     <Divider style={{ width: '100%', margin: '16px 0' }} />
                   </div>
                 ))

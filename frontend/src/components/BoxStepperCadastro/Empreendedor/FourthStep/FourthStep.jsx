@@ -35,39 +35,27 @@ export function FourthStep() {
 
   const onSubmit = async (values) => {
     const { cep, cpf, logradouro, numero, cidade, estado, complemento, nomeBarbearia, descricao } = values
-    const imgPerfil = sessionStorage.getItem('imgPerfil')
-    const imgBanner = sessionStorage.getItem('imgBanner')
     const token = JSON.parse(sessionStorage.getItem('user'))
 
-    // Criar um novo FormData
     const formData = new FormData()
 
-    // Adicionar os campos do objeto
-    formData.append('barbearia', JSON.stringify({
+    const barbeariaData = {
+      cep,
       cpf,
-      nome: nomeBarbearia,
-      descricao,
-      endereco: {
-        cep,
-        logradouro,
-        numero,
-        cidade,
-        estado,
-        complemento
-      }
-    }))
-
-    if (imgPerfil) {
-      const response = await fetch(imgPerfil)
-      const blob = await response.blob()
-      formData.append('perfil', blob, 'imgPerfil.png')
+      logradouro,
+      numero,
+      cidade,
+      estado,
+      complemento,
+      nomeBarbearia,
+      descricao
     }
 
-    if (imgBanner) {
-      const response = await fetch(imgBanner)
-      const blob = await response.blob()
-      formData.append('banner', blob, 'imgBanner.png')
-    }
+    formData.append('barbearia', JSON.stringify(barbeariaData))
+    formData.append('perfil', profileImage)
+    formData.append('banner', bannerImage)
+
+    console.log('Formulário de cadastro de barbearia:', formData)
 
     try {
       const response = await api.post('/usuarios/cadastro-barbearia', formData,
@@ -110,7 +98,7 @@ export function FourthStep() {
 
   const handleCepBlur = (event, formik) => {
     const cep = event.target.value.replace(/\D/g, '')
-    console.log('CEP no blur:', cep) // Log do CEP no blur
+    console.log('CEP no blur:', cep)
     if (cep.length === 8) {
       fetchCep(cep, formik.setFieldValue)
     } else {
@@ -121,28 +109,20 @@ export function FourthStep() {
   const handleImageProfileUpload = (event) => {
     const file = event.target.files[0]
     if (file) {
-      const reader = new FileReader()
-      reader.onload = () => {
-        const base64Image = reader.result
-        setProfileImage(base64Image)
-        sessionStorage.setItem('imgPerfil', base64Image)
-      }
-      reader.readAsDataURL(file)
+      sessionStorage.setItem('imgPerfil', file)
+      setProfileImage(file)
     }
   }
+
 
   const handleImageBannerUpload = (event) => {
     const file = event.target.files[0]
     if (file) {
-      const reader = new FileReader()
-      reader.onload = () => {
-        const base64Image = reader.result
-        setBannerImage(base64Image)
-        sessionStorage.setItem('imgBanner', base64Image)
-      }
-      reader.readAsDataURL(file)
+      sessionStorage.setItem('imgBanner', file)
+      setBannerImage(file)
     }
   }
+
 
   return (
     <Box style={{ marginLeft: 32, marginRight: 32 }}>

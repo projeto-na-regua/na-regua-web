@@ -5,8 +5,9 @@ import ModeCommentIcon from '@mui/icons-material/ModeComment'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import { useState } from 'react'
 
-export function Post({ username, content, avatar, imagemPost, likes, liked, commits, onLike, modalOpen, isOwner, onDelete }) {
+export function Post({ username, content, avatar, imagemPost, likes, commits, onLike, modalOpen, isOwner, onDelete }) {
   const [anchorEl, setAnchorEl] = useState(null)
+  const [liked, setLiked] = useState(false)
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget)
@@ -107,7 +108,7 @@ export function Post({ username, content, avatar, imagemPost, likes, liked, comm
           gap: 8,
           alignItems: 'center',
           cursor: 'pointer',
-        }} onClick={onLike}>
+        }} onClick={() => setLiked(!liked)}>
           {liked ? <ThumbUpIcon /> : <ThumbUpOutlinedIcon />}
           <Typography variant='body1'>
             {likes === 0 ? 0 : likes}

@@ -67,36 +67,33 @@ export function Perfil() {
   }, [token])
 
   const handleImageSubmit = async () => {
-    const formData = new FormData();
-    formData.append('file', image);
+    const formData = new FormData()
+    formData.append('file', image)
 
     try {
       const response = await api.put('/usuarios/editar-img-perfil', formData, {
         headers: {
           Authorization: token
         }
-      });
+      })
 
-      const updatedImage = response.data.imageURL;
+      console.log(response.data)
+      const updatedImage = response.data.imagem
 
-      // Atualize o estado do perfil e a sessionStorage com a nova imagem
-      setUserInfo({
-        ...userInfo,
-        imgPerfil: updatedImage
-      });
+      console.log(updatedImage)
 
-      // Atualize a sessionStorage
-      const currentUser = JSON.parse(sessionStorage.getItem('userInfo'));
-      currentUser.imgPerfil = updatedImage;
-      sessionStorage.setItem('userInfo', JSON.stringify(currentUser));
+      const currentUser = JSON.parse(sessionStorage.getItem('userInfo'))
+      currentUser.imgPerfil = updatedImage
 
-      // Adicione um contador ou refresh trigger para forçar a atualização
-      setBase64Image(updatedImage);
+      console.log(updatedImage)
+      sessionStorage.setItem('userInfo', JSON.stringify(currentUser))
+
+      setBase64Image(updatedImage)
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
-    setOpen(false);
-  };
+    setOpen(false)
+  }
 
 
 

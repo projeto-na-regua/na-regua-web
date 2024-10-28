@@ -70,30 +70,37 @@ export function Sidebar() {
             display: "flex",
             flexDirection: "column",
             marginLeft: 16,
+            height: "100%",
+            justifyContent: "space-between",
           }}
         >
           {!barbeariaInfo && (
-            <>
+            <div style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 8
+            }}>
               <Typography variant="h7" style={{ color: "white" }}>
                 Perfil
               </Typography>
 
-          {/* Itens de Perfil comuns a todos os usuários */}
-          <OptionsSidebar text="Agendamentos" icon={calendario} />
-          <OptionsSidebar text="Galeria" icon={galeria} />
+              {/* Itens de Perfil comuns a todos os usuários */}
+              <OptionsSidebar text="Agendamentos" icon={calendario} />
+              <OptionsSidebar text="Galeria" icon={galeria} />
+            </div>
+          )}
 
           {!isAdm && barbeariaInfo && (
             <div
               style={{
                 color: "white",
-                marginTop: 32, // Espaçamento entre o perfil e o nome da barbearia
-                marginBottom: 16, // Espaçamento entre o título da barbearia e os itens abaixo
+                marginTop: 32,
+                marginBottom: 16,
               }}
             >
               <Typography variant="body1" style={{ color: "#E3A74F", fontWeight: 'bold' }}>
                 {barbeariaInfo.nomeNegocio}
               </Typography>
-
               <OptionsSidebar text="Agenda" />
             </div>
           )}
@@ -114,32 +121,30 @@ export function Sidebar() {
               <OptionsSidebar text="Gerenciamento" />
             </div>
           )}
-        </div>
 
-        <div
-          style={{
-            width: "100%",
-            display: "flex",
-            flexDirection: "column",
-            gap: 16,
-            marginLeft: 16,
-            marginBottom: 32,
-          }}
-        >
-          {!barbeariaInfo && (
-            <Button
-              variant="contained"
-              onClick={() => navigate("/cadastro-barbearia")}
-              style={{ width: 180, backgroundColor: "#E3A74F", color: "#082031" }}
-            >
-              Possui barbearia?
-            </Button>
-          )}
-
-          <OptionsSidebar text="Configurações" icon={config} />
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+              gap: 16,
+              marginLeft: 16,
+              marginBottom: 32,
+            }}
+          >
+            {!barbeariaInfo && (
+              <Button
+                variant="contained"
+                onClick={() => navigate("/cadastro-barbearia")}
+                style={{ width: 180, backgroundColor: "#E3A74F", color: "#082031" }}
+              >
+                Possui barbearia?
+              </Button>
+            )}
+            <OptionsSidebar text="Configurações" icon={config} />
+          </div>
         </div>
       </div>
     </ThemeProvider>
   )
 }
-
