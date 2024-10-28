@@ -10,6 +10,7 @@ import CloseIcon from '@mui/icons-material/Close'
 export function Perfil() {
   const token = JSON.parse(sessionStorage.getItem("user"))
   const tipoUsuario = JSON.parse(sessionStorage.getItem("tipo"))
+  const imagePerfil = sessionStorage.getItem('imgPerfil')
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(true)
   const [userInfo, setUserInfo] = useState({
@@ -68,27 +69,28 @@ export function Perfil() {
 
   const handleImageSubmit = async () => {
     const formData = new FormData()
-    formData.append('file', image)
+
+    if (image) {
+      formData.append('file', image, image.name)
+    }
 
     try {
       const response = await api.put('/usuarios/editar-img-perfil', formData, {
         headers: {
-          Authorization: token
+          Authorization: token,
+          'Content-Type': 'multipart/form-data'
         }
       })
 
       console.log(response.data)
       const updatedImage = response.data.imagem
 
-      console.log(updatedImage)
-
       const currentUser = JSON.parse(sessionStorage.getItem('userInfo'))
       currentUser.imgPerfil = updatedImage
 
-      console.log(updatedImage)
       sessionStorage.setItem('userInfo', JSON.stringify(currentUser))
-
       setBase64Image(updatedImage)
+
     } catch (error) {
       console.log(error)
     }
@@ -96,20 +98,19 @@ export function Perfil() {
   }
 
 
+  // const handleInfoSubmit = async () => {
+  //   try {
+  //     const response = await api.put('/usuarios/editar-perfil', userInfo, {
+  //       headers: {
+  //         Authorization: token
+  //       }
+  //     })
 
-  const handleInfoSubmit = async () => {
-    try {
-      const response = await api.put('/usuarios/editar-perfil', userInfo, {
-        headers: {
-          Authorization: token
-        }
-      })
-
-      console.log(response)
-    } catch (error) {
-      console.log(error)
-    }
-  }
+  //     console.log(response)
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
 
   return (
     <ThemeProvider theme={theme}>
@@ -133,21 +134,16 @@ export function Perfil() {
               {loading ? (
                 <Skeleton variant="circle" width={64} height={64} style={{ margin: 16 }} />
               ) : (
-                <Avatar style={{
-                  width: 64,
-                  height: 64,
-                  color: '#082031',
-                  backgroundColor: utils.randomColor(),
-                  fontSize: 24,
-                  margin: 16
-                }}>
-                  {!userInfo.imgPerfil ? userInfo.nome.charAt(0) : <img src={userInfo.imgPerfil} alt="Imagem de perfil" style={{
-                    width: 64,
-                    height: 64,
-                    borderRadius: '50%',
-                    objectFit: 'cover'
-                  }} />}
+                <Avatar style={{ width: 64, height: 64, color: '#082031', backgroundColor: utils.randomColor(), fontSize: 24, margin: 16 }}>
+                  {!imagePerfil ? userInfo.nome.charAt(0) : (
+                    <img
+                      src={imagePerfil}
+                      alt="Imagem de perfil"
+                      style={{ width: 64, height: 64, borderRadius: '50%', objectFit: 'cover' }}
+                    />
+                  )}
                 </Avatar>
+
               )}
 
               <div style={{

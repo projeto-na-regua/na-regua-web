@@ -28,6 +28,7 @@ export function Comunidade() {
   const userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
   const navigate = useNavigate()
   const [liked, setLiked] = useState(false)
+  const imagePerfil = sessionStorage.getItem('imgPerfil')
 
   useEffect(() => {
     if (!token) {
@@ -221,97 +222,208 @@ export function Comunidade() {
           <div style={{
             display: 'flex',
             flexDirection: 'column',
-            border: '1px solid #CBD5E0',
-            borderRadius: 12,
-            alignItems: 'center',
-            padding: 16,
-            margin: 16,
-            maxHeight: '30vh',
-            justifyContent: 'center',
+            alignItems: 'center'
           }}>
-            <img
-              src={userInfo.imgPerfil}
-              alt='imagem de perfil'
-              style={{
-                width: 150,
-                height: 150,
-                borderRadius: '50%',
-                marginBottom: 16,
-                border: '1px solid #CBD5E0',
-              }}
-            />
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              border: '1px solid #CBD5E0',
+              borderRadius: 12,
+              alignItems: 'center',
+              padding: 16,
+              margin: 16,
+              maxHeight: '30vh',
+              justifyContent: 'center',
+              width: '100%'
+            }}>
+              <img
+                src={imagePerfil}
+                alt='imagem de perfil'
+                style={{
+                  width: 150,
+                  height: 150,
+                  borderRadius: '50%',
+                  marginBottom: 16,
+                  border: '1px solid #CBD5E0',
+                  objectFit: 'cover',
+                }}
+              />
 
-            <Typography variant='h7'>
-              @{userInfo.username}
-            </Typography>
+              <Typography variant='h7'>
+                @{userInfo.username}
+              </Typography>
+
+              <div style={{
+                display: 'flex',
+                flexDirection: 'row',
+                gap: 12,
+                marginTop: 32
+              }}>
+                <div style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'flex-end',
+                  gap: 4
+                }}>
+                  <Typography variant='h6' style={{
+                    fontWeight: 'bold',
+                    fontSize: 24,
+                  }}>
+                    70
+                  </Typography>
+
+                  <Typography variant='body1'>
+                    seguidores
+                  </Typography>
+                </div>
+
+                <div style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'flex-end',
+                  gap: 4
+                }}>
+                  <Typography variant='h6' style={{
+                    fontWeight: 'bold',
+                    fontSize: 24,
+                  }}>
+                    4
+                  </Typography>
+
+                  <Typography variant='body1'>
+                    seguindo
+                  </Typography>
+                </div>
+              </div>
+            </div>
 
             <div style={{
               display: 'flex',
-              flexDirection: 'row',
-              gap: 12,
-              marginTop: 32
+              flexDirection: 'column',
+              border: '1px solid #CBD5E0',
+              borderRadius: 12,
+              padding: 16,
+              maxHeight: '30vh',
+              justifyContent: 'center',
+              width: '100%'
             }}>
-              <div style={{
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'flex-end',
-                gap: 4
-              }}>
-                <Typography variant='h6' style={{
-                  fontWeight: 'bold',
-                  fontSize: 24,
-                }}>
-                  70
-                </Typography>
-
-                <Typography variant='body1'>
-                  seguidores
-                </Typography>
-              </div>
+              <Typography variant='h7'>
+                Seguidores
+              </Typography>
 
               <div style={{
                 display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'flex-end',
-                gap: 4
+                flexDirection: 'column',
+                gap: 8,
+                alignItems: 'center',
+                marginTop: 16,
               }}>
-                <Typography variant='h6' style={{
-                  fontWeight: 'bold',
-                  fontSize: 24,
+                <div style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  gap: 8,
+                  alignItems: 'center',
+                  marginTop: 16,
+                  width: '100%',
                 }}>
-                  4
-                </Typography>
+                  <img
+                    src='https://ui-avatars.com/api/?name=Roberto+Doe&background=random'
+                    alt="imagem de perfil"
+                    style={{
+                      width: 50,
+                      height: 50,
+                      borderRadius: '50%',
+                      objectFit: 'cover',
+                    }}
+                  />
 
-                <Typography variant='body1'>
-                  seguindo
-                </Typography>
+                  <div style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    gap: 8,
+                    flexGrow: 1,
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}>
+                    <Typography variant='body1'>
+                      @roberto
+                    </Typography>
+
+                    <Button variant='contained'>
+                      Seguindo
+                    </Button>
+                  </div>
+                </div>
+
+                <div style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  gap: 8,
+                  alignItems: 'center',
+                  width: '100%',
+                }}>
+                  <img
+                    src='https://ui-avatars.com/api/?name=Amanda+Jessica&background=random'
+                    alt="imagem de perfil"
+                    style={{
+                      width: 50,
+                      height: 50,
+                      borderRadius: '50%',
+                      objectFit: 'cover',
+                    }}
+                  />
+
+                  <div style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    gap: 8,
+                    flexGrow: 1,
+                    justifyContent: 'space-between',
+                    alignItems: 'center'
+                  }}>
+                    <Typography variant='body1'>
+                      @amanda
+                    </Typography>
+
+                    <Button variant='contained'>
+                      Seguir de volta
+                    </Button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
+
 
           <div style={{
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            margin: 16
+            margin: 16,
           }}>
             <div style={{
               display: 'flex',
               flexDirection: 'row',
               gap: 16,
+              border: '1px solid #CBD5E0',
+              padding: 16,
+              borderRadius: 12,
+              width: '100%',
             }}>
               <img
-                src={userInfo.imgPerfil}
+                src={imagePerfil}
                 alt='imagem de perfil'
                 style={{
                   width: 50,
                   height: 50,
                   borderRadius: '50%',
-                  marginTop: 16,
+                  objectFit: 'cover',
                 }}
               />
 
-              <div>
+              <div style={{
+                width: '100%',
+              }}>
                 <div style={{
                   display: 'flex',
                   flexDirection: 'column',
@@ -348,16 +460,17 @@ export function Comunidade() {
                       }}
                     />
                   )}
+
+                  <Divider style={{ width: '100%', margin: '16px 0' }} />
                 </div>
 
                 <div style={{
                   display: 'flex',
                   flexDirection: 'row',
                   gap: 8,
-                  marginTop: 16,
                   width: '100%',
                   justifyContent: 'space-between',
-                  alignItems: 'center',
+                  alignItems: 'center'
                 }}>
                   <div onClick={handleClick} style={{ cursor: 'pointer' }}>
                     <ImageIcon />
@@ -431,7 +544,91 @@ export function Comunidade() {
               Sugestões para você
             </Typography>
 
+            <div style={{
+              display: 'flex',
+              flexDirection: 'row',
+              gap: 8,
+              alignItems: 'center',
+              marginTop: 16,
+            }}>
+              <img
+                src='https://ui-avatars.com/api/?name=Roberto+Doe&background=random'
+                alt="imagem de perfil"
+                style={{
+                  width: 50,
+                  height: 50,
+                  borderRadius: '50%',
+                  objectFit: 'cover',
+                }}
+              />
 
+              <div style={{
+                display: 'flex',
+                flexDirection: 'row',
+                gap: 8,
+                flexGrow: 1,
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
+                <Typography variant='body1'>
+                  @roberto
+                </Typography>
+
+                <Button variant='contained'>
+                  Seguir
+                </Button>
+              </div>
+            </div>
+
+            <Divider style={{ width: '100%', margin: '16px 0' }} />
+
+            <div style={{
+              display: 'flex',
+              flexDirection: 'row',
+              gap: 8,
+              alignItems: 'center',
+              marginTop: 16,
+            }}>
+              <img
+                src='https://ui-avatars.com/api/?name=Joao+Silva&background=random'
+                alt='imagem de perfil'
+                style={{
+                  width: 50,
+                  height: 50,
+                  borderRadius: '50%',
+                  objectFit: 'cover',
+                }}
+              />
+
+              <div style={{
+                display: 'flex',
+                flexDirection: 'row',
+                gap: 8,
+                flexGrow: 1,
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
+                <Typography variant='body1'>
+                  @joao.silva
+                </Typography>
+
+                <Button variant='contained'>
+                  Seguir
+                </Button>
+              </div>
+            </div>
+
+            <Typography variant='h7' style={{ fontWeight: 'bold', marginTop: 24 }}>
+              Principais assuntos do momento
+            </Typography>
+
+            <Typography variant='body1' style={{ marginTop: 16 }}>
+              #plataformanova
+            </Typography>
+
+            <Typography variant='body1' style={{ marginTop: 16 }}>
+              #produtos
+            </Typography>
           </div>
         </div>
       </div>
@@ -512,6 +709,7 @@ export function Comunidade() {
                         width: 50,
                         height: 50,
                         borderRadius: '50%',
+                        objectFit: 'cover',
                       }}
                     />
 

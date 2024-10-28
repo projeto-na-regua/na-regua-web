@@ -28,6 +28,7 @@ export default function AccountMenu() {
   const barbeariaInfo = JSON.parse(sessionStorage.getItem("barbearia"))
   const token = JSON.parse(sessionStorage.getItem("user"))
   const userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
+  const imagePerfil = sessionStorage.getItem('imgPerfil')
   const navigate = useNavigate()
   const [anchorEl, setAnchorEl] = React.useState(null)
   const open = Boolean(anchorEl)
@@ -69,7 +70,7 @@ export default function AccountMenu() {
 
   const getImagePerfil = async () => {
     try {
-      const response = await api.get('usuarios/getImage', {
+      const response = await api.get('usuarios/get-image', {
         headers: {
           Authorization: token,
         },
@@ -105,7 +106,7 @@ export default function AccountMenu() {
             }}
           >
             <Avatar sx={{ width: 32, height: 32, backgroundColor: utils.randomColor, color: '#082031' }}>
-              {!userInfo.imgPerfil ? userInfo.nome.charAt(0) : <img src={userInfo.imgPerfil} alt="Imagem de perfil" style={{
+              {!imagePerfil ? userInfo.nome.charAt(0) : <img src={imagePerfil} alt="Imagem de perfil" style={{
                 objectFit: 'cover',
                 width: '100%',
                 height: '100%',
