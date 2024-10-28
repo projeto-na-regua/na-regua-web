@@ -1,8 +1,7 @@
-import { Button, Typography } from '@mui/material'
+import { Typography } from '@mui/material'
+import AccountMenu from './AccountMenu/AccountMenu'
 
-export function HeaderUsuario (props) {
-  const userInfo = JSON.parse(sessionStorage.getItem('userInfo'))
-
+export function HeaderUsuario(props) {
   return (
     <div style={{
       width: '100%',
@@ -17,14 +16,13 @@ export function HeaderUsuario (props) {
         justifyContent: 'space-between',
         alignItems: 'center'
       }}>
-        <Typography variant='h6' style={{ color: '#082031', marginLeft: 16 }}>{props.title}</Typography>
+        <Typography variant='h6' style={{ color: '#082031', marginLeft: 16, fontWeight: 'bold' }}>{props.title}</Typography>
 
-        <Button
-          variant='outlined' style={{
-            marginRight: 16,
-          }}>
-          {userInfo.nome}
-        </Button>
+        <div style={{
+          paddingRight: 16
+        }}>
+          <AccountMenu />
+        </div>
       </div>
     </div>
   )

@@ -1,12 +1,5 @@
-.fullHeightBg {
-    background-color: #F4F3EE;
-    min-height: 100vh;
-    overflow-y: scroll;
-  }
-
 .buscarBarbearias {
     display: flex;
-    background-color: #F4F3EE;
 }
 
 .containerBuscarBarbearias {
@@ -35,14 +28,15 @@
 
 .nenhumaBarbeariaEncontrada{
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    margin-top: 10%;
+    align-items: center;
+    gap: 12px;
 }
 
 .loadingContainer{
     display: flex;
     justify-content: center;
-    margin-top: 10%;
     align-items: center;
     gap: 20px;
 }

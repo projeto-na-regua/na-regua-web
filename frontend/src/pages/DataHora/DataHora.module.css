@@ -1,59 +1,25 @@
-.container {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-}
-
-main {
-    padding-top: 5%;
-    display: flex;
-    flex-direction: column;
-    width: 80%; 
-    margin: 0 auto;
-    max-width: 80%;
-}
-
-.labelHorario {
-    display: block;
-    text-align: center; 
-    margin: 10px;
-    font-weight: bold;
-    position: relative;
-    background-color: #F4F3EE;
-    width: 21%;
-    top: 18px;
-    left: 45px;
-}
-
 .bordaInformacoesAdicionais {
-    border: 1px solid #082031;
-    padding: 16px;
-    border-radius: 30px;
-    height: 390px;
-    width: 97%;
     display: flex;
-    margin-bottom: 10%;
+    border: 1px solid #082031;
+    border-radius: 30px;
+    padding: 32px;
+    margin: 16px;
 }
 
 .ContainerInformacoesAdicionais {
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 35px;
+    height: 100%;
+    width: 100%;
+    align-items: center;
+    gap: 32px;
 }
-
-.ContainerDiasHorarios {
-    width: 20%;
-}
-
-.ContainerCardsDiasFuncionamento {
-    margin-left: -4px; 
-    margin-right: -4px;
-  }
 
 .ContainerDiasHorarios {
     display: flex;
     flex-direction: column;
+    width: 25%;
 }
 
 .botaoFecharDia,

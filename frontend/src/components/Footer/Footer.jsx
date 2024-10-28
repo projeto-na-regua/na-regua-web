@@ -2,10 +2,8 @@ import iconFace from '../../utils/assets/IconsFooter/facebook.png'
 import iconInsta from '../../utils/assets/IconsFooter/instagram.png'
 import style from './Footer.module.css'
 
-
 export function Footer(props) {
     return (
-
         <div className={style.divTodoFooter}>
             <div className={style.divSaibaMais}>
                 <div className={style.divConteudoSaibaMais}>
@@ -34,20 +32,15 @@ export function Footer(props) {
                 <div className={style.divConteudoSaibaMais}>
                     <div className={style.titulo}>Saiba Mais</div>
                     <div className={style.subTituloSocial}>
-
                         <div className={style.divIcons}>
                             <img className={style.imagemSocial} src={iconFace} alt="" />
                             <img className={style.imagemSocial} src={iconInsta} alt="" />
                         </div>
 
                         <div className={style.separacao}></div>
-
                     </div>
                 </div>
             </div>
-
-
         </div>
-
     )
 }

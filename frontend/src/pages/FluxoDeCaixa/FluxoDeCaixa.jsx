@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import styles from './FluxoDeCaixa.module.css'
-import { theme } from '../../theme'
+import { theme } from '../../theme.js'
 import { ThemeProvider } from '@emotion/react'
 import chartConfig from './FluxoDeCaixa.js'
 import CardFluxoCaixa from '../../components/CardFluxoCaixa/CardFluxoCaixa.jsx'
@@ -10,7 +10,7 @@ import api from '../../api.js'
 import { Sidebar } from '../../components/Sidebar.jsx'
 import { HeaderUsuario } from '../../components/Header.jsx'
 
-export function FluxoDeCaixa() {
+export function Financeiro() {
     const graficoFluxoCaixaRef = useRef(null)
     const graficoLucratividadeRef = useRef(null)
     const fluxoCaixaChartRef = useRef(null)

@@ -1,6 +1,6 @@
 .divTodoFooter{
     display: flex;
-    height: 17vh;
+    height: 15vh;
     color: white;
     background: #082031;
 }
@@ -48,7 +48,7 @@
     justify-content: space-evenly;
     width: 50%;
     height: 60%;
-    
+
 }
 
 .titulo{

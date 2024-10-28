@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Button, ThemeProvider } from '@mui/material';
 import { theme } from "../../theme";
+import EventBusyIcon from '@mui/icons-material/EventBusy';
 
 function CardDataHoraClosed(props) {
   const { nome } = props;
@@ -19,10 +20,8 @@ function CardDataHoraClosed(props) {
         width: '150px',
         height: '125px',
         position: 'relative',
-        marginBottom: '25px',
-        marginRight: '0px',
         ...props.style
-      }}> 
+      }}>
         <div className="labelDiaSemana" style={{
           position: 'absolute',
           top: '-12px',
@@ -36,7 +35,12 @@ function CardDataHoraClosed(props) {
           borderRadius: '6px',
           width: '60%',
           zIndex: 1,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
         }}>
+          <EventBusyIcon style={{ fontSize: '20px', marginRight: '8px' }} color='error' />
+
           {nome}
         </div>
         <Button

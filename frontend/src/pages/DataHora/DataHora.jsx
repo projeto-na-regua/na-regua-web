@@ -1,79 +1,129 @@
-import React, { useEffect, useState } from "react";
-import CardDataHora from "../../components/CardDataHora/CardDataHora";
-import CardDataHoraClosed from "../../components/CardDataHora/CardDataHoraClosed";
-import styles from "./DataHora.module.css";
+import React, { useEffect, useState } from "react"
+import CardDataHora from "../../components/CardDataHora/CardDataHora"
+import CardDataHoraClosed from "../../components/CardDataHora/CardDataHoraClosed"
+import styles from "./DataHora.module.css"
 import {
   Button,
   TextField,
   ThemeProvider,
-  CircularProgress,
   FormControl,
   InputLabel,
   MenuItem,
   Select,
-  Grid,
-} from "@mui/material";
-import { useFormik } from "formik";
-import { theme } from "../../theme";
-import { toast } from "react-toastify";
-import api from "../../api";
-import { ModalEditar } from "../../components/ModalEditarBarbearia/ModalEditarBarbearia";
-
+  Skeleton,
+} from "@mui/material"
+import { useFormik } from "formik"
+import { theme } from "../../theme"
+import { toast } from "react-toastify"
+import api from "../../api"
+import { ModalEditar } from "../../components/ModalEditarBarbearia/ModalEditarBarbearia"
 
 export function DataHora() {
-  const token = JSON.parse(sessionStorage.getItem("user"));
-  const [diaSelecionado, setDiaSelecionado] = useState(null);
-  const [horarios, setHorarios] = useState([]);
-  const [isInitialLoad, setIsInitialLoad] = useState(true);
-  const [modalEditarOpen, setModalEditarOpen] = useState(false);
+  const token = JSON.parse(sessionStorage.getItem("user"))
+  const [diaSelecionado, setDiaSelecionado] = useState(null)
+  const [horarios, setHorarios] = useState([])
+  const [isInitialLoad, setIsInitialLoad] = useState(true)
+  const [modalEditarOpen, setModalEditarOpen] = useState(false)
+
+  const horariosPadroes = [
+    "00:00",
+    "00:30",
+    "01:00",
+    "01:30",
+    "02:00",
+    "02:30",
+    "03:00",
+    "03:30",
+    "04:00",
+    "04:30",
+    "05:00",
+    "05:30",
+    "06:00",
+    "06:30",
+    "07:00",
+    "07:30",
+    "08:00",
+    "08:30",
+    "09:00",
+    "09:30",
+    "10:00",
+    "10:30",
+    "11:00",
+    "11:30",
+    "12:00",
+    "12:30",
+    "13:00",
+    "13:30",
+    "14:00",
+    "14:30",
+    "15:00",
+    "15:30",
+    "16:00",
+    "16:30",
+    "17:00",
+    "17:30",
+    "18:00",
+    "18:30",
+    "19:00",
+    "19:30",
+    "20:00",
+    "20:30",
+    "21:00",
+    "21:30",
+    "22:00",
+    "22:30",
+    "23:00",
+    "23:30",
+  ]
 
   const handleDiaChange = (e) => {
-    setDiaSelecionado(parseInt(e.target.value));
-  };
+    setDiaSelecionado(parseInt(e.target.value))
+  }
 
   const handleHorarioChange = (e, tipo) => {
-    const { value } = e.target;
+    const { value } = e.target
     setHorarios((prevHorarios) =>
       prevHorarios.map((dia) =>
         dia.id === diaSelecionado ? { ...dia, [tipo]: value } : dia
       )
-    );
-  };
+    )
+  }
 
   const handleFecharDia = () => {
     setHorarios((prevHorarios) =>
       prevHorarios.map((dia) =>
         dia.id === diaSelecionado
           ? {
-              ...dia,
-              fechado: !dia.fechado,
-              horaAbertura: dia.fechado ? "08:00:00" : dia.horaAbertura,
-              horaFechamento: dia.fechado ? "17:00:00" : dia.horaFechamento,
-            }
+            ...dia,
+            fechado: !dia.fechado,
+            horaAbertura: dia.fechado ? "08:00" : dia.horaAbertura,
+            horaFechamento: dia.fechado ? "17:00" : dia.horaFechamento,
+          }
           : dia
       )
-    );
-  };
+    )
+  }
 
-  const diaAtual = horarios.find((dia) => dia.id === diaSelecionado) || {
-    horaAbertura: "",
-    horaFechamento: "",
-  };
+  const diaAtual =
+    horarios.find((dia) => dia.id === diaSelecionado) || {
+      horaAbertura: "",
+      horaFechamento: "",
+    }
 
   const handleDefinirHorario = () => {
     setHorarios((prevHorarios) =>
       prevHorarios.map((dia) =>
         dia.id === diaSelecionado
           ? {
-              ...dia,
-              horaAbertura: diaAtual.horaAbertura,
-              horaFechamento: diaAtual.horaFechamento,
-            }
+            ...dia,
+            horaAbertura: diaAtual.horaAbertura,
+            horaFechamento: diaAtual.horaFechamento,
+          }
           : dia
       )
-    );
-    toast.success("Horário atualizado com sucesso!");
-  };
+    )
+    toast.success("Horário atualizado com sucesso!")
+  }
 
   const formik = useFormik({
     diaSemanas: [],
@@ -85,21 +135,21 @@ export function DataHora() {
             horaAbertura: dia.fechado ? null : dia.horaAbertura,
             horaFechamento: dia.fechado ? null : dia.horaFechamento,
           })),
-        };
+        }
 
         await api.put("/barbearias/perfil", formData, {
           headers: {
             Authorization: token,
           },
-        });
+        })
 
-        toast.success("Informações atualizadas com sucesso!");
+        toast.success("Informações atualizadas com sucesso!")
       } catch (error) {
-        console.error("Erro ao atualizar as informações principais:", error);
-        toast.error("Erro ao atualizar as informações principais!");
+        console.error("Erro ao atualizar as informações principais:", error)
+        toast.error("Erro ao atualizar as informações principais!")
       }
     },
-  });
+  })
 
   useEffect(() => {
     const fetchBarbeariaData = async () => {
@@ -108,43 +158,40 @@ export function DataHora() {
           headers: {
             Authorization: token,
           },
-        });
-        const barbeariaData = response.data;
+        })
+        const barbeariaData = response.data
 
-        console.log(barbeariaData);
-
-        setHorarios(barbeariaData.diaSemanas);
-        setDiaSelecionado(barbeariaData.diaSemanas[0]?.id || null);
-        setIsInitialLoad(false);
+        setHorarios(barbeariaData.diaSemanas)
+        setDiaSelecionado(barbeariaData.diaSemanas[0]?.id || null)
+        setIsInitialLoad(false)
       } catch (error) {
-        console.error("Erro ao obter dados da barbearia", error);
+        console.error("Erro ao obter dados da barbearia", error)
       }
-    };
+    }
 
     if (isInitialLoad) {
-      fetchBarbeariaData();
+      fetchBarbeariaData()
     }
-  }, [token, formik, isInitialLoad]);
+  }, [token, formik, isInitialLoad])
 
   const handleEditarConfirm = async () => {
     try {
-      await formik.handleSubmit();
+      await formik.handleSubmit()
     } catch (error) {
-      toast.error("Erro ao atualizar as informações!");
+      toast.error("Erro ao atualizar as informações!")
     }
-  };
+  }
+
+  const gridStyle = {
+    display: "grid",
+    gridTemplateColumns: "repeat(4, 1fr)",
+    gap: "32px",
+  }
 
   return (
     <ThemeProvider theme={theme}>
       <main>
         <div className={styles.container}>
-          <label
-            htmlFor="inputId"
-            style={{ color: "#082031" }}
-            className={styles.labelHorario}
-          >
-            Horário de funcionamento
-          </label>
           <div className={styles.bordaInformacoesAdicionais}>
             <div className={styles.ContainerInformacoesAdicionais}>
               <div className={styles.ContainerDiasHorarios}>
@@ -168,7 +215,7 @@ export function DataHora() {
                     className={styles.selectBox}
                     style={{
                       borderRadius: "10px",
-                      fontWeigth: 500,
+                      fontWeight: 500,
                       color: "#082031",
                     }}
                   >
@@ -190,8 +237,9 @@ export function DataHora() {
                   fullWidth
                   className={styles.inputHora}
                   inputProps={{
-                    step: 1,
+                    step: 60,
                   }}
+                  InputLabelProps={{ shrink: true }}
                   style={{ marginBottom: "16px" }}
                 />
 
@@ -205,66 +253,62 @@ export function DataHora() {
                   fullWidth
                   className={styles.inputHora}
                   inputProps={{
-                    step: 1,
+                    step: 60,
                   }}
+                  InputLabelProps={{ shrink: true }}
                   style={{ marginBottom: "16px" }}
                 />
 
                 <Button
-                  className={styles.botaoFecharDia}
                   variant="outlinedBlue"
                   type="button"
                   onClick={handleFecharDia}
                   style={{ marginBottom: "16px" }}
                 >
                   {diaAtual.fechado ||
-                  diaAtual.horaAbertura === null ||
-                  diaAtual.horaFechamento === null
+                    diaAtual.horaAbertura === null ||
+                    diaAtual.horaFechamento === null
                     ? "Abrir Este Dia"
                     : "Fechar Este Dia"}
                 </Button>
 
                 <Button
-                  className={styles.botaoDefinirHorario}
                   variant="contained"
                   type="button"
                   onClick={() => setModalEditarOpen(true)}
-                  style={{ marginBottom: "16px" }}
                 >
                   Definir Horário
                 </Button>
               </div>
 
-              <Grid
-                container
-                className={styles.ContainerCardsDiasFuncionamento}
-                spacing={1}
-              >
-                {horarios.map((horario) => (
-                  <Grid
-                    item
-                    key={horario.id}
-                    xs={8}
-                    sm={6}
-                    md={3}
-                    style={{ padding: "-2px" }}
-                  >
-                    {horario.fechado ||
-                    horario.horaAbertura === null ||
-                    horario.horaFechamento === null ? (
-                      <CardDataHoraClosed nome={horario.nome} />
-                    ) : (
-                      <>
+              <div style={gridStyle}>
+                {isInitialLoad
+                  ? Array(7)
+                    .fill(0)
+                    .map((_, index) => (
+                      <Skeleton
+                        key={index}
+                        variant="rectangular"
+                        width={150}
+                        height={125}
+                      />
+                    ))
+                  : horarios.map((horario) => (
+                    <div key={horario.id} style={{ margin: 0, padding: 0 }}>
+                      {horario.fechado ||
+                        horario.horaAbertura === null ||
+                        horario.horaFechamento === null ? (
+                        <CardDataHoraClosed nome={horario.nome} />
+                      ) : (
                         <CardDataHora
                           nome={horario.nome}
                           horaInicio={horario.horaAbertura}
                           horaFim={horario.horaFechamento}
                         />
-                      </>
-                    )}
-                  </Grid>
-                ))}
-              </Grid>
+                      )}
+                    </div>
+                  ))}
+              </div>
             </div>
           </div>
         </div>
@@ -275,9 +319,8 @@ export function DataHora() {
         handleClose={() => setModalEditarOpen(false)}
         handleConfirm={handleEditarConfirm}
       />
-      
     </ThemeProvider>
-  );
+  )
 }
 
-export default DataHora;
+export default DataHora

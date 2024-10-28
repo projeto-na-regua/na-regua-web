@@ -5,6 +5,7 @@ import { theme } from '../../theme.js'
 import { Button, CircularProgress, Pagination, Stack, ThemeProvider, Typography } from '@mui/material'
 import api from '../../api.js'
 import corte from '../../utils/assets/corte.jpg'
+import AddPhotoAlternateOutlinedIcon from '@mui/icons-material/AddPhotoAlternateOutlined';
 
 export function Galeria() {
   const [imagens, setImagens] = useState([])
@@ -62,7 +63,11 @@ export function Galeria() {
           }}>
             <Typography variant='h7' style={{ color: '#082031', marginLeft: 16 }}>Seus cortes</Typography>
 
-            <Button variant='contained' style={{ marginRight: 16 }}>
+            <Button
+              variant='contained'
+              style={{ marginRight: 16 }}
+              startIcon={<AddPhotoAlternateOutlinedIcon />}
+              >
               Adicionar foto
             </Button>
           </div>
