@@ -5,11 +5,12 @@ import { useEffect, useState } from 'react'
 import editicon from '../../utils/assets/editicon.svg'
 import { ModalPersonalizado } from '../ModalPersonalizado/ModalPersonalizado'
 import utils from '../../utils/globals'
+import CloseIcon from '@mui/icons-material/Close'
 
 export function Perfil() {
   const token = JSON.parse(sessionStorage.getItem("user"))
+  const tipoUsuario = JSON.parse(sessionStorage.getItem("tipo"))
   const [open, setOpen] = useState(false)
-  const [modal, setModal] = useState('')
   const [loading, setLoading] = useState(true)
   const [userInfo, setUserInfo] = useState({
     nome: '',
@@ -25,6 +26,9 @@ export function Perfil() {
     estado: '',
     dtypes: ''
   })
+  const [modal, setModal] = useState('editarImagem' || 'editarInformacoesPessoais' || 'editarEndereco')
+  const [image, setImage] = useState(null)
+  const [base64Image, setBase64Image] = useState('')
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -62,6 +66,54 @@ export function Perfil() {
     fetchUserInfo()
   }, [token])
 
+  const handleImageSubmit = async () => {
+    const formData = new FormData();
+    formData.append('file', image);
+
+    try {
+      const response = await api.put('/usuarios/editar-img-perfil', formData, {
+        headers: {
+          Authorization: token
+        }
+      });
+
+      const updatedImage = response.data.imageURL;
+
+      // Atualize o estado do perfil e a sessionStorage com a nova imagem
+      setUserInfo({
+        ...userInfo,
+        imgPerfil: updatedImage
+      });
+
+      // Atualize a sessionStorage
+      const currentUser = JSON.parse(sessionStorage.getItem('userInfo'));
+      currentUser.imgPerfil = updatedImage;
+      sessionStorage.setItem('userInfo', JSON.stringify(currentUser));
+
+      // Adicione um contador ou refresh trigger para forçar a atualização
+      setBase64Image(updatedImage);
+    } catch (error) {
+      console.log(error);
+    }
+    setOpen(false);
+  };
+
+
+
+  const handleInfoSubmit = async () => {
+    try {
+      const response = await api.put('/usuarios/editar-perfil', userInfo, {
+        headers: {
+          Authorization: token
+        }
+      })
+
+      console.log(response)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <div>
@@ -92,7 +144,12 @@ export function Perfil() {
                   fontSize: 24,
                   margin: 16
                 }}>
-                  {!userInfo.imgPerfil ? userInfo.nome.charAt(0) : <img src={userInfo.imgPerfil} alt="Imagem de perfil" />}
+                  {!userInfo.imgPerfil ? userInfo.nome.charAt(0) : <img src={userInfo.imgPerfil} alt="Imagem de perfil" style={{
+                    width: 64,
+                    height: 64,
+                    borderRadius: '50%',
+                    objectFit: 'cover'
+                  }} />}
                 </Avatar>
               )}
 
@@ -125,13 +182,17 @@ export function Perfil() {
                       color: '#9E9E9E'
                     }}
                   >
-                    {userInfo.dtypes}
+                    {tipoUsuario.dtype} | @{userInfo.username}
                   </Typography>
                 )}
               </div>
             </div>
 
             <Button
+              onClick={() => {
+                setOpen(true)
+                setModal('editarImagem')
+              }}
               endIcon={<img src={editicon} alt="Editar" />}
               variant='contained' style={{
                 margin: 16,
@@ -260,7 +321,7 @@ export function Perfil() {
               endIcon={<img src={editicon} alt="Editar" />}
               onClick={() => {
                 setOpen(true)
-                setModal('pessoal')
+                setModal('editarInformacoesPessoais')
               }}
               variant='contained' style={{
                 margin: 16,
@@ -389,7 +450,7 @@ export function Perfil() {
               endIcon={<img src={editicon} alt="Editar" />}
               onClick={() => {
                 setOpen(true)
-                setModal('endereco')
+                setModal('editarEndereco')
               }}
               variant='contained' style={{
                 margin: 16,
@@ -400,7 +461,241 @@ export function Perfil() {
         </div>
       </div>
 
-      <ModalPersonalizado open={open} setOpen={setOpen} modal={modal} />
+      {modal === 'editarImagem' && (
+        <ModalPersonalizado
+          open={open}
+          setOpen={setOpen}
+        >
+          <div style={{
+            width: '90%',
+            display: 'flex',
+            justifyContent: 'flex-end',
+            padding: 16
+          }}>
+            <CloseIcon onClick={() => setOpen(false)} style={{ cursor: 'pointer' }} />
+          </div>
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 16,
+            margin: 32,
+            alignItems: 'center',
+            justifyContent: 'center',
+            minWidth: 400
+          }}>
+            <img src={base64Image} alt="Imagem de perfil" style={{
+              width: 128,
+              height: 128,
+              borderRadius: '50%',
+              objectFit: 'cover'
+            }} />
+
+            <Typography
+              variant="h7"
+              style={{
+                fontWeight: 'bold',
+                color: '#082031'
+              }}
+            >
+              Editar Imagem de Perfil
+            </Typography>
+
+            <TextField
+              type="file"
+              variant="outlined"
+              onChange={(event) => {
+                const file = event.target.files[0]
+                setImage(file)
+                setBase64Image(URL.createObjectURL(file))
+              }}
+              fullWidth
+            />
+
+
+            <TextField
+              label="Nome"
+              variant="outlined"
+              value={userInfo.nome}
+              fullWidth
+            />
+
+            <TextField
+              label="Username"
+              variant="outlined"
+              value={userInfo.username}
+              fullWidth
+            />
+
+            <Button
+              onClick={handleImageSubmit}
+              variant="contained"
+              style={{
+                backgroundColor: '#082031',
+                color: '#F4F3EE',
+                fontWeight: 'bold'
+              }}
+            >
+              Salvar
+            </Button>
+          </div>
+        </ModalPersonalizado>
+      ) || modal === 'editarInformacoesPessoais' && (
+        <ModalPersonalizado
+          open={open}
+          setOpen={setOpen}
+        >
+          <div style={{
+            width: '90%',
+            display: 'flex',
+            justifyContent: 'flex-end',
+            padding: 16
+          }}>
+            <CloseIcon onClick={() => setOpen(false)} style={{ cursor: 'pointer' }} />
+          </div>
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 16,
+            padding: 32,
+            minWidth: 400
+          }}>
+            <Typography
+              variant="h7"
+              style={{
+                fontWeight: 'bold',
+                color: '#082031'
+              }}
+            >
+              Editar Informações Pessoais
+            </Typography>
+
+            <TextField
+              label="Nome"
+              variant="outlined"
+              value={userInfo.nome}
+              onChange={(event) => setUserInfo({ ...userInfo, nome: event.target.value })}
+            />
+
+            <TextField
+              label="E-mail"
+              variant="outlined"
+              value={userInfo.email}
+              onChange={(event) => setUserInfo({ ...userInfo, email: event.target.value })}
+            />
+
+            <TextField
+              label="Celular"
+              variant="outlined"
+              value={userInfo.celular}
+              onChange={(event) => setUserInfo({ ...userInfo, celular: event.target.value })}
+            />
+
+            <Button
+              onClick={() => {
+
+              }}
+              variant="contained"
+              style={{
+                backgroundColor: '#082031',
+                color: '#F4F3EE',
+                fontWeight: 'bold'
+              }}
+            >
+              Salvar
+            </Button>
+          </div>
+        </ModalPersonalizado>
+      ) || modal === 'editarEndereco' && (
+        <ModalPersonalizado
+          open={open}
+          setOpen={setOpen}
+        >
+          <div style={{
+            width: '90%',
+            display: 'flex',
+            justifyContent: 'flex-end',
+            padding: 16
+          }}>
+            <CloseIcon onClick={() => setOpen(false)} style={{ cursor: 'pointer' }} />
+          </div>
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 16,
+            padding: 32,
+            minWidth: 400
+          }}>
+            <Typography
+              variant="h7"
+              style={{
+                fontWeight: 'bold',
+                color: '#082031'
+              }}
+            >
+              Editar Endereço
+            </Typography>
+
+            <TextField
+              label="CEP"
+              variant="outlined"
+              value={userInfo.cep}
+              onChange={(event) => setUserInfo({ ...userInfo, cep: event.target.value })}
+            />
+
+            <TextField
+              label="Logradouro"
+              variant="outlined"
+              value={userInfo.logradouro}
+              onChange={(event) => setUserInfo({ ...userInfo, logradouro: event.target.value })}
+            />
+
+            <TextField
+              label="Número"
+              variant="outlined"
+              value={userInfo.numero}
+              onChange={(event
+              ) => setUserInfo({ ...userInfo, numero: event.target.value })}
+            />
+
+            <TextField
+              label="Complemento"
+              variant="outlined"
+              value={userInfo.complemento}
+              onChange={(event) => setUserInfo({ ...userInfo, complemento: event.target.value })}
+            />
+
+            <TextField
+              label="Cidade"
+              variant="outlined"
+              value={userInfo.cidade}
+              onChange={(event) => setUserInfo({ ...userInfo, cidade: event.target.value })}
+
+            />
+
+            <TextField
+              label="Estado"
+              variant="outlined"
+              value={userInfo.estado}
+              onChange={(event) => setUserInfo({ ...userInfo, estado: event.target.value })}
+
+            />
+
+            <Button
+              onClick={() => {
+
+              }}
+              variant="contained"
+              style={{
+                backgroundColor: '#082031',
+                color: '#F4F3EE',
+                fontWeight: 'bold'
+              }}
+            >
+              Salvar
+            </Button>
+          </div>
+        </ModalPersonalizado>
+      )}
     </ThemeProvider>
   )
 }

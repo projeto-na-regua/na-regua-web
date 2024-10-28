@@ -141,7 +141,7 @@ export default function AccountMenu() {
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
         {barbeariaInfo ? (
-          <>
+          <div>
             <MenuItem
               onClick={() => {
                 handleClose()
@@ -198,7 +198,7 @@ export default function AccountMenu() {
               </Typography>
             </MenuItem>
             <Divider />
-          </>
+          </div>
         ) : (
           <>
             <MenuItem

@@ -1,11 +1,26 @@
-import { Typography, Divider } from '@mui/material'
+import { Button, Typography, Menu, MenuItem } from '@mui/material'
 import ThumbUpIcon from '@mui/icons-material/ThumbUp'
-import ThumbDownIcon from '@mui/icons-material/ThumbDown'
-import ThumbDownOutlinedIcon from '@mui/icons-material/ThumbDownOutlined'
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined'
 import ModeCommentIcon from '@mui/icons-material/ModeComment'
+import MoreVertIcon from '@mui/icons-material/MoreVert'
+import { useState } from 'react'
 
-export function Post({ username, content, avatar, imagemPost, likes, dislikes, liked, disliked, commits }) {
+export function Post({ username, content, avatar, imagemPost, likes, liked, commits, onLike, modalOpen, isOwner, onDelete }) {
+  const [anchorEl, setAnchorEl] = useState(null)
+
+  const handleMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleMenuClose = () => {
+    setAnchorEl(null)
+  }
+
+  const handleDelete = () => {
+    onDelete()
+    handleMenuClose()
+  }
+
   return (
     <div style={{
       display: 'flex',
@@ -19,19 +34,44 @@ export function Post({ username, content, avatar, imagemPost, likes, dislikes, l
         flexDirection: 'row',
         gap: 8,
         alignItems: 'center',
+        justifyContent: 'space-between',
       }}>
-        <img
-          src={avatar}
-          alt='imagem de perfil'
-          style={{
-            width: 50,
-            height: 50,
-            borderRadius: '50%',
-          }}
-        />
-        <Typography variant='h6'>
-          {username}
-        </Typography>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'row',
+          gap: 8,
+          alignItems: 'center',
+        }}>
+          <img
+            src={avatar}
+            alt='imagem de perfil'
+            style={{
+              width: 50,
+              height: 50,
+              borderRadius: '50%',
+            }}
+          />
+          <Typography variant='body1'>
+            @{username}
+          </Typography>
+        </div>
+        {isOwner && (
+          <div>
+            <Button onClick={handleMenuOpen} variant='text'>
+              <MoreVertIcon />
+            </Button>
+
+
+            <Menu
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              onClose={handleMenuClose}
+            >
+              <MenuItem onClick={handleDelete}>Excluir</MenuItem>
+            </Menu>
+          </div>
+        )}
+
       </div>
       <Typography variant='body1'>
         {content}
@@ -42,8 +82,12 @@ export function Post({ username, content, avatar, imagemPost, likes, dislikes, l
           alt='imagem do post'
           style={{
             width: '100%',
+            maxWidth: 500,
+            height: 'auto',
             borderRadius: 12,
-            marginTop: 16,
+            border: '1px solid #CBD5E0',
+            maxHeight: 400,
+            objectFit: 'cover'
           }}
         />
       )}
@@ -61,23 +105,22 @@ export function Post({ username, content, avatar, imagemPost, likes, dislikes, l
           display: 'flex',
           flexDirection: 'row',
           gap: 8,
-        }}>
-          {liked ? <ThumbUpIcon style={{ cursor: 'pointer' }} /> : <ThumbUpOutlinedIcon style={{ cursor: 'pointer' }} />}
+          alignItems: 'center',
+          cursor: 'pointer',
+        }} onClick={onLike}>
+          {liked ? <ThumbUpIcon /> : <ThumbUpOutlinedIcon />}
           <Typography variant='body1'>
-            {likes}
-          </Typography>
-
-          {disliked ? <ThumbDownIcon style={{ cursor: 'pointer' }} /> : <ThumbDownOutlinedIcon style={{ cursor: 'pointer' }} />}
-          <Typography variant='body1'>
-            {dislikes}
+            {likes === 0 ? 0 : likes}
           </Typography>
         </div>
         <div style={{
           display: 'flex',
           flexDirection: 'row',
           gap: 8,
-        }}>
-          <ModeCommentIcon style={{ cursor: 'pointer' }} />
+          alignItems: 'center',
+          cursor: 'pointer',
+        }} onClick={modalOpen}>
+          <ModeCommentIcon />
           <Typography variant='body1'>
             {commits}
           </Typography>
