@@ -20,7 +20,7 @@ RUN npm run build
 FROM nginx:alpine
 
 # Copiar o arquivo de configuração personalizado do Nginx
-COPY nginx.conf /etc/nginx/nginx.conf
+COPY nginx.conf /etc/nginx/sites-available/
 
 # Copiar os arquivos de build do React para o diretório do Nginx
 COPY --from=build /app/build /usr/share/nginx/html
