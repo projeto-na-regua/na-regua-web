@@ -44,7 +44,7 @@ jobs:
 
   deploy:
     runs-on: self-hosted  # Usando runner self-hosted para o deploy
-
+    needs: build-and-deploy
     steps:
       # Passo 1: Fazer login no Docker Hub
       - name: Log in to Docker Hub on self-hosted runner
