@@ -35,11 +35,13 @@ jobs:
       # Passo 5: Construir a imagem Docker com o código do frontend
       - name: Build Docker image
         run: |
-          docker build -t melissaneves/naregua-web:latest ./frontend
+          cd .\frontend\
+          docker build -t melissaneves/naregua-web:latest 
 
       # Passo 6: Enviar a imagem para o Docker Hub
       - name: Push Docker image to Docker Hub
         run: |
+          cd .\frontend\
           docker push melissaneves/naregua-web:latest
 
   deploy:
