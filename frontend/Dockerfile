@@ -19,7 +19,10 @@ RUN npm run build
 # Etapa 2: Servir com Nginx
 FROM nginx:alpine
 
-# Copiar os arquivos de build para o diretório do Nginx
+# Copiar o arquivo de configuração personalizado do Nginx
+COPY nginx.conf /etc/nginx/nginx.conf
+
+# Copiar os arquivos de build do React para o diretório do Nginx
 COPY --from=build /app/build /usr/share/nginx/html
 
 # Expor a porta 80
