@@ -24,7 +24,6 @@ import CurrencyExchangeOutlinedIcon from '@mui/icons-material/CurrencyExchangeOu
 import PieChartOutlinedIcon from '@mui/icons-material/PieChartOutlined'
 
 export default function AccountMenu() {
-  const [isAdm, setIsAdm] = React.useState(false)
   const barbeariaInfo = JSON.parse(sessionStorage.getItem("barbearia"))
   const token = JSON.parse(sessionStorage.getItem("user"))
   const userInfo = JSON.parse(sessionStorage.getItem('userInfo'))

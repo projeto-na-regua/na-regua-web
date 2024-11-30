@@ -16,8 +16,7 @@ function BoxBarbeariaHistorico() {
   const [openModalAvaliacao, setOpenModalAvaliacao] = useState(false);
   const [openModalVisualizacao, setOpenModalVisualizacao] = useState(false);
   const [selectedAgendamento, setSelectedAgendamento] = useState(null);
-  const [loading, setLoading] = useState(true);
-
+ 
   useEffect(() => {
     const fetchAgendamentos = async () => {
       try {

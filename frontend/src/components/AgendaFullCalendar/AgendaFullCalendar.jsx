@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import dayjs from 'dayjs';
 import 'dayjs/locale/pt-br';
 import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
@@ -6,8 +6,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { toast } from "react-toastify";
-import api from '../../api.js';
+
 
 dayjs.locale('pt-br');
 
