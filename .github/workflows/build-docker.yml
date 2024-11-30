@@ -56,9 +56,11 @@ jobs:
       # Passo 3: Parar e remover qualquer container em execução com o nome 'naregua-web' (se existir)
       - name: Stop and remove existing container
         run: |
-          sudo docker ps -q --filter "name=naregua-web" | grep -q . && docker stop naregua-web && docker rm naregua-web || echo "No running container found"
+          sudo docker ps -q --filter "name=naregua-web" | grep -q . && sudo docker stop naregua-web && sudo docker rm naregua-web || echo "No running container found"
 
       # Passo 4: Rodar o novo container no servidor
       - name: Run the Docker container
         run: |
           sudo docker run -d --name naregua-web -p 80:80 --rm melissaneves/naregua-web:latest
+
+
