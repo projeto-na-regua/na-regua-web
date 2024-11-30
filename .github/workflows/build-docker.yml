@@ -16,8 +16,8 @@ jobs:
 
       # Passo 2: Instalar dependências e construir frontend (React)
       - name: Install dependencies and build frontend
-        working-directory: ./frontend
         run: |
+          cd .\frontend\
           npm install
           npm run build
 
