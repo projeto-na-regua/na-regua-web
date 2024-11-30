@@ -17,7 +17,7 @@ jobs:
       # Passo 2: Instalar dependências e construir frontend (React)
       - name: Install dependencies and build frontend
         run: |
-          cd .\frontend\
+          cd frontend  # Corrigido para usar o separador correto de diretórios
           npm install
           npm run build
 
@@ -35,13 +35,13 @@ jobs:
       # Passo 5: Construir a imagem Docker com o código do frontend
       - name: Build Docker image
         run: |
-          cd .\frontend\
-          docker build -t melissaneves/naregua-web:latest 
+          cd frontend  # Corrigido para usar o separador correto de diretórios
+          docker build -t melissaneves/naregua-web:latest .
 
       # Passo 6: Enviar a imagem para o Docker Hub
       - name: Push Docker image to Docker Hub
         run: |
-          cd .\frontend\
+          cd frontend  # Corrigido para usar o separador correto de diretórios
           docker push melissaneves/naregua-web:latest
 
   deploy:
@@ -68,4 +68,4 @@ jobs:
       # Passo 4: Rodar o novo container no servidor
       - name: Run the Docker container
         run: |
-          docker run -d --name naregua-web -p 80:80 melissaneves/naregua-web:latest
+          docker run -d --name naregua-web -p 80:80 --rm melissaneves/naregua-web:latest
