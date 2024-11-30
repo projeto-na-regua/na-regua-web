@@ -16,17 +16,11 @@ COPY . .
 # Construir o app React para produção
 RUN npm run build
 
-# Etapa 2: Servir com Nginx e balanceamento de carga
+# Etapa 2: Servir com Nginx
 FROM nginx:alpine
 
-# Instalar utilitários para configurar o balanceamento de carga
-RUN apk update && apk add bash
-
-# Copiar arquivos de build para o diretório do Nginx
+# Copiar os arquivos de build para o diretório do Nginx
 COPY --from=build /app/build /usr/share/nginx/html
-
-# Copiar o arquivo de configuração customizada do Nginx (balanceador de carga)
-COPY nginx.conf /etc/nginx/nginx.conf
 
 # Expor a porta 80
 EXPOSE 80
