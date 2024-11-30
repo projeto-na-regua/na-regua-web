@@ -5,13 +5,13 @@ FROM node:18 AS build
 WORKDIR /app
 
 # Copiar arquivos de dependências
-COPY package.json package-lock.json ./
+COPY package.json package-lock.json ./ 
 
 # Instalar dependências
 RUN npm install
 
 # Copiar o código do aplicativo
-COPY . .
+COPY . . 
 
 # Construir o app React para produção
 RUN npm run build
