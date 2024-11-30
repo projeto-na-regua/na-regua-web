@@ -14,13 +14,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Passo 2: Instalar dependências e construir frontend (React)
-      - name: Install dependencies and build frontend
-        run: |
-          cd frontend  # Corrigido para usar o separador correto de diretórios
-          npm install
-          npm run build
-
       # Passo 3: Configurar o Docker Buildx (necessário para multi-plataforma e melhores otimizações)
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
