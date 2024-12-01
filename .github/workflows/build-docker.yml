@@ -18,7 +18,9 @@ jobs:
       - name: Create build archive
         run: |
           cd frontend
+          ls -al build/ 
           tar -czf build.tar.gz build/  
+
 
       # Passo 4: Upload do build para o servidor (Nginx)
       - name: Upload build to server
