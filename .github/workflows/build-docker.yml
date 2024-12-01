@@ -19,7 +19,6 @@ jobs:
         run: |
           cd frontend  # Navegar até o diretório onde o app React está
           npm install  # Instalar dependências
-          npm run build  # Rodar o build do React
 
       # Passo 3: Compactar o diretório de build (opcional, se quiser otimizar o upload)
       - name: Create build archive
