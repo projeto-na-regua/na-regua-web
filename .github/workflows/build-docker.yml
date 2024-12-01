@@ -13,13 +13,7 @@ jobs:
       # Passo 1: Check-out do código
       - name: Checkout code
         uses: actions/checkout@v3
-
-      # Passo 2: Instalar dependências e build do React
-      - name: Build React app
-        run: |
-          cd frontend  # Navegar até o diretório onde o app React está
-          npm install  # Instalar dependências
-
+        
       # Passo 3: Compactar o diretório de build (opcional, se quiser otimizar o upload)
       - name: Create build archive
         run: |
