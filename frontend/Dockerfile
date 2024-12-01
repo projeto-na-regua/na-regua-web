@@ -1,32 +1,23 @@
 # Etapa 1: Construir o app React
-FROM node:18 AS build
+FROM node:16 as build
 
-# Definir diretório de trabalho
 WORKDIR /app
 
-# Copiar arquivos de dependências
-COPY package.json package-lock.json ./ 
+# Copia os arquivos do projeto React
+COPY . .
 
-# Instalar dependências
+# Instala as dependências e cria o build
 RUN npm install
-
-# Copiar o código do aplicativo
-COPY . . 
-
-# Construir o app React para produção
 RUN npm run build
 
-# Etapa 2: Servir com Nginx
+# Etapa 2: Servir o build com nginx (mas não rodar nginx dentro do container)
 FROM nginx:alpine
 
-# Copiar o arquivo de configuração personalizado do Nginx
-COPY nginx.conf /etc/nginx/sites-available/
-
-# Copiar os arquivos de build do React para o diretório do Nginx
+# Copia os arquivos do build para o diretório do nginx
 COPY --from=build /app/build /usr/share/nginx/html
 
-# Expor a porta 80
+# Expondo a porta 80 para o nginx (apenas se quiser testar localmente, não é necessário no GitHub Actions)
 EXPOSE 80
 
-# Comando para rodar o Nginx
+# O nginx será o responsável por servir a aplicação estática
 CMD ["nginx", "-g", "daemon off;"]

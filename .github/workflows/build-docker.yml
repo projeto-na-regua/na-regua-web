@@ -6,6 +6,46 @@ on:
       - main  # Aciona o workflow quando houver push na branch 'main'
 
 jobs:
+  build:
+    runs-on: ubuntu-latest  # Este é o runner do GitHub Actions para build
+
+    steps:
+      # Passo 1: Check-out do código
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Passo 2: Instalar dependências e build do React
+      - name: Build React app
+        run: |
+          cd frontend  # Navegar até o diretório onde o app React está
+          npm install  # Instalar dependências
+          npm run build  # Rodar o build do React
+
+      # Passo 3: Compactar o diretório de build (opcional, se quiser otimizar o upload)
+      - name: Create build archive
+        run: |
+          cd frontend
+          tar -czf build.tar.gz build/  # Compactar o diretório de build para facilitar o upload
+
+      # Passo 4: Upload do build para o servidor (Nginx)
+      - name: Upload build to server
+        uses: appleboy/ssh-action@v0.1.0
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          key: ${{ secrets.SERVER_PRIVATE_KEY }}
+          port: 22  # Porta SSH, caso esteja usando a padrão (22)
+          script: |
+                  # Criação do diretório no servidor e limpeza do diretório antigo
+                  mkdir -p /usr/share/nginx/html  # Certifique-se de que o diretório do Nginx existe
+                  rm -rf /usr/share/nginx/html/*  # Limpar o conteúdo anterior
+                  # Enviar os arquivos compactados (build.tar.gz) para o servidor
+                  scp -o StrictHostKeyChecking=no /home/runner/work/<repo-name>/frontend/build.tar.gz ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }}:/usr/share/nginx/html/
+                  # Descompactar os arquivos no diretório do Nginx
+                  ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }} "tar -xzf /usr/share/nginx/html/build.tar.gz -C /usr/share/nginx/html/"
+                  # Limpar o arquivo tar depois
+                  ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }} "rm /usr/share/nginx/html/build.tar.gz"
+
   docker:
     runs-on: ubuntu-latest  # Este é o runner do GitHub Actions para build
 
@@ -37,30 +77,9 @@ jobs:
           cd frontend  # Corrigido para usar o separador correto de diretórios
           docker push melissaneves/naregua-web:latest
 
-  deploy:
-    runs-on: self-hosted  # Usando runner self-hosted para o deploy
-    needs: docker
-    steps:
-      # Passo 1: Fazer login no Docker Hub
-      - name: Log in to Docker Hub on self-hosted runner
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKERHUB_USER }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # Passo 2: Puxar a imagem Docker mais recente do Docker Hub
-      - name: Pull Docker image from Docker Hub
-        run: |
-          sudo docker pull melissaneves/naregua-web:latest
 
-      # Passo 3: Parar e remover qualquer container em execução com o nome 'naregua-web' (se existir)
-      - name: Stop and remove existing container
-        run: |
-          sudo docker ps -q --filter "name=naregua-web" | grep -q . && sudo docker stop naregua-web && sudo docker rm naregua-web || echo "No running container found"
+  
 
-      # Passo 4: Rodar o novo container no servidor
-      - name: Run the Docker container
-        run: |
-          sudo docker run -d --name naregua-web -p 80:80 --rm melissaneves/naregua-web:latest
 
 
