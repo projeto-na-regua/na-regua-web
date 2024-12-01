@@ -13,12 +13,12 @@ jobs:
       # Passo 1: Check-out do código
       - name: Checkout code
         uses: actions/checkout@v3
-        
+
       # Passo 3: Compactar o diretório de build (opcional, se quiser otimizar o upload)
       - name: Create build archive
         run: |
           cd frontend
-          tar -czf build.tar.gz build/  # Compactar o diretório de build para facilitar o upload
+          tar -czf build.tar.gz build/  
 
       # Passo 4: Upload do build para o servidor (Nginx)
       - name: Upload build to server
@@ -29,14 +29,10 @@ jobs:
           key: ${{ secrets.SERVER_PRIVATE_KEY }}
           port: 22  # Porta SSH, caso esteja usando a padrão (22)
           script: |
-                  # Criação do diretório no servidor e limpeza do diretório antigo
-                  mkdir -p /usr/share/nginx/html  # Certifique-se de que o diretório do Nginx existe
-                  rm -rf /usr/share/nginx/html/*  # Limpar o conteúdo anterior
-                  # Enviar os arquivos compactados (build.tar.gz) para o servidor
+                  mkdir -p /usr/share/nginx/html  
+                  rm -rf /usr/share/nginx/html/*  
                   scp -o StrictHostKeyChecking=no /home/runner/work/<repo-name>/frontend/build.tar.gz ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }}:/usr/share/nginx/html/
-                  # Descompactar os arquivos no diretório do Nginx
                   ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }} "tar -xzf /usr/share/nginx/html/build.tar.gz -C /usr/share/nginx/html/"
-                  # Limpar o arquivo tar depois
                   ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }} "rm /usr/share/nginx/html/build.tar.gz"
 
   docker:
