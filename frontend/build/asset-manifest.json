@@ -1,0 +1,35 @@
+{
+  "files": {
+    "main.css": "/static/css/main.a21adc11.css",
+    "main.js": "/static/js/main.bdf8541b.js",
+    "static/media/imagem-cadastro.jpg": "/static/media/imagem-cadastro.2e1cc3dc13f1c153bdcb.jpg",
+    "static/media/bannerBarbearia.jpg": "/static/media/bannerBarbearia.29f16745eb445ca79a87.jpg",
+    "static/media/Imagem Login.png": "/static/media/Imagem Login.5cedc243d03876c9c0c0.png",
+    "static/media/mockup.png": "/static/media/mockup.6bd647cfa1ac64512d25.png",
+    "static/media/imagem-login.png": "/static/media/imagem-login.269361556dd82aad6612.png",
+    "static/media/imagem-barbeiro-home.jpg": "/static/media/imagem-barbeiro-home.e5d26cf9e30d74287524.jpg",
+    "static/media/barbeiroPerfil.jpg": "/static/media/barbeiroPerfil.7c2cbff068beed4a2519.jpg",
+    "static/media/FinishImage.svg": "/static/media/FinishImage.d914af01523561e818bf747ca4fa7b35.svg",
+    "static/media/corte.jpg": "/static/media/corte.98251c2326b3240259d5.jpg",
+    "static/media/avatar-funcionario.jpg": "/static/media/avatar-funcionario.a4a5141d79d16bc6195d.jpg",
+    "static/media/logo-scale0.svg": "/static/media/logo-scale0.cb5cae27cfa27478b04c15d2433b354c.svg",
+    "static/media/logo-scale1.svg": "/static/media/logo-scale1.cb5cae27cfa27478b04c15d2433b354c.svg",
+    "static/media/home.svg": "/static/media/home.822fd35c5196bd08146f57436e62b457.svg",
+    "static/media/editicon.svg": "/static/media/editicon.e8984e303dcac132b1b7358071e7f96d.svg",
+    "static/media/calendario.svg": "/static/media/calendario.2b46fde677b4ed3118ab0e30ab798489.svg",
+    "static/media/config.svg": "/static/media/config.20028a0b6906ce9eab16cd4ef768f164.svg",
+    "static/media/funcionarios.svg": "/static/media/funcionarios.8c388927e8dfbc6c3cddafdba487ff04.svg",
+    "static/media/imagem-perfil.svg": "/static/media/imagem-perfil.9478feb08c7e2cdea08b7aa7ea44718e.svg",
+    "static/media/galeria.svg": "/static/media/galeria.6075d0508510e210e005e96078d998b0.svg",
+    "static/media/chart.svg": "/static/media/chart.62a13f956387516a861064e83097a6e1.svg",
+    "index.html": "/index.html",
+    "static/media/servicos.svg": "/static/media/servicos.d16ac84b13bbac699cd9071f797fa4be.svg",
+    "static/media/dashboard.svg": "/static/media/dashboard.caada54c103af4485229a673f86ee59d.svg",
+    "main.a21adc11.css.map": "/static/css/main.a21adc11.css.map",
+    "main.bdf8541b.js.map": "/static/js/main.bdf8541b.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.a21adc11.css",
+    "static/js/main.bdf8541b.js"
+  ]
+}
