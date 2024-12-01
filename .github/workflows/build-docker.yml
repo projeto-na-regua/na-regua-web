@@ -17,7 +17,7 @@ jobs:
       # Passo 3: Compactar o diretório de build (opcional, se quiser otimizar o upload)
       - name: Create build archive
         run: |
-          cd frontend
+          cd frontend/
           ls -al build/ 
           tar -czf build.tar.gz build/  
 
@@ -33,7 +33,7 @@ jobs:
           script: |
                   mkdir -p /usr/share/nginx/html  
                   rm -rf /usr/share/nginx/html/*  
-                  scp -o StrictHostKeyChecking=no /home/runner/work/<repo-name>/frontend/build.tar.gz ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }}:/usr/share/nginx/html/
+                  scp -o StrictHostKeyChecking=no /home/runner/work/na-regua-web/frontend/build.tar.gz ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }}:/usr/share/nginx/html/
                   ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }} "tar -xzf /usr/share/nginx/html/build.tar.gz -C /usr/share/nginx/html/"
                   ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }} "rm /usr/share/nginx/html/build.tar.gz"
 
