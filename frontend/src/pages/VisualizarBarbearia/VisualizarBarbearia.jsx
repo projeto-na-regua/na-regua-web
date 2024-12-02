@@ -238,7 +238,7 @@ export function VisualizarBarbearia() {
                                 <div className={styles.bannerFotoPerfilBarbearia}>
                                     <div className={styles.bannerBarbearia}>
                                         <img
-                                            src={imgBanner && /^https:\/\/upload0naregua\.blob\.core\.windows\.net\/upload\/.+/.test(imgBanner) ? imgBanner : bannerBarbeariaPadrao}
+                                            src={imgBanner ? imgBanner : bannerBarbeariaPadrao}
                                             alt=""
                                         />
                                     </div>
@@ -248,7 +248,7 @@ export function VisualizarBarbearia() {
 
 
                                     <div className={styles.circuloPerfilBarbearia}>
-                                        <CirculoPerfilBarbearia fotoPerfil={imgPerfil && /^https:\/\/upload0naregua\.blob\.core\.windows\.net\/upload\/.+/.test(imgPerfil) ? imgPerfil : imgBarbeariaPadrao} />
+                                        <CirculoPerfilBarbearia fotoPerfil={imgPerfil ? imgPerfil : imgBarbeariaPadrao } />
 
                                     </div>
                                 </div>
@@ -323,7 +323,11 @@ export function VisualizarBarbearia() {
                                         </div>
                                         <div className={styles.fotosEquipe}>
                                             {Array.isArray(funcionarios) && funcionarios.map((funcionario, index) => (
-                                                <FotoPerfilEquipe key={index} nome={funcionario.nome} foto={imgPerfilFuncionarios[index] === 'https://upload0naregua.blob.core.windows.net/upload/' ? 'https://i.pinimg.com/736x/b1/aa/73/b1aa73786a14bf19fb208dfbf90488e5.jpg' : imgPerfilFuncionarios[index]} />
+                                                <FotoPerfilEquipe
+                                                    key={index}
+                                                    nome={funcionario.nome}
+                                                    foto={imgPerfilFuncionarios[index] ? imgPerfilFuncionarios[index] : imgBarbeariaPadrao}
+                                                />
                                             ))}
                                         </div>
                                     </div>

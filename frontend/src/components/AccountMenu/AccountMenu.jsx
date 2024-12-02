@@ -104,7 +104,7 @@ export default function AccountMenu() {
             }}
           >
             <Avatar sx={{ width: 32, height: 32, backgroundColor: utils.randomColor, color: '#082031' }}>
-              {imagePerfil ? <img src={imagePerfil} alt="imagem-perfil" style={{ width: 32, height: 32, borderRadius: 16 }} /> : userInfo.nome.charAt(0)}
+              {userInfo.imgPerfil ? <img src={userInfo.imgPerfil} alt="imagem-perfil" style={{ width: 32, height: 32, borderRadius: 16 }} /> : userInfo.nome.charAt(0)}
             </Avatar>
 
             <Typography variant="body1" style={{ color: '#082031', fontWeight: 600, marginLeft: 8 }}>

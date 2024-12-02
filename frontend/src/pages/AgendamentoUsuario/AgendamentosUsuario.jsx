@@ -99,14 +99,17 @@ export function AgendamentoUsuario() {
                                                 borderBottomLeftRadius: 12,
                                                 height: '100%',
                                                 alignItems: 'center',
+                                                justifyContent: 'space-around',
                                                 minWidth: 180
                                             }}>
-                                                <img src={agendamento.fotoNegocio} alt='Imagem barbearia' style={{ width: 100, height: 100, borderRadius: 50 }} />
+                                                <img src={agendamento.imgPerfilBarbearia} alt='Imagem barbearia' style={{ width: 100, height: 100, borderRadius: 50 }} />
 
                                                 <Typography variant='h7' style={{ color: '#082031', textWrap: 'wrap' }}>{agendamento.nomeNegocio}</Typography>
 
 
-                                                <Typography variant='body1' style={{ color: '#082031', textAlign: 'center', marginTop: 8 }}>{agendamento.enderecoBarbearia.logradouro}, {agendamento.enderecoBarbearia.numero} - {agendamento.enderecoBarbearia.cidade}</Typography>
+                                                <Typography variant='body1' style={{ color: '#082031', textAlign: 'center', marginTop: 8, textWrap: 'wrap', width: '75%' }}>
+                                                    {agendamento.enderecoBarbearia.logradouro}, {agendamento.enderecoBarbearia.numero} - {agendamento.enderecoBarbearia.cidade}
+                                                </Typography>
                                             </div>
 
                                             <div style={{
@@ -169,7 +172,7 @@ export function AgendamentoUsuario() {
                     }}>
                         <Typography variant='h7' style={{ color: '#082031', marginLeft: 16, marginTop: 16 }}>Histórico</Typography>
 
-                        <BoxBarbeariaHistorico /> 
+                        <BoxBarbeariaHistorico />
 
                         <Stack spacing={2} style={{ marginTop: 16, alignItems: 'center' }}>
                             <Pagination

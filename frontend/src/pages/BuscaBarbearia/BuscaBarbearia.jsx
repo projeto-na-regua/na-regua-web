@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react"
 import styles from './BuscaBarbearia.module.css'
-import { Footer } from "../../components/Footer/Footer"
+import { Footer } from "../../components/Footer/Footer.jsx"
 import CardBarbeariaEncontrada from "../../components/CardBarbeariaEncontrada/CardBarbeariaEncontrada.jsx"
 import logo from '../../utils/assets/logo-scale0.svg'
-import Header from "../../components/Header/Header"
-import { theme } from '../../theme'
+import Header from "../../components/Header/Header.jsx"
+import { theme } from '../../theme.js'
 import { ThemeProvider } from '@emotion/react'
 import { useNavigate } from 'react-router-dom'
 import imgBarbeariaPadrao from '../../utils/assets/barbeariaPadrao.png'
@@ -130,7 +130,7 @@ export function BuscaBarbearia() {
                                             key={barbearia.id}
                                             nomeBarbearia={barbearia.nomeNegocio}
                                             endereco={`${barbearia.logradouro}, ${barbearia.numero}`}
-                                            foto={imgPerfil[index] && /^https:\/\/upload0naregua\.blob\.core\.windows\.net\/upload\/.+/.test(imgPerfil[index]) ? imgPerfil[index] : imgBarbeariaPadrao}
+                                            foto={imgPerfil[index] ? imgPerfil[index] : imgBarbeariaPadrao}
                                         />
                                     ))}
                                 </div>

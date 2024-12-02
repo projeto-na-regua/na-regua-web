@@ -241,7 +241,7 @@ export function Comunidade() {
                 alignItems: 'center',
               }}>
                 <img
-                  src={imagePerfil || `https://ui-avatars.com/api/?name=${userInfo.nome}&background=random`}
+                  src={userInfo.imgPerfil || `https://ui-avatars.com/api/?name=${userInfo.nome}&background=random`}
                   alt='imagem de perfil'
                   style={{
                     width: 150,
@@ -514,7 +514,7 @@ export function Comunidade() {
               borderRadius: 12
             }}>
               <img
-                src={imagePerfil || `https://ui-avatars.com/api/?name=${userInfo.nome}&background=random`}
+                src={userInfo.imgPerfil || `https://ui-avatars.com/api/?name=${userInfo.nome}&background=random`}
                 alt='imagem de perfil'
                 style={{
                   width: 50,

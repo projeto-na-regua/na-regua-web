@@ -1,19 +1,15 @@
 import React from "react";
 import styles from "./CardAvaliacoesVisualizarBarbearia.module.css"
-import foto from "../../utils/assets/barbeiroPerfil.jpg"
 import EstrelasAvaliacao from "../EstrelasAvaliacao/EstrelasAvaliacao";
 
 const CardAvaliacoesVisualizarBarbearia = ({ nomeCliente,
     dataAvaliacao,
     comentario,
-    estrelas }) => {
+    estrelas,
+    imgPerfil }) => {
     return (
         <>
             <div className={styles.conteudoCardAvaliacoesVisualizarBarbearia}>
-                <div className={styles.foto}>
-                    <img src={foto} alt="" />
-                </div>
-
                 <div className={styles.informacoesCard}>
 
                     <div className={styles.nomeData}>
@@ -27,7 +23,6 @@ const CardAvaliacoesVisualizarBarbearia = ({ nomeCliente,
                     </div>
 
                     <div className={styles.linhaConteudo}>
-                        <div className={styles.linha}></div>
                         <div className={styles.conteudoAvaliacao}>
                             <span>{comentario}</span>
                         </div>
