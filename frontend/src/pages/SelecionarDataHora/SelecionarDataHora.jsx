@@ -92,9 +92,9 @@ export function SelecionarDataHora() {
                 dataHora: `${selectedDate.format('YYYY-MM-DD')} ${selectedHorario}:00`
             };
             console.log(agendamento);
-    
+
             const loadingToastId = toast.loading("Finalizando seu agendamento...");
-    
+
             fetchAgendar(agendamento)
                 .then(() => {
                     toast.dismiss(loadingToastId); // Remove o toast de carregamento
@@ -228,7 +228,7 @@ export function SelecionarDataHora() {
         <ThemeProvider theme={theme}>
             <div className={styles.header}>
                 <Header
-                    esquerda={<img src={logo} alt='logo-na-regua' style={{ width: '70%' }} />}
+                    esquerda={<img onClick={() => navigate('/')} src={logo} alt='logo-na-regua' style={{ width: '70%' }} />}
                     direita={
                         <div>
                             {isAuth

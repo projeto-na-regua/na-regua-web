@@ -150,7 +150,7 @@ export function Financeiro() {
             <Sidebar />
 
             <div className={styles.fluxoCaixaTodo}>
-                <HeaderUsuario title='Fluxo de Caixa' />
+                <HeaderUsuario title='Financeiro' />
                 {mostrarModal && (
                     <div className={styles.modalAdicionarValorDespesa}>
                         <div className={styles.backgroundShade} />

@@ -23,7 +23,6 @@ export function DataHora() {
   const [diaSelecionado, setDiaSelecionado] = useState('')
   const [horarios, setHorarios] = useState([] || '')
   const [modalEditarOpen, setModalEditarOpen] = useState(false)
-  
 
   const handleDiaChange = (e) => {
     const selectedDay = parseInt(e.target.value || '');
@@ -204,6 +203,7 @@ export function DataHora() {
     },
   })
 
+
   useEffect(() => {
     const fetchBarbeariaData = async () => {
       try {
@@ -231,6 +231,7 @@ export function DataHora() {
     } catch (error) {
       console.error("Erro ao atualizar as informações:", error)
       toast.error("Erro ao atualizar as informações!")
+      console.error("Erro ao atualizar as informações:", error)
     }
   }
 

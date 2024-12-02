@@ -83,7 +83,7 @@ export function BuscaBarbearia() {
             }}>
                 <div className={styles.header}>
                     <Header
-                        esquerda={<img src={logo} alt='logo-na-regua' style={{ width: '70%' }} />}
+                        esquerda={<img onClick={() => navigate('/')} src={logo} alt='logo-na-regua' style={{ width: '70%' }} />}
                         direita={
                             <div>
                                 {isAuth
