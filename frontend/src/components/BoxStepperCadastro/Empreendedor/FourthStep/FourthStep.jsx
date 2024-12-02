@@ -6,10 +6,12 @@ import { toast } from 'react-toastify'
 import editicon from '../../../../utils/assets/editicon.svg'
 import { useState } from 'react'
 import api from '../../../../api'
+import { useNavigate } from 'react-router-dom'
 
 export function FourthStep() {
   const [profileImage, setProfileImage] = useState(null)
   const [bannerImage, setBannerImage] = useState(null)
+  const navigate = useNavigate()
 
   const initialValues = {
     cep: '',
@@ -49,7 +51,8 @@ export function FourthStep() {
       nomeDoNegocio
     }
 
-    formData.append('barbearia', barbeariaData)
+    formData.append('barbearia', JSON.stringify(barbeariaData));
+
 
     if (profileImage) {
       formData.append('perfil', profileImage)
@@ -75,6 +78,7 @@ export function FourthStep() {
 
       const barbearia = response.data
       console.log('Barbearia cadastrada:', barbearia)
+      navigate('/login')
     } catch (error) {
       console.error('Erro ao cadastrar barbearia:', error)
       toast.error('Erro ao cadastrar barbearia!')
@@ -348,6 +352,6 @@ export function FourthStep() {
           </Form>
         )}
       </Formik>
-    </Box>
-  )
+    </Box>
+  )
 }

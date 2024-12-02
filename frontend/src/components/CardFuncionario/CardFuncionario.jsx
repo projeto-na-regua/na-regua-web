@@ -40,7 +40,7 @@ function CardFuncionario(props) {
         <img
           className={styles.fotoTeste}
           //essa url abaixo deveria vir juntamente com a imagem no endpoint (GET /funcionarios)
-          src={props.image ? "https://upload0naregua.blob.core.windows.net/upload/" + props.image : imgPerfilDefault} 
+          src={props.image}
           alt="imagem-barbeiro"
         />
       </div>
@@ -51,6 +51,9 @@ function CardFuncionario(props) {
 
       <Button onClick={() => setVerMais(true)} variant='contained' style={{
         height: 50,
+        backgroundColor: '#E3A74F',
+        color: '#082031',
+        width: '80%'
       }}>
         Ver mais
       </Button>

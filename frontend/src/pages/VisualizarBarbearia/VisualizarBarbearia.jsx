@@ -115,7 +115,7 @@ export function VisualizarBarbearia() {
 
     const fetchMapaGoogle = async (endereco) => {
         try {
-            const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${endereco}&key=AIzaSyB_bpX4vjXwCdDSo5xd0E4tqIWOJexOJYQ`);
+            const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${endereco}&key=AIzaSyBiIQVJzDCjwCila1MkL21K28vKtC8JQjI`);
             const data = await response.json();
 
             // Verifica se a resposta retornou um status OK
@@ -211,7 +211,7 @@ export function VisualizarBarbearia() {
         <ThemeProvider theme={theme}>
             <div className={styles.header}>
                 <Header
-                    esquerda={<img src={logo} alt='logo-na-regua' style={{ width: '70%' }} />}
+                    esquerda={<img onClick={() => navigate('/')} src={logo} alt='logo-na-regua' style={{ width: '70%' }} />}
                     direita={
                         <div>
                             {isAuth

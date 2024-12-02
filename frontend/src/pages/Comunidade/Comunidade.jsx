@@ -42,6 +42,8 @@ export function Comunidade() {
     hiddenFileInput.current.click()
   }
 
+  console.log(posts)
+
   const handleImageUpload = (event) => {
     const file = event.target.files[0]
     if (file) {
@@ -190,10 +192,6 @@ export function Comunidade() {
     }
   }
 
-  const likeMockado = (idPost) => {
-    setLiked(!liked)
-  }
-
   useEffect(() => {
     fetchPosts()
   }, [])
@@ -202,7 +200,7 @@ export function Comunidade() {
     <ThemeProvider theme={theme}>
       <div>
         <Header
-          esquerda={<img src={logo} alt='logo-na-regua' style={{ width: '70%' }} />}
+          esquerda={<img onClick={() => navigate('/')} src={logo} alt='logo-na-regua' style={{ width: '70%' }} />}
           direita={
             <div>
               {isAuth
@@ -227,31 +225,40 @@ export function Comunidade() {
             <div style={{
               display: 'flex',
               flexDirection: 'column',
-              border: '1px solid #CBD5E0',
+              backgroundColor: '#082031',
               borderRadius: 12,
               alignItems: 'center',
               padding: 16,
               margin: 16,
-              maxHeight: '40vh',
               justifyContent: 'center',
-              width: '100%'
+              width: '100%',
+              height: '40vh',
+              gap: 32
             }}>
-              <img
-                src={imagePerfil}
-                alt='imagem de perfil'
-                style={{
-                  width: 150,
-                  height: 150,
-                  borderRadius: '50%',
-                  marginBottom: 16,
-                  border: '1px solid #CBD5E0',
-                  objectFit: 'cover',
-                }}
-              />
+              <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}>
+                <img
+                  src={imagePerfil || `https://ui-avatars.com/api/?name=${userInfo.nome}&background=random`}
+                  alt='imagem de perfil'
+                  style={{
+                    width: 150,
+                    height: 150,
+                    borderRadius: '50%',
+                    marginBottom: 16,
+                    border: '5px solid #E3A74F',
+                    objectFit: 'cover',
+                  }}
+                />
 
-              <Typography variant='h7'>
-                @{userInfo.username}
-              </Typography>
+                <Typography variant='h7' style={{
+                  color: '#E3A74F',
+                }}>
+                  @{userInfo.username || 'username'}
+                </Typography>
+              </div>
 
               <div style={{
                 display: 'flex',
@@ -263,16 +270,19 @@ export function Comunidade() {
                   display: 'flex',
                   flexDirection: 'row',
                   alignItems: 'flex-end',
-                  gap: 4
+                  gap: 8
                 }}>
                   <Typography variant='h6' style={{
                     fontWeight: 'bold',
                     fontSize: 24,
+                    color: 'white',
                   }}>
                     70
                   </Typography>
 
-                  <Typography variant='body1'>
+                  <Typography variant='body1' style={{
+                    color: 'white'
+                  }}>
                     seguidores
                   </Typography>
                 </div>
@@ -286,11 +296,14 @@ export function Comunidade() {
                   <Typography variant='h6' style={{
                     fontWeight: 'bold',
                     fontSize: 24,
+                    color: 'white'
                   }}>
                     4
                   </Typography>
 
-                  <Typography variant='body1'>
+                  <Typography variant='body1' style={{
+                    color: 'white'
+                  }}>
                     seguindo
                   </Typography>
                 </div>
@@ -300,15 +313,18 @@ export function Comunidade() {
             <div style={{
               display: 'flex',
               flexDirection: 'column',
-              border: '1px solid #CBD5E0',
+              backgroundColor: '#082031',
               borderRadius: 12,
               padding: 16,
               maxHeight: '30vh',
               justifyContent: 'center',
               width: '100%'
             }}>
-              <Typography variant='h7'>
-                Seguidores
+              <Typography variant='h7' style={{
+                color: '#E3A74F',
+                fontWeight: 'bold'
+              }}>
+                Sugestões para você
               </Typography>
 
               <div style={{
@@ -345,7 +361,9 @@ export function Comunidade() {
                     justifyContent: 'space-between',
                     alignItems: 'center',
                   }}>
-                    <Typography variant='body1'>
+                    <Typography variant='body1' style={{
+                      color: 'white'
+                    }}>
                       @roberto
                     </Typography>
 
@@ -381,12 +399,98 @@ export function Comunidade() {
                     justifyContent: 'space-between',
                     alignItems: 'center'
                   }}>
-                    <Typography variant='body1'>
+                    <Typography variant='body1' style={{
+                      color: 'white'
+                    }}>
                       @amanda
                     </Typography>
 
-                    <Button variant='contained'>
+                    <Button variant='contained' style={{
+                      color: '#082031',
+                      backgroundColor: '#E3A74F'
+                    }}>
                       Seguir de volta
+                    </Button>
+                  </div>
+                </div>
+
+                <div style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  gap: 8,
+                  alignItems: 'center',
+                  width: '100%',
+                }}>
+                  <img
+                    src='https://ui-avatars.com/api/?name=Luiz+Silva&background=random'
+                    alt="imagem de perfil"
+                    style={{
+                      width: 50,
+                      height: 50,
+                      borderRadius: '50%',
+                      objectFit: 'cover',
+                    }}
+                  />
+
+                  <div style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    gap: 8,
+                    flexGrow: 1,
+                    justifyContent: 'space-between',
+                    alignItems: 'center'
+                  }}>
+                    <Typography variant='body1' style={{
+                      color: 'white'
+                    }}>
+                      @luizinho
+                    </Typography>
+
+                    <Button variant='contained' style={{
+                      color: '#082031',
+                      backgroundColor: '#E3A74F'
+                    }}>
+                      Seguir de volta
+                    </Button>
+                  </div>
+                </div>
+
+                <div style={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  gap: 8,
+                  alignItems: 'center',
+                  width: '100%',
+                }}>
+                  <img
+                    src='https://ui-avatars.com/api/?name=Vinicius+Manuel&background=random'
+                    alt="imagem de perfil"
+                    style={{
+                      width: 50,
+                      height: 50,
+                      borderRadius: '50%',
+                      objectFit: 'cover',
+                    }}
+                  />
+
+                  <div style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    gap: 8,
+                    flexGrow: 1,
+                    justifyContent: 'space-between',
+                    alignItems: 'center'
+                  }}>
+                    <Typography variant='body1' style={{
+                      color: 'white'
+                    }}>
+                      @viniciusx
+                    </Typography>
+
+                    <Button variant='contained' style={{
+                      color: '#E3A74F',
+                    }}>
+                      Seguindo
                     </Button>
                   </div>
                 </div>
@@ -399,7 +503,7 @@ export function Comunidade() {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            margin: 16,
+            margin: 16
           }}>
             <div style={{
               display: 'flex',
@@ -407,11 +511,10 @@ export function Comunidade() {
               gap: 16,
               border: '1px solid #CBD5E0',
               padding: 16,
-              borderRadius: 12,
-              width: '100%',
+              borderRadius: 12
             }}>
               <img
-                src={imagePerfil}
+                src={imagePerfil || `https://ui-avatars.com/api/?name=${userInfo.nome}&background=random`}
                 alt='imagem de perfil'
                 style={{
                   width: 50,
@@ -502,6 +605,10 @@ export function Comunidade() {
                 Array.from(new Array(6)).map((_, index) => (
                   <Skeleton key={index} variant="rectangular" width={700} height={100} style={{ marginBottom: 16 }} />
                 ))
+              ) : posts.length === 0 ? (
+                <div style={{ textAlign: 'center', marginTop: 20 }}>
+                  <p>Não encontramos nenhum post. Seja o primeiro!</p>
+                </div>
               ) : (
                 posts.map((post, index) => (
                   <div style={{
@@ -513,7 +620,7 @@ export function Comunidade() {
                     <Post
                       username={post.username}
                       content={post.conteudo}
-                      avatar={post.imgPerfil}
+                      avatar={post.imgPerfil || `https://ui-avatars.com/api/?name=${post.username}&background=random`}
                       imagemPost={post.midia}
                       likes={post.qtdCurtidas || 0}
                       liked={post.liked}
@@ -530,6 +637,7 @@ export function Comunidade() {
                   </div>
                 ))
               )}
+
             </div>
           </div>
 
@@ -540,7 +648,7 @@ export function Comunidade() {
             margin: 16,
             width: 300,
           }}>
-            <Typography variant='h7' style={{ fontWeight: 'bold' }}>
+            <Typography variant='h7' style={{ fontWeight: 'bold', color: '#082031' }}>
               Sugestões para você
             </Typography>
 
@@ -579,8 +687,6 @@ export function Comunidade() {
                 </Button>
               </div>
             </div>
-
-            <Divider style={{ width: '100%', margin: '16px 0' }} />
 
             <div style={{
               display: 'flex',
@@ -703,7 +809,7 @@ export function Comunidade() {
                     width: '90%',
                   }} key={index}>
                     <img
-                      src={comentario.imgPerfil}
+                      src={comentario.imgPerfil || `https://ui-avatars.com/api/?name=${comentario.username}&background=random`}
                       alt='imagem de perfil'
                       style={{
                         width: 50,

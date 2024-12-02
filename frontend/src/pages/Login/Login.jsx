@@ -58,7 +58,7 @@ function Login() {
 
         // Redireciona o usuário de acordo com seu tipo
         if (userAdmResponse.data.dtype === 'Barbeiro') {
-          navigate('/comunidade');
+          navigate('/agenda');
         } else if (userAdmResponse.data.dtype === 'Cliente') {
           navigate('/perfil/agendamentos');
         }
@@ -93,8 +93,7 @@ function Login() {
           height: '100vh',
           display: 'flex',
           justifyContent: 'center',
-          alignItems: 'center',
-          backgroundColor: '#F4F3EE'
+          alignItems: 'center'
         }}>
           <div style={{
             display: 'flex',

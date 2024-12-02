@@ -156,7 +156,7 @@ export function Funcionarios() {
                           <CardFuncionario
                             key={funcionario.id}
                             name={funcionario.nome}
-                            image={funcionario.imgPerfil}
+                            image={funcionario.imgPerfil || `https://ui-avatars.com/api/?name=${funcionario.nome}&background=random`}
                             email={funcionario.email}
                             phone={funcionario.celular}
                             onClick={() => setVerMais(funcionario.id)}

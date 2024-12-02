@@ -86,8 +86,6 @@ export default function AccountMenu() {
     }
   }
 
-  getImagePerfil()
-
   return (
     <React.Fragment>
       <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
@@ -106,14 +104,7 @@ export default function AccountMenu() {
             }}
           >
             <Avatar sx={{ width: 32, height: 32, backgroundColor: utils.randomColor, color: '#082031' }}>
-              {!imagePerfil ? userInfo.nome.charAt(0) : <img src={imagePerfil} alt="Imagem de perfil" style={{
-                objectFit: 'cover',
-                width: '100%',
-                height: '100%',
-                borderRadius: '50%',
-                overflow: 'hidden',
-
-              }} />}
+              {imagePerfil ? <img src={imagePerfil} alt="imagem-perfil" style={{ width: 32, height: 32, borderRadius: 16 }} /> : userInfo.nome.charAt(0)}
             </Avatar>
 
             <Typography variant="body1" style={{ color: '#082031', fontWeight: 600, marginLeft: 8 }}>
