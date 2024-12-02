@@ -119,6 +119,7 @@ export function Sidebar() {
               <OptionsSidebar text="Financeiro" />
               <OptionsSidebar text="Funcionários" />
               <OptionsSidebar text="Gerenciamento" />
+              <OptionsSidebar text="Comunidade" />
             </div>
           )}
 

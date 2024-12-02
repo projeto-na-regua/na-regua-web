@@ -17,6 +17,7 @@ import ContentCutIcon from '@mui/icons-material/ContentCut'
 import GroupIcon from '@mui/icons-material/Group'
 import SettingsIcon from '@mui/icons-material/Settings'
 import CollectionsIcon from '@mui/icons-material/Collections'
+import ForumIcon from '@mui/icons-material/Forum';
 
 export function OptionsSidebar(props) {
   const navigate = useNavigate()
@@ -50,6 +51,9 @@ export function OptionsSidebar(props) {
         break
       case 'Configurações':
         navigate('/configuracoes')
+        break
+      case 'Comunidade':
+        navigate('/comunidade')
         break
       case 'Voltar':
         navigate('/')
@@ -89,6 +93,9 @@ export function OptionsSidebar(props) {
         break
       case 'Configurações':
         IconComponent = location.pathname.includes('/configuracoes') ? SettingsIcon : SettingsOutlinedIcon
+        break
+      case 'Comunidade':
+        IconComponent = ForumIcon
         break
       default:
         return null
