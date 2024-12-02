@@ -20,17 +20,17 @@ import { ModalEditar } from "../../components/ModalEditarBarbearia/ModalEditarBa
 
 export function DataHora() {
   const token = JSON.parse(sessionStorage.getItem("user"))
-  const [diaSelecionado, setDiaSelecionado] = useState(null)
-  const [horarios, setHorarios] = useState([])
-  const [isInitialLoad, setIsInitialLoad] = useState(true)
+  const [diaSelecionado, setDiaSelecionado] = useState('')
+  const [horarios, setHorarios] = useState([] || '')
   const [modalEditarOpen, setModalEditarOpen] = useState(false)
 
   const handleDiaChange = (e) => {
-    setDiaSelecionado(parseInt(e.target.value))
-  }
+    const selectedDay = parseInt(e.target.value || '');
+    setDiaSelecionado(selectedDay);
+  };
 
   const handleHorarioChange = (e, tipo) => {
-    const { value } = e.target
+    const { value } = e.target || ''
     setHorarios((prevHorarios) =>
       prevHorarios.map((dia) =>
         dia.id === diaSelecionado ? { ...dia, [tipo]: value } : dia
@@ -55,32 +55,133 @@ export function DataHora() {
 
   const diaAtual =
     horarios.find((dia) => dia.id === diaSelecionado) || {
-      horaAbertura: "",
-      horaFechamento: "",
+      horaAbertura: '',
+      horaFechamento: '',
     }
-
-  const handleDefinirHorario = () => {
-    setHorarios((prevHorarios) =>
-      prevHorarios.map((dia) =>
-        dia.id === diaSelecionado
-          ? {
-            ...dia,
-            horaAbertura: diaAtual.horaAbertura,
-            horaFechamento: diaAtual.horaFechamento,
-          }
-          : dia
-      )
-    )
-    toast.success("Horário atualizado com sucesso!")
-  }
 
   const formik = useFormik({
     initialValues: {
-      diaSemanas: [], // Insira os valores padrão esperados aqui
+      diaSemanas: [
+        {
+          id: 0,
+          nome: "SEG", // Substitua com os dias reais se necessário
+          horaAbertura: {
+            hour: 0,
+            minute: 0,
+            second: 0,
+            nano: 0
+          },
+          horaFechamento: {
+            hour: 0,
+            minute: 0,
+            second: 0,
+            nano: 0
+          }
+        },
+        {
+          id: 1,
+          nome: "TER",
+          horaAbertura: {
+            hour: 0,
+            minute: 0,
+            second: 0,
+            nano: 0
+          },
+          horaFechamento: {
+            hour: 0,
+            minute: 0,
+            second: 0,
+            nano: 0
+          }
+        },
+        {
+          id: 2,
+          nome: "QUA",
+          horaAbertura: {
+            hour: 0,
+            minute: 0,
+            second: 0,
+            nano: 0
+          },
+          horaFechamento: {
+            hour: 0,
+            minute: 0,
+            second: 0,
+            nano: 0
+          }
+        },
+        {
+          id: 3,
+          nome: "QUI",
+          horaAbertura: {
+            hour: 0,
+            minute: 0,
+            second: 0,
+            nano: 0
+          },
+          horaFechamento: {
+            hour: 0,
+            minute: 0,
+            second: 0,
+            nano: 0
+          }
+        },
+        {
+          id: 4,
+          nome: "SEX",
+          horaAbertura: {
+            hour: 0,
+            minute: 0,
+            second: 0,
+            nano: 0
+          },
+          horaFechamento: {
+            hour: 0,
+            minute: 0,
+            second: 0,
+            nano: 0
+          }
+        },
+        {
+          id: 5,
+          nome: "SAB",
+          horaAbertura: {
+            hour: 0,
+            minute: 0,
+            second: 0,
+            nano: 0
+          },
+          horaFechamento: {
+            hour: 0,
+            minute: 0,
+            second: 0,
+            nano: 0
+          }
+        },
+        {
+          id: 6,
+          nome: "DOM",
+          horaAbertura: {
+            hour: 0,
+            minute: 0,
+            second: 0,
+            nano: 0
+          },
+          horaFechamento: {
+            hour: 0,
+            minute: 0,
+            second: 0,
+            nano: 0
+          }
+        },
+      ],
     },
     onSubmit: async (values) => {
       try {
+        const barbearia = JSON.parse(sessionStorage.getItem("barbearia")) || {};
+
         const formData = {
+          ...barbearia,
           diaSemanas: horarios.map((dia) => ({
             ...dia,
             horaAbertura: dia.fechado ? null : dia.horaAbertura,
@@ -110,26 +211,25 @@ export function DataHora() {
           headers: {
             Authorization: token,
           },
-        })
-        const barbeariaData = response.data
-
-        setHorarios(barbeariaData.diaSemanas)
-        setDiaSelecionado(barbeariaData.diaSemanas[0]?.id || null)
-        setIsInitialLoad(false)
+        });
+        const barbeariaData = response.data;
+        setHorarios(barbeariaData.diaSemanas);
+        setDiaSelecionado(barbeariaData.diaSemanas[0]?.id || '');
       } catch (error) {
-        console.error("Erro ao obter dados da barbearia", error)
+        console.error("Erro ao obter dados da barbearia", error);
       }
+    };
+  
+    if (horarios.length === 0) {
+      fetchBarbeariaData();
     }
-
-    if (isInitialLoad) {
-      fetchBarbeariaData()
-    }
-  }, [token, formik, isInitialLoad])
+  }, [token, horarios]);
 
   const handleEditarConfirm = async () => {
     try {
       await formik.handleSubmit()
     } catch (error) {
+      console.error("Erro ao atualizar as informações:", error)
       toast.error("Erro ao atualizar as informações!")
       console.error("Erro ao atualizar as informações:", error)
     }
@@ -162,7 +262,7 @@ export function DataHora() {
                   <Select
                     labelId="diaSemana-label"
                     id="diaSemana"
-                    value={diaSelecionado || ""}
+                    value={diaSelecionado || ''}
                     onChange={handleDiaChange}
                     label="Dia da Semana"
                     className={styles.selectBox}
@@ -184,7 +284,7 @@ export function DataHora() {
                   id="horaAbertura"
                   label="Hora de Abertura"
                   type="time"
-                  value={diaAtual.horaAbertura}
+                  value={diaAtual.horaAbertura || ''}
                   onChange={(e) => handleHorarioChange(e, "horaAbertura")}
                   variant="outlined"
                   fullWidth
@@ -200,7 +300,7 @@ export function DataHora() {
                   id="horaFechamento"
                   label="Hora de Fechamento"
                   type="time"
-                  value={diaAtual.horaFechamento}
+                  value={diaAtual.horaFechamento || ''}
                   onChange={(e) => handleHorarioChange(e, "horaFechamento")}
                   variant="outlined"
                   fullWidth
@@ -235,8 +335,8 @@ export function DataHora() {
               </div>
 
               <div style={gridStyle}>
-                {isInitialLoad
-                  ? Array(7)
+                {horarios.length === 0 ? (
+                  Array(7)
                     .fill(0)
                     .map((_, index) => (
                       <Skeleton
@@ -246,11 +346,10 @@ export function DataHora() {
                         height={125}
                       />
                     ))
-                  : horarios.map((horario) => (
+                ) : (
+                  horarios.map((horario) => (
                     <div key={horario.id} style={{ margin: 0, padding: 0 }}>
-                      {horario.fechado ||
-                        horario.horaAbertura === null ||
-                        horario.horaFechamento === null ? (
+                      {horario.fechado || horario.horaAbertura === null || horario.horaFechamento === null ? (
                         <CardDataHoraClosed nome={horario.nome} />
                       ) : (
                         <CardDataHora
@@ -260,7 +359,8 @@ export function DataHora() {
                         />
                       )}
                     </div>
-                  ))}
+                  ))
+                )}
               </div>
             </div>
           </div>
