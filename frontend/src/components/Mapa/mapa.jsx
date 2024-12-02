@@ -6,7 +6,7 @@ import styles from "./Mapa.module.css";
 // Função para carregar o script da API do Google Maps de forma assíncrona
 const loadGoogleMapsScript = (callback) => {
     const script = document.createElement("script");
-    script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyBiIQVJzDCjwCila1MkL21K28vKtC8JQjI&libraries=places`;
+    script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyBiIQVJzDCjwCila1MkL21K28vKtC8JQjI&libraries=places';
     script.async = true;
     script.defer = true;
     script.onload = callback;
