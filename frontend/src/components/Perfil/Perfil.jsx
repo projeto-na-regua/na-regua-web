@@ -135,9 +135,9 @@ export function Perfil() {
                 <Skeleton variant="circle" width={64} height={64} style={{ margin: 16 }} />
               ) : (
                 <Avatar style={{ width: 64, height: 64, color: '#082031', backgroundColor: utils.randomColor(), fontSize: 24, margin: 16 }}>
-                  {!imagePerfil ? userInfo.nome.charAt(0) : (
+                  {!userInfo.imgPerfil ? userInfo.nome.charAt(0) : (
                     <img
-                      src={imagePerfil}
+                      src={userInfo.imgPerfil}
                       alt="Imagem de perfil"
                       style={{ width: 64, height: 64, borderRadius: '50%', objectFit: 'cover' }}
                     />
